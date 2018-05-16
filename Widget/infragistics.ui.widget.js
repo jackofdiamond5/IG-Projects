@@ -27,6 +27,7 @@ if (typeof jQuery !== "function") {
         options: {
 			/* igWidget options go here */
 			startValue : 10,
+			currentValue : 10,
 			stopMessage : "Stopped",
 			pauseMessage : "Paused",
 			autoStart : false,
@@ -42,6 +43,16 @@ if (typeof jQuery !== "function") {
 			// stopped
 			// paused
 			// resumed
+		},
+		start: function (curValue) {
+			//return this._intervalID = setInterval($.proxy(this.decrement, this, true), 1000);
+			return 'started';
+		},
+		pause: function () {
+			return 'paused'	
+		},
+		stop: function () {
+			return 'stopped'
 		},
         _create: function () {
 			/* igWidget constructor goes here */

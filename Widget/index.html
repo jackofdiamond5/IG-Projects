@@ -8,25 +8,55 @@
 </head>
 
 <body>
+	<div id='const'>
+		<div id='widget'>
+				<canvas id='counter'>
+					
+				</canvas>
+			</div>
+		
+			<div id='buttons'>
+				<button id='start'> Start </button>
+				<button id='pause'> Pause </button>
+				<button id='stop'> Stop </button>
+			</div>
+	</div>
 	
-	<div id='widget'></div>
-
 	<script>
 		var w = $.ui.igWidget({}, $('#widget'));
-		
-		console.log(w.options['delta']) // 1
+		// console.log(w.options['delta'])
+		// console.log(w.option('delta'))
 
-		function Stop(widget) {
+		$(document).ready(() => {
+			$('#start').click(function () {
+				Start($(this));
+			})
+		})
 
+		$(document).ready(() => {
+			$('#pause').click(function () {
+				Pause($(this));
+			})
+		})
+
+		$(document).ready(() => {
+			$('#stop').click(function () {
+				Stop($(this));
+			})
+		})
+
+		function Start(widget) {
+			console.log(w.start());
 		}
 
 		function Pause(widget) {
-
+			console.log(w.pause());
 		}
 
-		function Resume(widget) {
-
+		function Stop(widget) {
+			console.log(w.stop());
 		}
+
 
 	</script>
 

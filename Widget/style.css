@@ -1,0 +1,33 @@
+#counter {
+    background-color:yellow;    
+    box-shadow: 0 0 3pt 2pt black;
+    border-radius: 15%;
+    text-align: center;
+}
+
+#start {
+    border-radius: 50%;
+    margin-right: 30px;
+    box-shadow: 0 0 3pt 1pt green;
+}
+
+#stop {
+    border-radius: 50%;
+    margin-right: 30px;
+    box-shadow: 0 0 3pt 1pt red;
+}
+
+#pause {
+    border-radius: 50%;
+    margin-right: 30px;
+    box-shadow: 0 0 3pt 1pt blue;
+}
+
+#buttons {
+    margin-top: 10px;
+    margin-left:40px;
+}
+
+#const {
+    margin-left: 25%;
+}
