@@ -50,6 +50,7 @@ if (typeof jQuery !== "function") {
 			this.options.pauseMessage = this.options.pauseMessage;
 			this.options.delta = this.options.delta;
 			this.options.autoStart = this.options.autoStart;
+			this.element.addClass( "widget" );
         },
         _setOption: function (option, value) {
 			/* igWidget custom setOption goes here */

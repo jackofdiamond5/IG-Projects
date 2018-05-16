@@ -8,15 +8,14 @@
 </head>
 
 <body>
+	
 	<div id='widget'></div>
 
 	<script>
-		var w = $('#widget').igWidget();
-		// var l = $('<div>').appendTo('body').igWidget();
+		var w = $.ui.igWidget({}, $('#widget'));
 		
-		console.log(w)
-		// console.log(l);
-		
+		console.log(w.options['delta']) // 1
+
 		function Stop(widget) {
 
 		}
@@ -28,5 +27,7 @@
 		function Resume(widget) {
 
 		}
+
 	</script>
+
 </body>
