@@ -8,56 +8,52 @@
 </head>
 
 <body>
-	<div id='const'>
-		<div id='widget'>
-				<canvas id='counter'>
-					
-				</canvas>
-			</div>
-		
-			<div id='buttons'>
-				<button id='start'> Start </button>
-				<button id='pause'> Pause </button>
-				<button id='stop'> Stop </button>
-			</div>
-	</div>
+	<div id='const'></div>
 	
+	<div id='buttons'>
+		<button class='start'> Start </button>
+		<button class='pause'> Pause </button>
+		<button class='stop'> Stop </button>
+	</div>
+
+	<span> Pesho </span>
+
 	<script>
-		var w = $.ui.igWidget({}, $('#widget'));
-		// console.log(w.options['delta'])
-		// console.log(w.option('delta'))
+		$("span").click(function() { $(this).css("background-color", "gray"); }); 
+
+		$('#const').igWidget({
+			// autoStart: true
+		});
 
 		$(document).ready(() => {
-			$('#start').click(function () {
-				Start($(this));
+			$('.start').click(function () {
+				Start(this);
 			})
 		})
 
 		$(document).ready(() => {
-			$('#pause').click(function () {
-				Pause($(this));
+			$('.pause').click(function () {
+				Pause(this);
 			})
 		})
 
 		$(document).ready(() => {
-			$('#stop').click(function () {
-				Stop($(this));
+			$('.stop').click(function () {
+				Stop(this);
 			})
 		})
 
 		function Start(widget) {
-			console.log(w.start());
+			$('#const').igWidget('start');
 		}
 
 		function Pause(widget) {
-			console.log(w.pause());
+			$('#const').igWidget('pause');
 		}
 
 		function Stop(widget) {
-			console.log(w.stop());
+			$('#const').igWidget('stop');
 		}
 
-
 	</script>
-
 </body>
