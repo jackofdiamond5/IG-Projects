@@ -23,6 +23,7 @@
 
 		$('#const').igWidget({
 			// autoStart: true
+			// startValue: 15 
 		});
 
 		$(document).ready(() => {
@@ -42,16 +43,16 @@
 				Stop(this);
 			})
 		})
-
-		function Start(widget) {
+		
+		function Start() {
 			$('#const').igWidget('start');
 		}
 
-		function Pause(widget) {
+		function Pause() {
 			$('#const').igWidget('pause');
 		}
 
-		function Stop(widget) {
+		function Stop() {
 			$('#const').igWidget('stop');
 		}
 

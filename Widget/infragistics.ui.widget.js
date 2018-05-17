@@ -32,30 +32,67 @@ if (typeof jQuery !== "function") {
 			currentValue : null,
 			stopMessage : "Stopped",
 			pauseMessage : "Paused",
+			elapsedMessage: "Timer has elapsed!",
 			autoStart : false,
 			delta : 1
         },
 		events: {
-			elapsed: new Event('elapsed'),
-			tick: new Event('tick'),
-			rendering: new Event('rendering'),
-			rendered: new Event('rendered'),
-			started: new Event('started'),
-			stopped: new Event('stopped'),
-			paused: new Event('paused'),
-			resumed: new Event('resumed')
+			elapsed: 'elapsed',
+			tick: 'tick',
+			rendering: 'rendering',
+			rendered: 'rendered',
+			started: 'started',
+			stopped: 'stopped',
+			paused: 'paused',
+			resumed: 'resumed'
+		},
+		_triggerElapsed: function () {
+			clearInterval(this._intervalID)
+			this._trigger(this.events.elapsed);
+			console.log(this.options.elapsedMessage);
+		},
+		_triggerTick: function () {
+			var args = {
+				currentValue: this.options.currentValue
+			};
+			
+			this._trigger(this.events.tick, null, args);
+		},
+		_triggerRendering: function () {
+			// TODO	
+		},
+		_triggerRendered: function () {
+			// TODO
+		},
+		_triggerStarted: function () {
+			// TODO
+		},
+		_triggerStopped: function () {
+			clearInterval(this._intervalID)
+			this._trigger(this.events.stopped)
+			this._renderWidgetStartValue();
+		},
+		_triggerPaused: function () {
+			this._trigger(this.events.paused);
+			clearInterval(this._intervalID);
+		},
+		_triggerResumed: function () {
+			// TODO
+		},
+		_triggerStart: function () {
+			// TODO
 		},
 		start: function (curValue) {
+			// if start is called more than once -> pause and stop do not work
+			// if start is called more than once -> the elapsed event is called infinitely
 			// if started is triggered -> return -> otherwise it will increase countdown speed by 1 sec
 			this._beginCountdown();
 		},
 		pause: function () {
-			// TODO: trigger paused
-			console.log('paused');
+			this._triggerPaused();
 		},
 		stop: function () {
-			// TODO: trigger stopped
-			console.log('stopped');
+			this._triggerStopped();
 		},
 		_render: function () {
 			// TODO: trigger rendering
@@ -65,31 +102,37 @@ if (typeof jQuery !== "function") {
 			
 			this.element.prepend(div);
 			
+			this._renderWidgetStartValue();
+			// TODO: trigger rendered
+		},
+		_renderWidgetStartValue: function () {
 			var span = $('.widget > span');
 			span.addClass('counter');
-			span.on('elapsed', function() {console.log('pesho')})
 
 			this.options.currentValue = this.options.startValue;
 
 			span.text(this.options.currentValue);
-			// TODO: trigger rendered
 		},
 		_beginCountdown: function() {
 			// TODO: trigger started; if paused was triggered - trigger resumed instead of started
-			this._intervalID = setInterval($.proxy(this._updateCurrentValue, this, true), 1000);
+			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
 		},
-		_updateCurrentValue: function () {
+		_decrementCurrentValue: function (raiseEvent) {
 			var counter = $('.counter');
 			this.options.currentValue -= this.options.delta;
 
-			if(this.options.currentValue <= 0) {
-				counter.text(0);
-				// TODO: trigger elapsed
+			if (raiseEvent) {
+				this._triggerTick();
+			}
 
+			if (this.options.currentValue > 0) {
+				counter.text(this.options.currentValue);
 				return;
 			}
 			
-			counter.text(this.options.currentValue);
+			// TODO: trigger elapsed
+			counter.text(0);
+			this._triggerElapsed();
 		},
         _create: function () {
 			/* igWidget constructor goes here */
@@ -101,18 +144,22 @@ if (typeof jQuery !== "function") {
 
 			this._render();
 
-			if(this.options.autoStart) {
+			if (this.options.autoStart) {
 				this._beginCountdown();
 			}
         },
         _setOption: function (option, value) {
 			/* igWidget custom setOption goes here */
-			var css = this.css, elements, prevValue = this.options[option];
+			var css = this.css, elements, prevValue = this.options[option]; // ?
 			if (prevValue === value) {
 				return;
 			}
 
-			this.options[option] = value;
+			// if we want to explicitly check for any changes to currentValue
+			// unneeded since the line that is afterwards sets it anyway
+			// if(option === 'currentValue') {
+			// 	this.options['currentValue'] = value;
+			// }
 			
 			// The following line applies the option value to the igWidget meaning you don't
 			// have to perform this.options[option] = value;
