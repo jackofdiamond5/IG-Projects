@@ -22,8 +22,17 @@
 		$("span").click(function() { $(this).css("background-color", "gray"); }); 
 
 		$('#const').igWidget({
-			// autoStart: true
+			autoStart: true,
 			// startValue: 15 
+			rendered: function (evt, ui) {console.log('rendered');},
+			rendering: function (evt, ui) {console.log('rendering');},
+			tick: function (evt, ui) {console.log('tick')},
+			paused: function (evt, ui) {console.log('paused')},
+			stopped: function (evt, ui) {console.log('stopped')},
+			started: function (evt, ui) {console.log('started')},
+			resumed: function (evt, ui) {console.log('resumed')},
+			elapsed: function (evt, ui) {console.log('elapsed')},
+			autoStarted: function (evt, ui) {console.log('auto-started')}
 		});
 
 		$(document).ready(() => {
@@ -43,7 +52,7 @@
 				Stop(this);
 			})
 		})
-		
+	
 		function Start() {
 			$('#const').igWidget('start');
 		}

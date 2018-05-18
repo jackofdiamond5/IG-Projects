@@ -38,18 +38,42 @@ if (typeof jQuery !== "function") {
         },
 		events: {
 			elapsed: 'elapsed',
+			_elapsedIsFired: false,
+
 			tick: 'tick',
+			_tickIsFired: false,
+
 			rendering: 'rendering',
+			_renderingIsFired: false,
+
 			rendered: 'rendered',
+			_renderedIsFired: false,
+
 			started: 'started',
+			_startedIsFired: false,
+
 			stopped: 'stopped',
+			_stoppedIsFired: false,
+
 			paused: 'paused',
-			resumed: 'resumed'
+			_pausedIsFired: false,
+
+			resumed: 'resumed',
+			_resumedIsFired: false,
+
+			autoStarted: 'autoStarted',
+			_autoStartedIsFired: false
 		},
 		_triggerElapsed: function () {
 			clearInterval(this._intervalID)
 			this._trigger(this.events.elapsed);
-			console.log(this.options.elapsedMessage);
+			
+			this.events._elapsedIsFired = true;
+			this.events._startedIsFired = false;
+			this.events._stoppedIsFired = false;
+			this.events._pausedIsFired = false;
+			this.events._stoppedIsFired = false;
+			this.events._resumedIsFired = false;
 		},
 		_triggerTick: function () {
 			var args = {
@@ -57,36 +81,96 @@ if (typeof jQuery !== "function") {
 			};
 			
 			this._trigger(this.events.tick, null, args);
+			this.events._tickIsFired = true;
 		},
 		_triggerRendering: function () {
-			// TODO	
+			this._trigger(this.events.rendering);
+
+			if (this.events.rendered) {
+				return;
+			}
+
+			this.events._renderingIsFired = true;
 		},
 		_triggerRendered: function () {
-			// TODO
+			this._trigger(this.events.rendered);
+
+			if (this.events._triggerRendering) {
+				this.events._triggerRendering = false;
+				this.events._triggerRendered = true;
+			}
 		},
 		_triggerStarted: function () {
-			// TODO
+			if (!this.events._startedIsFired && this.events._pausedIsFired && !this.events._stoppedIsFired) {
+				this._triggerResumed();
+			}
+
+			if (!this.events._resumedIsFired) {
+				this._trigger(this.events.started);
+			}
+
+			if (!this.events._startedIsFired) {
+				this.events._startedIsFired = true;
+				this.events._pausedIsFired = false;
+				this.events._stoppedIsFired = false;
+			}
+
+			this._beginCountdown();
 		},
 		_triggerStopped: function () {
+			if (this.events._elapsedIsFired || 
+				this.options.currentValue === this.options.startValue) {
+				return;
+			}
+
 			clearInterval(this._intervalID)
 			this._trigger(this.events.stopped)
 			this._renderWidgetStartValue();
+
+			
+			this.events._tickIsFired = false;
+			this.events._resumedIsFired = false;
+			this.events._pausedIsFired = false;
+			this.events._autoStartedIsFired = false;
+			this.events._startedIsFired = false;
+			this.events._stoppedIsFired = true;
 		},
 		_triggerPaused: function () {
+			if (this.events._stoppedIsFired || 
+				this.events._elapsedIsFired || 
+				this.options.currentValue === this.options.startValue) {
+				return;
+			}
+
 			this._trigger(this.events.paused);
 			clearInterval(this._intervalID);
+			
+			this.events._pausedIsFired = true;
+			this.events._tickIsFired = false;
+			this.events._stoppedIsFired = false;
+			this.events._startedIsFired = false;
+			this.events._autoStartedIsFired = false;
+			this.events._pausedIsFired = true;
 		},
 		_triggerResumed: function () {
-			// TODO
+			this._trigger(this.events.resumed);
+			this.events._resumedIsFired = true;
 		},
-		_triggerStart: function () {
-			// TODO
-		},
-		start: function (curValue) {
-			// if start is called more than once -> pause and stop do not work
-			// if start is called more than once -> the elapsed event is called infinitely
-			// if started is triggered -> return -> otherwise it will increase countdown speed by 1 sec
+		_triggerAutoStart: function () {
+			if (this.events._autoStartedIsFired) {
+				return;
+			}
+
+			this._trigger(this.events.autoStarted);
+			this.events._autoStartedIsFired = true;
 			this._beginCountdown();
+		},
+		start: function () {
+			if (this.events._startedIsFired || this.events._elapsedIsFired || this.events._autoStartedIsFired) {
+				return;
+			}
+
+			this._triggerStarted();
 		},
 		pause: function () {
 			this._triggerPaused();
@@ -95,7 +179,8 @@ if (typeof jQuery !== "function") {
 			this._triggerStopped();
 		},
 		_render: function () {
-			// TODO: trigger rendering
+			this._triggerRendering();
+
 			var div = $('<div />');
 			div.append($('<span />'));
 			div.addClass(this.css.container);
@@ -103,7 +188,8 @@ if (typeof jQuery !== "function") {
 			this.element.prepend(div);
 			
 			this._renderWidgetStartValue();
-			// TODO: trigger rendered
+
+			this._triggerRendered();
 		},
 		_renderWidgetStartValue: function () {
 			var span = $('.widget > span');
@@ -114,7 +200,6 @@ if (typeof jQuery !== "function") {
 			span.text(this.options.currentValue);
 		},
 		_beginCountdown: function() {
-			// TODO: trigger started; if paused was triggered - trigger resumed instead of started
 			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
 		},
 		_decrementCurrentValue: function (raiseEvent) {
@@ -130,7 +215,6 @@ if (typeof jQuery !== "function") {
 				return;
 			}
 			
-			// TODO: trigger elapsed
 			counter.text(0);
 			this._triggerElapsed();
 		},
@@ -145,7 +229,7 @@ if (typeof jQuery !== "function") {
 			this._render();
 
 			if (this.options.autoStart) {
-				this._beginCountdown();
+				this._triggerAutoStart();
 			}
         },
         _setOption: function (option, value) {
