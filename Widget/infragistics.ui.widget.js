@@ -134,6 +134,7 @@ if (typeof jQuery !== "function") {
 			this.events._pausedIsFired = false;
 			this.events._autoStartedIsFired = false;
 			this.events._startedIsFired = false;
+
 			this.events._stoppedIsFired = true;
 		},
 		_triggerPaused: function () {
@@ -146,11 +147,11 @@ if (typeof jQuery !== "function") {
 			this._trigger(this.events.paused);
 			clearInterval(this._intervalID);
 			
-			this.events._pausedIsFired = true;
 			this.events._tickIsFired = false;
 			this.events._stoppedIsFired = false;
 			this.events._startedIsFired = false;
 			this.events._autoStartedIsFired = false;
+			
 			this.events._pausedIsFired = true;
 		},
 		_triggerResumed: function () {
