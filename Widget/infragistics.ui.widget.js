@@ -127,7 +127,6 @@ if (typeof jQuery !== "function") {
 			this._trigger(this.events.stopped)
 			this._renderWidgetStartValue();
 
-			
 			this.events._tickIsFired = false;
 			this.events._resumedIsFired = false;
 			this.events._pausedIsFired = false;
