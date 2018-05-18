@@ -16,13 +16,11 @@
 		<button class='stop'> Stop </button>
 	</div>
 
-	<span> Pesho </span>
+	<button class='destroy'> Destroy </button>
 
 	<script>
-		$("span").click(function() { $(this).css("background-color", "gray"); }); 
-
 		$('#const').igWidget({
-			autoStart: true,
+			autoStart: false,
 			// startValue: 15 
 			rendered: function (evt, ui) {console.log('rendered');},
 			rendering: function (evt, ui) {console.log('rendering');},
@@ -34,6 +32,12 @@
 			elapsed: function (evt, ui) {console.log('elapsed')},
 			autoStarted: function (evt, ui) {console.log('auto-started')}
 		});
+
+		$(document).ready(() => {
+			$('.destroy').click(function () {
+				$('#const').igWidget('destroy').remove();
+			})
+		})
 
 		$(document).ready(() => {
 			$('.start').click(function () {

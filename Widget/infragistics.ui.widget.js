@@ -1,13 +1,13 @@
 ﻿/*!@license
- * Infragistics.Web.ClientUI Widget <build_number>
+ * Infragistics.Web.ClientUI Widget 1.0.0
  *
  * Copyright (c) 2011-<year> Infragistics Inc.
  *
  * http://www.infragistics.com/
  *
  * Depends on:
- *  jquery-<min_supported_version>.js
- *	jquery.ui.core.js
+ *  Built and tested with jquery-3.3.1.min.js;
+ *	jquery.ui.core.js;
  *	jquery.ui.widget.js
  */
 
@@ -18,7 +18,9 @@ if (typeof jQuery !== "function") {
 
 (function ($) {
     /*
-		igWidget is a widget based on jQuery UI that <widget_description>
+		igWidget is a widget based on jQuery UI that counts down to zero, from a specified start.
+		It supports stopping, pausing, as well as autostart.
+		As well as it throws events for all of the aforementioned actions.
 	*/
 	$.widget('ui.igWidget', {
 		css: {
@@ -191,30 +193,40 @@ if (typeof jQuery !== "function") {
 			this._triggerRendered();
 		},
 		_renderWidgetStartValue: function () {
-			var span = $('.widget > span');
-			span.addClass('counter');
-
+			var counter = $('.widget > span');
+			counter.addClass('counter');
+			counter.append("<span />");
+			
+			var output = $('.counter > span');
+			output.addClass('output');
+			
 			this.options.currentValue = this.options.startValue;
 
-			span.text(this.options.currentValue);
+			output.text(this.options.currentValue);
 		},
 		_beginCountdown: function() {
 			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
 		},
 		_decrementCurrentValue: function (raiseEvent) {
-			var counter = $('.counter');
 			this.options.currentValue -= this.options.delta;
+			var output = $('.counter > span');
 
 			if (raiseEvent) {
 				this._triggerTick();
 			}
 
+			if(this.options.currentValue <= 3) {
+				output.addClass('blink');
+			}
+
 			if (this.options.currentValue > 0) {
-				counter.text(this.options.currentValue);
+				output.text(this.options.currentValue);
 				return;
 			}
 			
-			counter.text(0);
+			output.text(0);
+			output.addClass('end');
+			output.removeClass('blink');
 			this._triggerElapsed();
 		},
         _create: function () {
