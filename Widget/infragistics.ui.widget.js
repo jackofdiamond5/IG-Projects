@@ -19,7 +19,7 @@ if (typeof jQuery !== "function") {
 (function ($) {
     /*
 		igWidget is a widget based on jQuery UI that counts down to zero, from a specified start.
-		It supports stopping, pausing, as well as autostart.
+		It supports stopping, pausing, as well as auto-start and self-destroy.
 		As well as it throws events for all of the aforementioned actions.
 	*/
 	$.widget('ui.igWidget', {
@@ -127,6 +127,7 @@ if (typeof jQuery !== "function") {
 
 			clearInterval(this._intervalID)
 			this._trigger(this.events.stopped)
+			this.events._stoppedIsFired = true;
 			this._renderWidgetStartValue();
 
 			this.events._tickIsFired = false;
@@ -135,7 +136,6 @@ if (typeof jQuery !== "function") {
 			this.events._autoStartedIsFired = false;
 			this.events._startedIsFired = false;
 
-			this.events._stoppedIsFired = true;
 		},
 		_triggerPaused: function () {
 			if (this.events._stoppedIsFired || 
@@ -145,6 +145,7 @@ if (typeof jQuery !== "function") {
 			}
 
 			this._trigger(this.events.paused);
+			this.events._pausedIsFired = true;
 			clearInterval(this._intervalID);
 			
 			this.events._tickIsFired = false;
@@ -152,7 +153,6 @@ if (typeof jQuery !== "function") {
 			this.events._startedIsFired = false;
 			this.events._autoStartedIsFired = false;
 
-			this.events._pausedIsFired = true;
 		},
 		_triggerResumed: function () {
 			this._trigger(this.events.resumed);
@@ -196,7 +196,10 @@ if (typeof jQuery !== "function") {
 		_renderWidgetStartValue: function () {
 			var counter = $('.widget > span');
 			counter.addClass('counter');
-			counter.append("<span />");
+
+			if(!this.events._stoppedIsFired) {
+				counter.append("<span />");
+			}
 			
 			var output = $('.counter > span');
 			output.addClass('output');
@@ -252,7 +255,6 @@ if (typeof jQuery !== "function") {
 			}
 
 			// if we want to explicitly check for any changes to currentValue
-			// unneeded since the line that is afterwards sets it anyway
 			// if(option === 'currentValue') {
 			// 	this.options['currentValue'] = value;
 			// }
