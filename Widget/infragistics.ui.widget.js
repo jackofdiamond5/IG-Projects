@@ -151,7 +151,7 @@ if (typeof jQuery !== "function") {
 			this.events._stoppedIsFired = false;
 			this.events._startedIsFired = false;
 			this.events._autoStartedIsFired = false;
-			
+
 			this.events._pausedIsFired = true;
 		},
 		_triggerResumed: function () {
@@ -265,6 +265,9 @@ if (typeof jQuery !== "function") {
             /* igWidget destructor - unbind all event handlers, remove dynamically added classes and 
 				dynamically added elements in the widget element's DOM
 			*/
+
+			this.element.children(".widget").remove();
+
             $.Widget.prototype.destroy.apply(this, arguments);
         }
     });

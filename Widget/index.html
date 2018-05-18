@@ -34,12 +34,6 @@
 		});
 
 		$(document).ready(() => {
-			$('.destroy').click(function () {
-				$('#const').igWidget('destroy').remove();
-			})
-		})
-
-		$(document).ready(() => {
 			$('.start').click(function () {
 				Start(this);
 			})
@@ -54,6 +48,12 @@
 		$(document).ready(() => {
 			$('.stop').click(function () {
 				Stop(this);
+			})
+		})
+
+		$(document).ready(() => {
+			$('.destroy').click(function () {
+				$('#const').igWidget('destroy');
 			})
 		})
 	
