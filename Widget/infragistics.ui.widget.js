@@ -72,10 +72,11 @@ if (typeof jQuery !== "function") {
 			
 			this.events._elapsedIsFired = true;
 			this.events._startedIsFired = false;
-			this.events._stoppedIsFired = false;
 			this.events._pausedIsFired = false;
 			this.events._stoppedIsFired = false;
 			this.events._resumedIsFired = false;
+			this.events._autoStartedIsFired = false;
+			this.events._tickIsFired = false;
 		},
 		_triggerTick: function () {
 			var args = {
@@ -86,11 +87,11 @@ if (typeof jQuery !== "function") {
 			this.events._tickIsFired = true;
 		},
 		_triggerRendering: function () {
-			this._trigger(this.events.rendering);
-
-			if (this.events.rendered) {
+			if (this.events._renderedIsFired) {
 				return;
 			}
+			
+			this._trigger(this.events.rendering);
 
 			this.events._renderingIsFired = true;
 		},
@@ -130,7 +131,7 @@ if (typeof jQuery !== "function") {
 			this.events._stoppedIsFired = true;
 
 			var output = $('.counter > span');
-			if(this.options.currentValue <= 3) {
+			if (this.options.currentValue <= 3) {
 				output.removeClass('blink');
 			}
 
