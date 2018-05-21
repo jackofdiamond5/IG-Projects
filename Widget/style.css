@@ -82,7 +82,7 @@
     margin-left: 24.75vw;
 }
 
-.buttonsVisualize > .start, .stop, .pause {
+.buttonsVisualize > .start, .stop, .pause, .destroy {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-weight: 600;
 }
