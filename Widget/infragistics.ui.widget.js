@@ -203,7 +203,7 @@ if (typeof jQuery !== "function") {
 			var counter = $('.widget > span');
 			counter.addClass('counter');
 
-			if(!this.events._stoppedIsFired) {
+			if (!this.events._stoppedIsFired) {
 				counter.append("<span />");
 			}
 			
@@ -225,7 +225,7 @@ if (typeof jQuery !== "function") {
 				this._triggerTick();
 			}
 
-			if(this.options.currentValue <= 3) {
+			if (this.options.currentValue <= 3) {
 				output.addClass('blink');
 			}
 
