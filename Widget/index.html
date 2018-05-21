@@ -19,35 +19,36 @@
 	<button class='destroy'> Destroy </button>
 
 	<script>
+
 		$('#const').igWidget({
 			autoStart: false,
 			// startValue: 15 
 			rendered: function (evt, ui) {console.log('rendered');},
 			rendering: function (evt, ui) {console.log('rendering');},
-			tick: function (evt, ui) {console.log('tick')},
-			paused: function (evt, ui) {console.log('paused')},
-			stopped: function (evt, ui) {console.log('stopped')},
-			started: function (evt, ui) {console.log('started')},
-			resumed: function (evt, ui) {console.log('resumed')},
-			elapsed: function (evt, ui) {console.log('elapsed')},
-			autoStarted: function (evt, ui) {console.log('auto-started')}
+			tick: function (evt, ui) {console.log('tick');},
+			paused: function (evt, ui) {console.log('paused');},
+			stopped: function (evt, ui) {console.log('stopped');},
+			started: function (evt, ui) {console.log('started');},
+			resumed: function (evt, ui) {console.log('resumed');},
+			elapsed: function (evt, ui) {console.log('elapsed');},
+			autoStarted: function (evt, ui) {console.log('auto-started');}
 		});
 
 		$(document).ready(() => {
 			$('.start').click(function () {
-				Start(this);
+				$('#const').igWidget('start');
 			})
 		})
 
 		$(document).ready(() => {
 			$('.pause').click(function () {
-				Pause(this);
+				$('#const').igWidget('pause');
 			})
 		})
 
 		$(document).ready(() => {
 			$('.stop').click(function () {
-				Stop(this);
+				$('#const').igWidget('stop');
 			})
 		})
 
@@ -56,18 +57,6 @@
 				$('#const').igWidget('destroy');
 			})
 		})
-	
-		function Start() {
-			$('#const').igWidget('start');
-		}
-
-		function Pause() {
-			$('#const').igWidget('pause');
-		}
-
-		function Stop() {
-			$('#const').igWidget('stop');
-		}
 
 	</script>
 </body>

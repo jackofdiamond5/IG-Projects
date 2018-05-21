@@ -128,6 +128,12 @@ if (typeof jQuery !== "function") {
 			clearInterval(this._intervalID)
 			this._trigger(this.events.stopped)
 			this.events._stoppedIsFired = true;
+
+			var output = $('.counter > span');
+			if(this.options.currentValue <= 3) {
+				output.removeClass('blink');
+			}
+
 			this._renderWidgetStartValue();
 
 			this.events._tickIsFired = false;
@@ -135,7 +141,6 @@ if (typeof jQuery !== "function") {
 			this.events._pausedIsFired = false;
 			this.events._autoStartedIsFired = false;
 			this.events._startedIsFired = false;
-
 		},
 		_triggerPaused: function () {
 			if (this.events._stoppedIsFired || 
@@ -152,7 +157,7 @@ if (typeof jQuery !== "function") {
 			this.events._stoppedIsFired = false;
 			this.events._startedIsFired = false;
 			this.events._autoStartedIsFired = false;
-
+			this.events._resumedIsFired = false;
 		},
 		_triggerResumed: function () {
 			this._trigger(this.events.resumed);
