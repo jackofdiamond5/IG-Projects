@@ -79,7 +79,7 @@ if (typeof jQuery !== "function") {
 			this.events._tickIsFired = false;
 		},
 		_triggerTick: function () {
-			var args = {
+			let args = {
 				currentValue: this.options.currentValue
 			};
 			
@@ -130,7 +130,7 @@ if (typeof jQuery !== "function") {
 			this._trigger(this.events.stopped)
 			this.events._stoppedIsFired = true;
 
-			var output = $('.counter > span');
+			let output = $('.counter > span');
 			if (this.options.currentValue <= 3) {
 				output.removeClass('blink');
 			}
@@ -189,37 +189,87 @@ if (typeof jQuery !== "function") {
 		_render: function () {
 			this._triggerRendering();
 
-			var div = $('<div />');
+			let div = $('<div />');
 			div.append($('<span />'));
 			div.addClass(this.css.container);
 			
 			this.element.prepend(div);
 			
+			this._renderButtons();
 			this._renderWidgetStartValue();
-
+			this._handleButtonClicks();
+			
 			this._triggerRendered();
 		},
 		_renderWidgetStartValue: function () {
-			var counter = $('.widget > span');
+			let counter = $('.widget > span');
 			counter.addClass('counter');
 
 			if (!this.events._stoppedIsFired) {
 				counter.append("<span />");
 			}
 			
-			var output = $('.counter > span');
+			let output = $('.counter > span');
 			output.addClass('output');
 			
 			this.options.currentValue = this.options.startValue;
 
 			output.text(this.options.currentValue);
 		},
+		_renderButtons: function () {
+			let widget = $('.widget');
+			
+			let buttonsHolder = $('<div />');
+			buttonsHolder.addClass('buttons');
+			buttonsHolder
+			.append('<button id="str">')
+			.append('<button id="psr">')
+			.append('<button id="stpr">')
+			.append('<button id="dstr">');
+			
+			widget.append(buttonsHolder);
+
+			let start = $('.buttons > #str');
+			start.addClass('start');
+			start.text("Start");
+
+			let pause = $('.buttons > #psr');
+			pause.addClass('pause');
+			pause.text("Pause");
+
+			let stop = $('.buttons > #stpr');
+			stop.addClass('stop');
+			stop.text("Stop");
+
+			let destroy = $('.buttons > #dstr');
+			destroy.addClass('destroy');
+			destroy.text('Destroy');
+		},
+		_handleButtonClicks: function () {
+			let widgetInstance = this;
+	
+			$('.start').click(function () {
+				widgetInstance.start();
+			});
+		
+			$('.pause').click(function () {
+				widgetInstance.pause();
+			});
+		
+			$('.stop').click(function () {
+				widgetInstance.stop();
+			});
+		
+			$('.destroy').click(function () {
+				widgetInstance.destroy();
+			});
+		},
 		_beginCountdown: function() {
 			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
 		},
 		_decrementCurrentValue: function (raiseEvent) {
 			this.options.currentValue -= this.options.delta;
-			var output = $('.counter > span');
+			let output = $('.counter > span');
 
 			if (raiseEvent) {
 				this._triggerTick();
@@ -255,7 +305,7 @@ if (typeof jQuery !== "function") {
         },
         _setOption: function (option, value) {
 			/* igWidget custom setOption goes here */
-			var css = this.css, elements, prevValue = this.options[option]; // ?
+			let css = this.css, elements, prevValue = this.options[option]; // ?
 			if (prevValue === value) {
 				return;
 			}

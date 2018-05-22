@@ -16,7 +16,7 @@
     background-color:  green;
 }
 .start:hover {
-    background-color: rgb(76, 175, 80);
+    background-color: rgb(35, 158, 39);
 }
 
 .stop {
@@ -24,7 +24,7 @@
     background-color: red;
 }
 .stop:hover {
-    background-color: rgb(230, 90, 90);
+    background-color: rgb(252, 101, 101);
 }
 
 .pause {
@@ -44,9 +44,9 @@
     background-color: rgb(83, 85, 100); 
 }
 
-#buttons {
-    margin-top: 10px;
-    margin-left: 24.75vw;
+.buttons {
+    margin-top: 15px;
+    /* margin-left: 24.75vw; */
     position: relative;
 }
 

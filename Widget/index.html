@@ -9,15 +9,6 @@
 
 <body>
 	<div id='const'></div>
-	
-	<div id='buttons'>
-		<button class='start'> Start </button>
-		<button class='pause'> Pause </button>
-		<button class='stop'> Stop </button>
-		<button class='destroy'> Destroy </button>
-	</div>
-
-
 	<script>
 
 		$('#const').igWidget({
@@ -33,30 +24,6 @@
 			elapsed: function (evt, ui) {console.log('elapsed');},
 			autoStarted: function (evt, ui) {console.log('auto-started');}
 		});
-
-		$(document).ready(() => {
-			$('.start').click(function () {
-				$('#const').igWidget('start');
-			})
-		})
-
-		$(document).ready(() => {
-			$('.pause').click(function () {
-				$('#const').igWidget('pause');
-			})
-		})
-
-		$(document).ready(() => {
-			$('.stop').click(function () {
-				$('#const').igWidget('stop');
-			})
-		})
-
-		$(document).ready(() => {
-			$('.destroy').click(function () {
-				$('#const').igWidget('destroy');
-			})
-		})
-
+		
 	</script>
 </body>
