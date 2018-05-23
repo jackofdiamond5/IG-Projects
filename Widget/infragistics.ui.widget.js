@@ -18,11 +18,11 @@ if (typeof jQuery !== "function") {
 
 (function ($) {
     /*
-		igWidget is a widget based on jQuery UI that counts down to zero, from a specified start.
+		igCountdown is a widget based on jQuery UI that counts down to zero, from a specified start.
 		It supports stopping, pausing, as well as auto-start and self-destroy.
 		As well as it throws events for all of the aforementioned actions.
 	*/
-	$.widget('ui.igWidget', {
+	$.widget('ui.igCountdown', {
 		css: {
 			/* igWidget element classes go here */
 			container: 'widget',
@@ -32,159 +32,120 @@ if (typeof jQuery !== "function") {
 			/* igWidget options go here */
 			startValue : 10,
 			currentValue : null,
-			stopMessage : "Stopped",
+			resetMessage : "Resetted",
 			pauseMessage : "Paused",
 			elapsedMessage: "Timer has elapsed!",
 			autoStart : false,
 			delta : 1
         },
 		events: {
-			elapsed: 'elapsed',
-			_elapsedIsFired: false,
+			started: 'started',
+			resumed: 'resumed',
+			paused: 'paused',
+			reset: 'reset',
 
 			tick: 'tick',
-			_tickIsFired: false,
+			elapsed: 'elapsed',
 
 			rendering: 'rendering',
-			_renderingIsFired: false,
-
-			rendered: 'rendered',
-			_renderedIsFired: false,
-
-			started: 'started',
-			_startedIsFired: false,
-
-			stopped: 'stopped',
-			_stoppedIsFired: false,
-
-			paused: 'paused',
-			_pausedIsFired: false,
-
-			resumed: 'resumed',
-			_resumedIsFired: false,
-
-			autoStarted: 'autoStarted',
-			_autoStartedIsFired: false
+			rendered: 'rendered'
 		},
-		_triggerElapsed: function () {
-			clearInterval(this._intervalID)
-			this._trigger(this.events.elapsed);
-			
-			this.events._elapsedIsFired = true;
-			this.events._startedIsFired = false;
-			this.events._pausedIsFired = false;
-			this.events._stoppedIsFired = false;
-			this.events._resumedIsFired = false;
-			this.events._autoStartedIsFired = false;
-			this.events._tickIsFired = false;
+		_state: {
+			running: false,
+			paused: false
 		},
-		_triggerTick: function () {
-			let args = {
-				currentValue: this.options.currentValue
-			};
-			
-			this._trigger(this.events.tick, null, args);
-			this.events._tickIsFired = true;
+		_start: function () {
+			this._triggerStarted();
 		},
-		_triggerRendering: function () {
-			if (this.events._renderedIsFired) {
-				return;
-			}
-			
-			this._trigger(this.events.rendering);
-
-			this.events._renderingIsFired = true;
+		_pause: function () {
+			this._triggerPaused();
 		},
-		_triggerRendered: function () {
-			this._trigger(this.events.rendered);
-
-			if (this.events._triggerRendering) {
-				this.events._triggerRendering = false;
-				this.events._triggerRendered = true;
-			}
+		_stop: function () {
+			this._triggerReset();
 		},
-		_triggerStarted: function () {
-			if (!this.events._startedIsFired && this.events._pausedIsFired && !this.events._stoppedIsFired) {
+		_triggerStarted: function () {		
+			if (this._state.paused) {
 				this._triggerResumed();
 			}
+			else if (!this._state.running) {
+				let args = {
+					owner: this
+				}
 
-			if (!this.events._resumedIsFired) {
-				this._trigger(this.events.started);
+				this._trigger(this.events.started, null, args);
+				this._beginCountdown();
 			}
-
-			if (!this.events._startedIsFired) {
-				this.events._startedIsFired = true;
-				this.events._pausedIsFired = false;
-				this.events._stoppedIsFired = false;
-			}
-
-			this._beginCountdown();
 		},
-		_triggerStopped: function () {
-			if (this.events._elapsedIsFired || 
-				this.options.currentValue === this.options.startValue) {
-				return;
+		_triggerPaused: function () {
+			if (!this._state.paused && this.options.currentValue != this.options.startValue) {
+				let args = {
+					owner: this
+				}
+
+				this._state.paused = true;
+				this._trigger(this.events.paused, null, args);
+				clearInterval(this._intervalID);
+			}
+		},
+		_triggerReset: function () {
+			let args = {
+				owner: this
 			}
 
-			clearInterval(this._intervalID)
-			this._trigger(this.events.stopped)
-			this.events._stoppedIsFired = true;
+			clearInterval(this._intervalID);
+			this._trigger(this.events.reset, null, args);
 
 			let output = $('.counter > span');
 			if (this.options.currentValue <= 3) {
 				output.removeClass('blink');
 			}
 
-			this._renderWidgetStartValue();
-
-			this.events._tickIsFired = false;
-			this.events._resumedIsFired = false;
-			this.events._pausedIsFired = false;
-			this.events._autoStartedIsFired = false;
-			this.events._startedIsFired = false;
-		},
-		_triggerPaused: function () {
-			if (this.events._stoppedIsFired || 
-				this.events._elapsedIsFired || 
-				this.options.currentValue === this.options.startValue) {
-				return;
+			if (this._setOption('currentValue', this.options.startValue)) {
+				output.text(this.options.currentValue);
 			}
 
-			this._trigger(this.events.paused);
-			this.events._pausedIsFired = true;
-			clearInterval(this._intervalID);
-			
-			this.events._tickIsFired = false;
-			this.events._stoppedIsFired = false;
-			this.events._startedIsFired = false;
-			this.events._autoStartedIsFired = false;
-			this.events._resumedIsFired = false;
+			output.removeClass('end');
+
+			this._state.running = false;
+			this._state.paused = false;
 		},
 		_triggerResumed: function () {
-			this._trigger(this.events.resumed);
-			this.events._resumedIsFired = true;
-		},
-		_triggerAutoStart: function () {
-			if (this.events._autoStartedIsFired) {
-				return;
+			let args = {
+				owner: this
 			}
 
-			this._trigger(this.events.autoStarted);
-			this.events._autoStartedIsFired = true;
+			this._trigger(this.events.resumed, null, args);
 			this._beginCountdown();
 		},
-		start: function () {
-			if (this.events._startedIsFired || this.events._elapsedIsFired || this.events._autoStartedIsFired) {
-				return;
+		_triggerTick: function () {
+			let args = {
+				owner: this,
+				currentValue: this.options.currentValue
+			};
+			
+			this._trigger(this.events.tick, null, args);
+		},
+		_triggerElapsed: function () {
+			let args = {
+				owner: this
 			}
 
-			this._triggerStarted();
+			clearInterval(this._intervalID)
+			this._trigger(this.events.elapsed, null, args);
 		},
-		pause: function () {
-			this._triggerPaused();
+		_triggerRendering: function () {
+			let args = {
+				owner: this
+			}
+
+			this._trigger(this.events.rendering, null, args);
 		},
-		stop: function () {
-			this._triggerStopped();
+		_triggerRendered: function () {
+			let args = {
+				owner: this
+			}
+
+			this._trigger(this.events.rendered, null, args);
 		},
 		_render: function () {
 			this._triggerRendering();
@@ -204,15 +165,12 @@ if (typeof jQuery !== "function") {
 		_renderWidgetStartValue: function () {
 			let counter = $('.widget > span');
 			counter.addClass('counter');
+			counter.append("<span />");
 
-			if (!this.events._stoppedIsFired) {
-				counter.append("<span />");
-			}
-			
 			let output = $('.counter > span');
 			output.addClass('output');
 			
-			this.options.currentValue = this.options.startValue;
+			this._setOption('currentValue', this.options.startValue);
 
 			output.text(this.options.currentValue);
 		},
@@ -224,11 +182,14 @@ if (typeof jQuery !== "function") {
 			buttonsHolder
 			.append('<button id="str">')
 			.append('<button id="psr">')
-			.append('<button id="stpr">')
+			.append('<button id="rst">')
 			.append('<button id="dstr">');
 			
 			widget.append(buttonsHolder);
 
+			this._addButtonClasses();
+		},
+		_addButtonClasses: function () {
 			let start = $('.buttons > #str');
 			start.addClass('start');
 			start.text("Start");
@@ -237,9 +198,9 @@ if (typeof jQuery !== "function") {
 			pause.addClass('pause');
 			pause.text("Pause");
 
-			let stop = $('.buttons > #stpr');
-			stop.addClass('stop');
-			stop.text("Stop");
+			let stop = $('.buttons > #rst');
+			stop.addClass('reset');
+			stop.text("Reset");
 
 			let destroy = $('.buttons > #dstr');
 			destroy.addClass('destroy');
@@ -249,15 +210,15 @@ if (typeof jQuery !== "function") {
 			let widgetInstance = this;
 	
 			$('.start').click(function () {
-				widgetInstance.start();
+				widgetInstance._start();
 			});
 		
 			$('.pause').click(function () {
-				widgetInstance.pause();
+				widgetInstance._pause();
 			});
 		
-			$('.stop').click(function () {
-				widgetInstance.stop();
+			$('.reset').click(function () {
+				widgetInstance._stop();
 			});
 		
 			$('.destroy').click(function () {
@@ -266,6 +227,9 @@ if (typeof jQuery !== "function") {
 		},
 		_beginCountdown: function() {
 			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
+
+			this._state.running = true;
+			this._state.paused = false;
 		},
 		_decrementCurrentValue: function (raiseEvent) {
 			this.options.currentValue -= this.options.delta;
@@ -274,60 +238,59 @@ if (typeof jQuery !== "function") {
 			if (raiseEvent) {
 				this._triggerTick();
 			}
-
 			if (this.options.currentValue <= 3) {
 				output.addClass('blink');
 			}
-
 			if (this.options.currentValue > 0) {
 				output.text(this.options.currentValue);
 				return;
 			}
 			
-			output.text(0);
+			output.text(this.options.currentValue);
 			output.addClass('end');
 			output.removeClass('blink');
 			this._triggerElapsed();
 		},
         _create: function () {
 			/* igWidget constructor goes here */
-			this.options.startValue = this.options.startValue;
-			this.options.stopMessage = this.options.stopMessage;
-			this.options.pauseMessage = this.options.pauseMessage;
-			this.options.delta = this.options.delta;
-			this.options.autoStart = this.options.autoStart;
-
+			// $.Widget.prototype._create.apply(this);
+			
 			this._render();
 
 			if (this.options.autoStart) {
-				this._triggerAutoStart();
+				this._triggerStarted();
 			}
         },
         _setOption: function (option, value) {
 			/* igWidget custom setOption goes here */
-			let css = this.css, elements, prevValue = this.options[option]; // ?
+			let css = this.css, elements, prevValue = this.options[option];
+			
+			if (isNaN(value)) {
+				return false;
+			}
+			if (value <= 0) {
+				return false;
+			}
 			if (prevValue === value) {
-				return;
+				return false;
 			}
 
-			// if we want to explicitly check for any changes to currentValue
-			// if(option === 'currentValue') {
-			// 	this.options['currentValue'] = value;
-			// }
-			
 			// The following line applies the option value to the igWidget meaning you don't
 			// have to perform this.options[option] = value;
-            $.Widget.prototype._setOption.apply(this, arguments);
+			$.Widget.prototype._setOption.apply(this, arguments);
+			
+			return true;
         },
         destroy: function () {
-            /* igWidget destructor - unbind all event handlers, remove dynamically added classes and 
+            /* igCountdown destructor - unbind all event handlers, remove dynamically added classes and 
 				dynamically added elements in the widget element's DOM
 			*/
 
 			this.element.children(".widget").remove();
+			clearInterval(this._intervalID);
 
-            $.Widget.prototype.destroy.apply(this, arguments);
+			$.Widget.prototype.destroy.apply(this, arguments);
         }
     });
-    $.extend($.ui.igWidget, {version: '<build_number>'});
+    $.extend($.ui.igCountdown, {version: '<build_number>'});
 }(jQuery));

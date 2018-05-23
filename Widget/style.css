@@ -19,11 +19,11 @@
     background-color: rgb(35, 158, 39);
 }
 
-.stop {
+.reset {
     box-shadow: 0 0 3pt 1pt red;
     background-color: red;
 }
-.stop:hover {
+.reset:hover {
     background-color: rgb(252, 101, 101);
 }
 
@@ -50,7 +50,7 @@
     position: relative;
 }
 
-.buttonsVisualize > .temp, .start, .stop, .pause, .destroy {
+.buttonsVisualize > .temp, .start, .reset, .pause, .destroy {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     border-radius: 50%;
     margin-right: 30px;

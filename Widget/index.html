@@ -9,21 +9,24 @@
 
 <body>
 	<div id='const'></div>
+	<div id='const1'></div>
+
 	<script>
 
-		$('#const').igWidget({
+		$('#const').igCountdown({
 			autoStart: false,
-			// startValue: 15 
+			startValue: 10,
 			rendered: function (evt, ui) {console.log('rendered');},
 			rendering: function (evt, ui) {console.log('rendering');},
 			tick: function (evt, ui) {console.log('tick');},
 			paused: function (evt, ui) {console.log('paused');},
-			stopped: function (evt, ui) {console.log('stopped');},
+			reset: function (evt, ui) {console.log('reset');},
 			started: function (evt, ui) {console.log('started');},
 			resumed: function (evt, ui) {console.log('resumed');},
 			elapsed: function (evt, ui) {console.log('elapsed');},
 			autoStarted: function (evt, ui) {console.log('auto-started');}
 		});
-		
+
+		//$('#const1').igCountdown();
 	</script>
 </body>
