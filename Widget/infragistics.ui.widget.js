@@ -31,7 +31,6 @@ if (typeof jQuery !== "function") {
         options: {
 			/* igWidget options go here */
 			startValue : 10,
-			currentValue : null,
 			resetMessage : "Resetted",
 			pauseMessage : "Paused",
 			elapsedMessage: "Timer has elapsed!",
@@ -50,6 +49,17 @@ if (typeof jQuery !== "function") {
 			rendering: 'rendering',
 			rendered: 'rendered'
 		},
+		setCurrentValue: function (newValue) {
+			if(isNaN(newValue)) {
+				return;
+			}
+			if(newValue < 0) {
+				return;
+			}
+
+			this._currentValue = newValue;
+		},
+		_currentValue : null,
 		_state: {
 			running: false,
 			paused: false
@@ -60,7 +70,7 @@ if (typeof jQuery !== "function") {
 		_pause: function () {
 			this._triggerPaused();
 		},
-		_stop: function () {
+		_reset: function () {
 			this._triggerReset();
 		},
 		_triggerStarted: function () {		
@@ -77,7 +87,7 @@ if (typeof jQuery !== "function") {
 			}
 		},
 		_triggerPaused: function () {
-			if (!this._state.paused && this.options.currentValue != this.options.startValue) {
+			if (!this._state.paused && this._currentValue != this.options.startValue) {
 				let args = {
 					owner: this
 				}
@@ -96,13 +106,17 @@ if (typeof jQuery !== "function") {
 			this._trigger(this.events.reset, null, args);
 
 			let output = $('.counter > span');
-			if (this.options.currentValue <= 3) {
+			// let output = $(this).find('.output');
+			if (this._currentValue <= 3) {
 				output.removeClass('blink');
 			}
 
-			if (this._setOption('currentValue', this.options.startValue)) {
-				output.text(this.options.currentValue);
-			}
+
+			//////////////////////////////////////////
+			// if (this._setOption('_currentValue', this.options.startValue)) {
+			output.text(this._currentValue);
+			// }
+			/////////////////////////////////////////
 
 			output.removeClass('end');
 
@@ -120,7 +134,7 @@ if (typeof jQuery !== "function") {
 		_triggerTick: function () {
 			let args = {
 				owner: this,
-				currentValue: this.options.currentValue
+				_currentValue: this._currentValue
 			};
 			
 			this._trigger(this.events.tick, null, args);
@@ -150,78 +164,84 @@ if (typeof jQuery !== "function") {
 		_render: function () {
 			this._triggerRendering();
 
-			let div = $('<div />');
-			div.append($('<span />'));
+			var randomId = Math.floor(Math.random() * 100);
+			let div = $('<div />', {id: randomId});
+			div.append('<span />');
 			div.addClass(this.css.container);
 			
 			this.element.prepend(div);
-			
-			this._renderButtons();
-			this._renderWidgetStartValue();
-			this._handleButtonClicks();
+
+			// console.log(this);
+			// console.log(this.element);
+			// console.log(this.element.children('.widget'));
+
+			this._renderButtons(randomId);
+			this._renderWidgetStartValue(randomId);
+			this._handleButtonClicks(randomId);
 			
 			this._triggerRendered();
 		},
-		_renderWidgetStartValue: function () {
-			let counter = $('.widget > span');
+		_renderWidgetStartValue: function (widgetId) {
+			let counter = $(`#${widgetId} > span`);
 			counter.addClass('counter');
 			counter.append("<span />");
 
 			let output = $('.counter > span');
 			output.addClass('output');
 			
-			this._setOption('currentValue', this.options.startValue);
+			this._currentValue = this.options.startValue;
 
-			output.text(this.options.currentValue);
+			output.text(this._currentValue);
 		},
-		_renderButtons: function () {
-			let widget = $('.widget');
-			
+		_renderButtons: function (widgetId) {
+			let widget = $(`#${widgetId}`);
+
 			let buttonsHolder = $('<div />');
 			buttonsHolder.addClass('buttons');
 			buttonsHolder
-			.append('<button id="str">')
-			.append('<button id="psr">')
-			.append('<button id="rst">')
-			.append('<button id="dstr">');
+			.append(`<button id="str${widgetId}">`)
+			.append(`<button id="psr${widgetId}">`)
+			.append(`<button id="rst${widgetId}">`)
+			.append(`<button id="dstr${widgetId}">`);
 			
 			widget.append(buttonsHolder);
 
-			this._addButtonClasses();
+			this._addButtonClasses(widgetId);
 		},
-		_addButtonClasses: function () {
-			let start = $('.buttons > #str');
+		_addButtonClasses: function (widgetId) {
+			let start = $(`.buttons > #str${widgetId}`);
 			start.addClass('start');
 			start.text("Start");
 
-			let pause = $('.buttons > #psr');
+			let pause = $(`.buttons > #psr${widgetId}`);
 			pause.addClass('pause');
 			pause.text("Pause");
 
-			let stop = $('.buttons > #rst');
-			stop.addClass('reset');
-			stop.text("Reset");
+			let reset = $(`.buttons > #rst${widgetId}`);
+			reset.addClass('reset');
+			reset.text("Reset");
 
-			let destroy = $('.buttons > #dstr');
+			let destroy = $(`.buttons > #dstr${widgetId}`);
 			destroy.addClass('destroy');
 			destroy.text('Destroy');
 		},
-		_handleButtonClicks: function () {
+		_handleButtonClicks: function (widgetId) {
+			// var x= $('ns\\:text').attr('value'); eventNamespace?
 			let widgetInstance = this;
 	
-			$('.start').click(function () {
+			$(`#str${widgetId}`).click(function () {
 				widgetInstance._start();
 			});
 		
-			$('.pause').click(function () {
+			$(`#psr${widgetId}`).click(function () {
 				widgetInstance._pause();
 			});
 		
-			$('.reset').click(function () {
-				widgetInstance._stop();
+			$(`#rst${widgetId}`).click(function () {
+				widgetInstance._reset();
 			});
 		
-			$('.destroy').click(function () {
+			$(`#dstr${widgetId}`).click(function () {
 				widgetInstance.destroy();
 			});
 		},
@@ -232,29 +252,31 @@ if (typeof jQuery !== "function") {
 			this._state.paused = false;
 		},
 		_decrementCurrentValue: function (raiseEvent) {
-			this.options.currentValue -= this.options.delta;
-			let output = $('.counter > span');
+			this._currentValue -= this.options.delta;
+			let allItems = $('.counter > span');
+			
+			let output = $(this).find(allItems);
+
+			// console.log($(this))
 
 			if (raiseEvent) {
 				this._triggerTick();
 			}
-			if (this.options.currentValue <= 3) {
+			if (this._currentValue <= 3) {
 				output.addClass('blink');
 			}
-			if (this.options.currentValue > 0) {
-				output.text(this.options.currentValue);
+			if (this._currentValue > 0) {
+				output.text(this._currentValue);
 				return;
 			}
 			
-			output.text(this.options.currentValue);
+			output.text(this._currentValue);
 			output.addClass('end');
 			output.removeClass('blink');
 			this._triggerElapsed();
 		},
         _create: function () {
 			/* igWidget constructor goes here */
-			// $.Widget.prototype._create.apply(this);
-			
 			this._render();
 
 			if (this.options.autoStart) {
