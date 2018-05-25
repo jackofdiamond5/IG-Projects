@@ -62,8 +62,6 @@
     font-weight: 600;
 }
 
-
-
 .blink {
     animation: blinker 1s linear infinite;
     color: rgb(255, 120, 0);

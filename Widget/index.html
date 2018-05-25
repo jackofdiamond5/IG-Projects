@@ -17,7 +17,7 @@
 
 		$('#const').igCountdown({
 			autoStart: false,
-			startValue: 10,
+			startValue: 'gosho',
 			rendered: function (evt, ui) {console.log('rendered');},
 			rendering: function (evt, ui) {console.log('rendering');},
 			tick: function (evt, ui) {console.log('tick');},
@@ -31,7 +31,10 @@
 
 		$('#const1').igCountdown();		
 		$('#const2').igCountdown();		
-		$('#const3').igCountdown();		
+		// $('#const3').igCountdown({tick: function (evt, ui) {console.log('tick');}});
 
+		$('#const3').igCountdown();
+		$('#const3').on('tick', function (evt, ui) {console.log('tick')});
+		
 	</script>
 </body>
