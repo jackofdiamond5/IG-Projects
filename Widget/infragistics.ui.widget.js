@@ -26,7 +26,14 @@ if (typeof jQuery !== "function") {
 			/* igWidget element classes go here */
 			container: 'widget',
 			counter: 'counter',
-			buttons: 'buttons'
+			output: 'output',
+			blink: 'blink',
+			end: 'end',
+			buttons: 'buttons',
+			start: 'start',
+			pause: 'pause',
+			reset: 'reset',
+			destroy: 'destroy'
 		},
         options: {
 			/* igWidget options go here */
@@ -113,14 +120,14 @@ if (typeof jQuery !== "function") {
 			clearInterval(this._intervalID);
 			this._trigger(this.events.reset, null, args);
 
-			let output = this.element.children().find('.output');
+			let output = this.element.children().find(`.${this.css.output}`);
 			if (this._currentValue <= 3) {
-				output.removeClass('blink');
+				output.removeClass(this.css.blink);
 			}
 
 			this._currentValue = this.options.startValue;
 			output.text(this.options.startValue);
-			output.removeClass('end');
+			output.removeClass(this.css.end);
 
 			this._running = false;
 			this._paused = false;
@@ -214,11 +221,11 @@ if (typeof jQuery !== "function") {
 		},
 		_renderWidgetStartValue: function () {
 			let counter = this.element.children().find('span');
-			counter.addClass('counter');
+			counter.addClass(this.css.counter);
 			counter.append("<span />");
 			
 			let output = this.element.children().find(`.${this.css.counter} > span`);
-			output.addClass('output');
+			output.addClass(this.css.output);
 			
 			if (!this._constrain(this.options.startValue)) {
 				return;
@@ -245,19 +252,19 @@ if (typeof jQuery !== "function") {
 		},
 		_addButtonClasses: function () {
 			let start = $(`.${this.css.buttons} > #str`);
-			start.addClass('start');
+			start.addClass(this.css.start);
 			start.text("Start");
 
 			let pause = $(`.${this.css.buttons} > #psr`);
-			pause.addClass('pause');
+			pause.addClass(this.css.pause);
 			pause.text("Pause");
 
 			let reset = $(`.${this.css.buttons} > #rst`);
-			reset.addClass('reset');
+			reset.addClass(this.css.reset);
 			reset.text("Reset");
 
 			let destroy = $(`.${this.css.buttons} > #dstr`);
-			destroy.addClass('destroy');
+			destroy.addClass(this.css.destroy);
 			destroy.text('Destroy');
 		},
 		_beginCountdown: function () {
@@ -267,13 +274,13 @@ if (typeof jQuery !== "function") {
 		_decrementCurrentValue: function (raiseEvent) {
 			this._currentValue -= this.options.delta;
 
-			let output = this.element.children().find('.output');
+			let output = this.element.children().find(`.${this.css.output}`);
 
 			if (raiseEvent) {
 				this._triggerTick();
 			}
 			if (this._currentValue <= 3) {
-				output.addClass('blink');
+				output.addClass(this.css.blink);
 			}
 			if (this._currentValue > 0) {
 				output.text(this._currentValue);
@@ -281,8 +288,8 @@ if (typeof jQuery !== "function") {
 			}
 			
 			output.text(this._currentValue);
-			output.addClass('end');
-			output.removeClass('blink');
+			output.addClass(this.css.end);
+			output.removeClass(this.css.blink);
 			this._triggerElapsed();
 		},
 		_constrain: function (value) {
@@ -318,10 +325,10 @@ if (typeof jQuery !== "function") {
 				igCountdown destructor - unbind all event handlers, remove dynamically added classes and 
 				dynamically added elements in the widget element's DOM
 			*/
-						
+
 			this.element.children(`.${this.css.container}`).remove();
 			this.element.children(`.${this.css.buttons}`).remove();
-			
+
 			// try {
 			// 	this.element.replaceWith(this._Initial.clone());
 			// }
