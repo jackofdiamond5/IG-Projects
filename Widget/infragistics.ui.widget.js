@@ -26,7 +26,7 @@ if (typeof jQuery !== "function") {
 		css: {
 			/* igWidget element classes go here */
 			container: 'widget',
-			counter: 'count'
+			counter: 'counter'
 		},
         options: {
 			/* igWidget options go here */
@@ -87,6 +87,10 @@ if (typeof jQuery !== "function") {
 			}
 		},
 		_triggerPaused: function () {
+			if (!this._constrain(this._currentValue)) {
+				return;
+			}
+
 			if (!this._paused && this._currentValue != this.options.startValue) {
 				let args = {
 					owner: this
@@ -102,7 +106,7 @@ if (typeof jQuery !== "function") {
 				owner: this
 			}
 
-			if (!this._constrain(this.options.startValue)) {
+			if (!this._constrain(this.options.startValue) || this._currentValue === this.options.startValue) {
 				return;
 			}
 
@@ -150,7 +154,7 @@ if (typeof jQuery !== "function") {
 				owner: this
 			}
 
-			this._trigger(this.events.rendering, null, args);
+			return this._trigger(this.events.rendering, null, args);
 		},
 		_triggerRendered: function () {
 			let args = {
@@ -160,8 +164,6 @@ if (typeof jQuery !== "function") {
 			this._trigger(this.events.rendered, null, args);
 		},
 		_render: function () {
-			this._triggerRendering();
-
 			let div = $('<div />');
 			div.append('<span />');
 			div.addClass(this.css.container);
@@ -169,10 +171,7 @@ if (typeof jQuery !== "function") {
 			this.element.prepend(div);
 
 			this._renderButtons();
-			this._renderWidgetStartValue();
-			this._handleButtonClicks();
-			
-			this._triggerRendered();
+			this._renderWidgetStartValue();		
 		},
 		_renderWidgetStartValue: function () {
 			let counter = this.element.children().find('span');
@@ -222,28 +221,6 @@ if (typeof jQuery !== "function") {
 			destroy.addClass('destroy');
 			destroy.text('Destroy');
 		},
-		_handleButtonClicks: function () {
-			let widgetInstance = this;
-			$('.buttons').on('click', '.start', function (event) {
-				event.stopImmediatePropagation();
-				widgetInstance._start();
-			});
-
-			$('.buttons').on('click', '.pause', function (event) {
-				event.stopImmediatePropagation();
-				widgetInstance._pause();
-			});
-
-			$('.buttons').on('click', '.reset', function (event) {
-				event.stopImmediatePropagation();
-				widgetInstance._reset();
-			});
-
-			$('.buttons').on('click', '.destroy', function (event) {
-				event.stopImmediatePropagation();
-				widgetInstance.destroy();
-			});
-		},
 		_beginCountdown: function() {	
 			this._paused = false;
 			this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
@@ -271,10 +248,82 @@ if (typeof jQuery !== "function") {
 		},
         _create: function () {
 			/* igWidget constructor goes here */
-			this._render();
+			
+			this._attachEvents();
 
 			if (this.options.autoStart) {
 				this._triggerStarted();
+			}
+		},
+		_attachEvents: function () {
+			let widgetInstance = this;
+
+			this._on(this.element, {
+				'click .buttons': function (event) {
+					event.stopImmediatePropagation();
+					switch (event.target.id) {
+						case 'str':
+							widgetInstance._start();
+						break;
+						case 'psr':
+							widgetInstance._pause();
+						break;
+						case 'rst':
+							widgetInstance._reset();
+						break;
+						case 'dstr':
+							widgetInstance.destroy();
+						break;
+					}
+				}
+			});
+
+			// this.element.delegate('.buttons', {
+			// 	'click': function (event) {
+			// 		event.stopImmediatePropagation();
+			// 		switch (event.target.id) {
+			// 			case 'str':
+			// 				widgetInstance._start();
+			// 			break;
+			// 			case 'psr':
+			// 				widgetInstance._pause();
+			// 			break;
+			// 			case 'rst':
+			// 				widgetInstance._reset();
+			// 			break;
+			// 			case 'dstr':
+			// 				widgetInstance.destroy();
+			// 			break;
+			// 		}
+			// 	}
+			// });
+
+			// $('.buttons').on('click', '.start', function (event) {
+			// 	event.stopImmediatePropagation();
+			// 	widgetInstance._start();
+			// });
+
+			// $('.buttons').on('click', '.pause', function (event) {
+			// 	event.stopImmediatePropagation();
+			// 	widgetInstance._pause();
+			// });
+
+			// $('.buttons').on('click', '.reset', function (event) {
+			// 	event.stopImmediatePropagation();
+			// 	widgetInstance._reset();
+			// });
+
+			// $('.buttons').on('click', '.destroy', function (event) {
+			// 	event.stopImmediatePropagation();
+			// 	widgetInstance.destroy();
+			// });
+
+			let renderingEnabled = this._triggerRendering();
+			if (renderingEnabled) {
+				this._render();
+				this._triggerRendered();	
+			} else {
+				console.log(`Rendering disabled for element #${widgetInstance.element[0].id}.`);
 			}
 		},
 		_constrain: function(value) {
@@ -309,11 +358,10 @@ if (typeof jQuery !== "function") {
 				dynamically added elements in the widget element's DOM
 			*/
 
-			this.element.removeClass('.counter');
-			this.element.removeClass(this.css.container);
 			this.element.removeClass(this.css.counter);
+			this.element.removeClass(this.css.container);
 
-			this.element.undelegate();
+			this.element.off();
 			this.element.empty();
 
 			clearInterval(this._intervalID);
