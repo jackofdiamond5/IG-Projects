@@ -37,12 +37,12 @@ if (typeof jQuery !== "function") {
 		},
         options: {
 			/* igWidget options go here */
-			startValue : 10,
-			resetMessage : "Resetted",
-			pauseMessage : "Paused",
+			startValue: 10,
+			resetMessage: "Resetted",
+			pauseMessage: "Paused",
 			elapsedMessage: "Timer has elapsed!",
-			autoStart : false,
-			delta : 1
+			autoStart: false,
+			delta: 1
         },
 		events: {
 			started: 'started',
@@ -172,8 +172,6 @@ if (typeof jQuery !== "function") {
 		},
 		_create: function () {
 			// constructor 
-			
-			// this._Initial = $(`#${this.element[0].id}`).clone();
 
 			this._attachEvents();
 
@@ -183,9 +181,8 @@ if (typeof jQuery !== "function") {
 		},
 		_attachEvents: function () {
 			let widgetInstance = this;
-
 			widgetInstance._on(widgetInstance.element, {
-				'click .buttons': function (event) {
+				'click.buttons': function (event) {
 					switch (event.target.id) {
 						case 'str':
 							widgetInstance._start();
@@ -208,6 +205,14 @@ if (typeof jQuery !== "function") {
 				this._render();
 				this._triggerRendered();	
 			}
+		},
+		_detachEvents: function () {
+			this.element.off('igcountdownstarted igcountdownstopped igcountdownreset igcountdownpaused');
+			this.element.off('igcountdowntick');
+		},
+		_restoreInitialState: function () {
+			this.element.children(`.${this.css.container}`).remove();
+			this.element.children(`.${this.css.buttons}`).remove();
 		},
 		_render: function () {
 			let div = $('<div />');
@@ -314,26 +319,20 @@ if (typeof jQuery !== "function") {
 				return;
 			}
 
-			// The following line applies the option value to the igWidget meaning you don't
+			// The following line applies the option value to the igCounter meaning you don't
 			// have to perform this.options[option] = value;
 			$.Widget.prototype._setOption.apply(this, arguments);
 			
 			return true;
-        },
+		},
         destroy: function () {
 			/* 
 				igCountdown destructor - unbind all event handlers, remove dynamically added classes and 
 				dynamically added elements in the widget element's DOM
 			*/
-
-			this.element.children(`.${this.css.container}`).remove();
-			this.element.children(`.${this.css.buttons}`).remove();
-
-			// try {
-			// 	this.element.replaceWith(this._Initial.clone());
-			// }
-			// catch (error) { throw new DOMException(error.message); }
-				
+			
+			this._detachEvents();
+			this._restoreInitialState();
 			clearInterval(this._intervalID);
 				
 			$.Widget.prototype.destroy.apply(this, arguments);

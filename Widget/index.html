@@ -9,7 +9,7 @@
 
 <body>
 	<div id='const' style="background-color: red;">
-		<span>Pesho</span>
+		<span>Some text</span>
 	</div>
 	<div id='const1' style="margin-left:11vw; margin-top:1vw;"></div>
 	<div id='const2' style="margin-left:22vw; margin-top:1vw;"></div>
@@ -19,10 +19,14 @@
 
 	<script>
 
+		// attach custom event listeners
+		$('#const1').on('somethingHappens1', function () { });
+		$('#const2').bind('somethingHappens2', function () { });
+		
 		// attach event listeners alongside initialization
 		$('#const').igCountdown({
 			autoStart: false,
-			startValue: '10',
+			startValue: 'invalid',
 			rendered: function (evt, ui) {console.log(`rendered - ${this.id}`);},
 			rendering: function (evt, ui) {console.log(`rendering - ${this.id}`);},
 			tick: function (evt, ui) {console.log('tick');},
@@ -41,7 +45,7 @@
 		});		
 		$('#const1').on('igcountdownstarted', function (evt, ui) { console.log('started'); });
 
-		$('#const2').igCountdown();		
+		$('#const2').igCountdown();
 		$('#const2').on('igcountdownpaused', function (evt, ui) { console.log('paused'); });
 
 		$('#const3').igCountdown();
