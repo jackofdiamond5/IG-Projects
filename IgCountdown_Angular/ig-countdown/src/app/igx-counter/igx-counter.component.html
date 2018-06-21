@@ -1,0 +1,12 @@
+<div class="widget">
+  <span class="counter">
+    <span *ngIf="_constrain(this.startValue)">
+      <span [class.blink]='_currentValue <= 3 && _currentValue > 0' [class.end]='_currentValue === 0'>{{_currentValue}}</span>
+    </span>
+  </span>
+</div>
+<div class="buttons">
+  <button class="start" (click)='onStart($event)'>Start</button>
+  <button class="pause" (click)='onPause($event)'>Pause</button>
+  <button class="reset" (click)='onReset($event)'>Reset</button>
+</div>
