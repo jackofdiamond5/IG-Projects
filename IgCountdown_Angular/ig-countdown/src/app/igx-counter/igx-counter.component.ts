@@ -123,7 +123,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public delta = 1;
 
   /**
-   * Thrown when the countdown has started
+   * Emitted when the countdown has started
    *
    * ```html
    * <igx-counter (started)='onStarted()'></igx-counter>
@@ -135,7 +135,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public started = new EventEmitter();
 
   /**
-   * Thrown when the countdown has started after it was paused
+   * Emitted when the countdown has started after it was paused
    *
    * ```html
    * <igx-counter (resumed)='onResumed()'></igx-counter>
@@ -147,7 +147,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public resumed = new EventEmitter();
 
   /**
-   * Thrown when the countdown has been paused
+   * Emitted when the countdown has been paused
    *
    * ```html
    * <igx-counter (paused)='onPaused()'></igx-counter>
@@ -159,7 +159,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public paused = new EventEmitter();
 
   /**
-   * Thrown when the counter has been reset
+   * Emitted when the counter has been reset
    *
    * ```html
    * <igx-counter (reset)='onReset()'></igx-counter>
@@ -171,7 +171,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public reset = new EventEmitter();
   
   /**
-   * Thrown when the widget has begun rendering
+   * Emitted when the widget has begun rendering
    *
    * ```html
    * <igx-counter (rendering)='onRendering()'></igx-counter>
@@ -183,7 +183,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public rendering = new EventEmitter();
 
   /**
-   * Thrown when the widget has finished rendering
+   * Emitted when the widget has finished rendering
    *
    * ```html
    * <igx-counter (rendered)='onRendered()'></igx-counter>
@@ -195,7 +195,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public rendered = new EventEmitter();
 
   /**
-   * Thrown when the timer has reached zero
+   * Emitted when the timer has reached zero
    *
    * ```html
    * <igx-counter (elapsed)='onElapsed()'></igx-counter>
@@ -207,7 +207,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   public elapsed = new EventEmitter();
 
   /**
-   * Thrown every time the counter's value is decreased
+   * Emitted every time the counter's value is decreased
    *
    * ```html
    * <igx-counter (tick)='onTick()'></igx-counter>
@@ -233,7 +233,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('.start click')
-  onStart (event) {
+  public onStart (event) {
     if (this._isRunning) {
       return;
     }
@@ -246,7 +246,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('.pause click')
-  onPause (event) {
+  public onPause (event) {
     event.stopImmediatePropagation();
     event.preventDefault();
     
@@ -257,7 +257,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
   }
  
   @HostListener('.reset click')
-  onReset (event) {
+  public onReset (event) {
     if (!this._isRunning && !this._isPaused) {
       return;
     }
@@ -289,6 +289,7 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
     }
   
     this._currentValue -= this.delta;
+    this.tick.emit();
   }
 
   private _togglePausedResumedEvents() {
