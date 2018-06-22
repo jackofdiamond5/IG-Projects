@@ -289,7 +289,16 @@ export class IgxCounterComponent implements OnInit, OnDestroy {
     }
   
     this._currentValue -= this.delta;
-    this.tick.emit();
+    this._toggleTickElapsedEvents();
+  }
+
+  private _toggleTickElapsedEvents() {
+    if (this._currentValue === 0) {
+      this.tick.emit();
+      this.elapsed.emit();
+    } else {
+      this.tick.emit();
+    }
   }
 
   private _togglePausedResumedEvents() {
