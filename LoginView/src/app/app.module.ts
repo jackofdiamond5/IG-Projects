@@ -14,7 +14,6 @@ import {
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { LoginViewComponent } from './login-view/login-view.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { CategoryChartComponent } from './category-chart/category-chart.component';
@@ -26,7 +25,6 @@ import { RegisterComponent } from './register/register.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginViewComponent,
     DialogComponent,
     DropDownComponent,
     CategoryChartComponent,
