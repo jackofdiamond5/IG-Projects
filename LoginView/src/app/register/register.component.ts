@@ -1,8 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { IRegister } from '../interfaces/register.interface';
+import { User } from '../models/UserModel';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +18,8 @@ export class RegisterComponent implements OnInit, IRegister {
 
   public myUser: FormGroup;
   public myRegistration: FormGroup;
+
+  @Output() registered: EventEmitter<any> = new EventEmitter();
 
   constructor(private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
     this.myUser = fb.group({
@@ -36,22 +39,29 @@ export class RegisterComponent implements OnInit, IRegister {
   }
 
   tryRegister() {
+    const user: User = new User();
     this.authentication.register(
-      this.firstName,
-      this.lastName,
-      this.username,
-      this.password
+      
     )
-      .subscribe(
-        r => {
-          const msgSuccess = document.getElementById('registrationSuccessMsg');
-          const registrationForm = document.getElementById('registrationForm');
-
-          registrationForm.hidden = true;
-          msgSuccess.hidden = false;
-        },
-        r => {
-          alert(r.error.error);
-        });
   }
+
+  // tryRegister() {
+  //   this.authentication.register(
+  //     this.firstName,
+  //     this.lastName,
+  //     this.username,
+  //     this.password
+  //   )
+  //     .subscribe(
+  //       r => {
+  //         const msgSuccess = document.getElementById('registrationSuccessMsg');
+  //         const registrationForm = document.getElementById('registrationForm');
+
+  //         localStorage.setItem(this.username, this.password);
+  //         this.registered.emit();
+  //       },
+  //       r => {
+  //         alert(r.error.error);
+  //       });
+  // }
 }

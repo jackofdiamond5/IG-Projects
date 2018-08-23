@@ -7,7 +7,7 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
-        <button #loginButton igxButton="raised" (click)="openDialog()">Log In</button>
+        <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
     </igx-navbar>
     <app-login-dialog></app-login-dialog>
     <div class="content" igxFlex>

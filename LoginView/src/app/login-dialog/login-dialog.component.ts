@@ -34,4 +34,9 @@ export class LoginDialogComponent implements OnInit {
   changeTitle(title) {
     this.title = title;
   }
+
+  @HostListener('registered')
+  handleRegistered() {
+    this.showLoginForm();
+  }
 }

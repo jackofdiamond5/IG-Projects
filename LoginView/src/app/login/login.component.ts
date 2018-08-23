@@ -37,27 +37,31 @@ export class LoginComponent implements OnInit, ILogin {
   }
 
   tryLogIn() {
-    this.authentication.login(
-      this.username,
-      this.password
-    )
-      .subscribe(
-        r => {
-          if (r.token) {
-            const msgSuccess = document.getElementById('successMsg');
-            const msgHello = document.getElementById('helloMsg');
-            const form = document.getElementById('loginForm');
-
-            this.user.setToken(r.token);
-            msgHello.textContent = 'Hello, ' + this.username + '! You have successfully logged in! ';
-            form.hidden = true;
-            msgSuccess.hidden = false;
-          }
-        },
-        r => {
-          alert(r.error.error);
-        });
+    
   }
+
+  // tryLogIn() {
+  //   this.authentication.login(
+  //     this.username,
+  //     this.password
+  //   )
+  //     .subscribe(
+  //       r => {
+  //         if (r.token) {
+  //           const msgSuccess = document.getElementById('successMsg');
+  //           const msgHello = document.getElementById('helloMsg');
+  //           const form = document.getElementById('loginForm');
+
+  //           this.user.setToken(r.token);
+  //           msgHello.textContent = 'Hello, ' + this.username + '! You have successfully logged in! ';
+  //           form.hidden = true;
+  //           msgSuccess.hidden = false;
+  //         }
+  //       },
+  //       r => {
+  //         alert(r.error.error);
+  //       });
+  // }
 
   showRegistrationForm() {
     const loginForm = document.getElementById('loginForm');
