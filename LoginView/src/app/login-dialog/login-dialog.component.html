@@ -1,4 +1,4 @@
-<igx-dialog (onClose)="resetForms()" #dialog (click)="changeTitle()" title="{{title}}" [closeOnOutsideSelect]="true">
-  <app-login></app-login>
+<igx-dialog #dialog (onClose)="resetForm()" (onOpen)="showLoginForm()" title="{{title}}" [closeOnOutsideSelect]="true">
+  <app-login (viewChange)="changeTitle($event)"></app-login>
   <app-register></app-register>
 </igx-dialog>

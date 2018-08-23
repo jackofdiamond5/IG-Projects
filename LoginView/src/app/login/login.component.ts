@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+
 import { ILogin } from '../interfaces/login.interface';
 
 @Component({
@@ -15,6 +16,8 @@ export class LoginComponent implements OnInit, ILogin {
 
   public myUser: FormGroup;
   public myRegistration: FormGroup;
+
+  @Output() viewChange: EventEmitter<any> = new EventEmitter();
 
   constructor(private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
     this.myUser = fb.group({
@@ -59,8 +62,8 @@ export class LoginComponent implements OnInit, ILogin {
   showRegistrationForm() {
     const loginForm = document.getElementById('loginForm');
     const registrationForm = document.getElementById('registrationForm');
-
     loginForm.hidden = true;
     registrationForm.hidden = false;
+    this.viewChange.emit('Register');
   }
 }

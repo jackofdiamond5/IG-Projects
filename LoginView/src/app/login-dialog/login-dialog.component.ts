@@ -8,6 +8,7 @@ import { IgxDialogComponent } from 'igniteui-angular';
 })
 export class LoginDialogComponent implements OnInit {
   title = 'Login';
+
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
 
   constructor() { }
@@ -15,8 +16,13 @@ export class LoginDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  @HostListener('onClose')
-  resetForms() {
+  open() {
+    this.loginDialog.open();
+  }
+
+  @HostListener('onOpen')
+  showLoginForm() {
+    this.title = 'Login';
     const loginForm = document.getElementById('loginForm');
     const registrationForm = document.getElementById('registrationForm');
 
@@ -24,12 +30,8 @@ export class LoginDialogComponent implements OnInit {
     registrationForm.hidden = true;
   }
 
-  open() {
-    this.loginDialog.open();
-  }
-
-  @HostListener('#register click')
-  changeTitle() {
-    this.title = 'Register';
+  @HostListener('viewChange')
+  changeTitle(title) {
+    this.title = title;
   }
 }
