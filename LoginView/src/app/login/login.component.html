@@ -1,0 +1,23 @@
+<form class="input-group-form" id="loginForm" [formGroup]="myUser" (ngSubmit)="tryLogin()">
+  <h3 class="login-title">Welcome Back</h3>
+  <igx-input-group>
+    <igx-prefix>
+      <igx-icon name="account_circle"></igx-icon>
+    </igx-prefix>
+    <label igxLabel for="email">Username</label>
+    <input igxInput id="email" name="email" formControlName="email" type="text" [(ngModel)]="email" />
+  </igx-input-group>
+  <igx-input-group>
+    <igx-prefix>
+      <igx-icon name="lock"></igx-icon>
+    </igx-prefix>
+    <input igxInput id="loginPassword" name="password" type="password" formControlName="password" [(ngModel)]="password" />
+    <label igxLabel for="password">Password</label>
+  </igx-input-group>
+  <div class="button-wrapper">
+    <button igxButton="raised" type="submit" igxRipple [disabled]="!myUser.valid">LOG IN</button>
+  </div>
+  <div class="register-container">
+    <button id="register" igxButton="raised" (click)="showRegistrationForm()">Register</button>
+  </div>
+</form>

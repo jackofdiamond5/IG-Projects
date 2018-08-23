@@ -1,0 +1,23 @@
+<div igxLayout>
+  <igx-nav-drawer #nav id="project-menu" isOpen="true" [enableGestures]='true' width="280px">
+    <ng-template igxDrawer>
+      <span igxDrawerItem [isHeader]="true">Views</span>
+      <span *ngFor="let route of topNavLinks" igxDrawerItem igxRipple routerLinkActive="igx-nav-drawer__item--active" routerLink="{{route.path}}">{{route.name}}</span>
+    </ng-template>
+  </igx-nav-drawer>
+  <div class="main" igxFlex igxLayout igxLayoutDir="columns">
+    <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
+      <button #loginButton igxButton="raised" (click)="dialog.open()">Log In</button>
+    </igx-navbar>
+
+    <igx-dialog (onClose)="resetForms()" #dialog (click)="changeTitle()" title="{{title}}" leftButtonLabel="Confirm" (onLeftButtonSelect)="dialog.close()"
+      rightButtonLabel="Cancel" (onRightButtonSelect)="dialog.close()">
+      <app-login></app-login>
+      <app-register></app-register>
+    </igx-dialog>
+
+    <div class="content" igxFlex>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
