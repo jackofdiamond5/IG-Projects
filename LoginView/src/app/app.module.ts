@@ -21,6 +21,7 @@ import { CategoryChartComponent } from './category-chart/category-chart.componen
 import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { RegisterComponent } from './register/register.component';
     DropDownComponent,
     CategoryChartComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginDialogComponent
   ],
   imports: [
     FormsModule,

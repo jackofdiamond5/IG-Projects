@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 import { routes } from './app-routing.module';
 
 import { IgxNavigationDrawerComponent } from 'igniteui-angular';
-import { IgxDialogComponent } from 'igniteui-angular';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +13,13 @@ import { IgxDialogComponent } from 'igniteui-angular';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Login';
-
   public topNavLinks: Array<{
     path: string,
     name: string
   }> = [];
 
   @ViewChild(IgxNavigationDrawerComponent) public navdrawer: IgxNavigationDrawerComponent;
-  @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
+  @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
 
   constructor(private router: Router) {
     for (const route of routes) {
@@ -44,14 +42,10 @@ export class AppComponent implements OnInit {
           this.navdrawer.close();
         }
       });
-  }
+   }
 
-  @HostListener('onClose')
-  resetForms() {
-    const loginForm = document.getElementById('loginForm');
-    const registrationForm = document.getElementById('registrationForm');
-
-    loginForm.hidden = false;
-    registrationForm.hidden = true;
-  }
+   @HostListener('#loginButton click')
+   openDialog() {
+     this.loginDialog.open();
+   }
 }

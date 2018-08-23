@@ -7,15 +7,9 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
-      <button #loginButton igxButton="raised" (click)="dialog.open()">Log In</button>
+        <button #loginButton igxButton="raised" (click)="openDialog()">Log In</button>
     </igx-navbar>
-
-    <igx-dialog (onClose)="resetForms()" #dialog (click)="changeTitle()" title="{{title}}" leftButtonLabel="Confirm" (onLeftButtonSelect)="dialog.close()"
-      rightButtonLabel="Cancel" (onRightButtonSelect)="dialog.close()">
-      <app-login></app-login>
-      <app-register></app-register>
-    </igx-dialog>
-
+    <app-login-dialog></app-login-dialog>
     <div class="content" igxFlex>
       <router-outlet></router-outlet>
     </div>
