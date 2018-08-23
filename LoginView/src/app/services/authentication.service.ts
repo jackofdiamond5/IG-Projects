@@ -1,49 +1,63 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { OnInit, OnDestroy, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, Subscription } from 'rxjs';
 import { LoginResultModel } from '../models/LoginResultModel';
 import { User } from '../models/UserModel';
-import { map } from 'rxjs/operators';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService implements OnInit, OnDestroy {
 
-  constructor(private http: HttpClient) { }
+  isAuthorized: boolean;
+  isAuthorizedSubscription: Subscription;
+  apiResult: string;
 
-  login(firstName: string, lastName: string, username: string, password: string) {
-    return this.http.post<any>(`/home`, { firstName: firstName, lastName: lastName, username: username, password: password })
-      .pipe(map(user => {
-        if (user && user.token) {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-
-        return user;
-      }));
+  constructor(private http: HttpClient, private oidcSecurityService: OidcSecurityService) {
+    this.isAuthorized = false;
   }
 
-  logout() {
-    localStorage.removeItem('currentUser');
+  ngOnInit() {
+    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized()
+      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+   }
+
+  ngOnDestroy() {
+    this.isAuthorizedSubscription.unsubscribe();
   }
 
-  register(user: User) {
-    return this.http.post('/home' + user.id, user);
+  //signUp() {
+  //  this.oidcSecurityService.authorize();
+  //}
+
+  //logout() {
+  //  this.oidcSecurityService.logoff();
+  //}
+
+  //callApi() {
+  //  const token = this.oidcSecurityService.getToken();
+   // const apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
+   // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+//
+   // this.http.get(apiURL, { headers: headers }).subscribe(
+   //     response => this.apiResult = JSON.stringify(response),
+   //     error => console.log(error));
+  //}
+
+  login(email: string, password: string): Observable<LoginResultModel> {
+    return this.http.post<LoginResultModel>('https://reqres.in/api/login', {
+      email: email,
+      password: password
+    });
   }
 
-  // login(email: string, password: string): Observable<LoginResultModel> {
-  //   return this.http.post<LoginResultModel>('https://reqres.in/api/login', {
-  //     email: email,
-  //     password: password
-  //   });
-  // }
-
-  // register(firstName: string, lastName: string, email: string, password: string): Observable<User> {
-  //   return this.http.post<User>('https://reqres.in/api/register', {
-  //     firstName: firstName,
-  //     lastName: lastName,
-  //     email: email,
-  //     password: password
-  //   });
-  // }
+  register(firstName: string, lastName: string, email: string, password: string): Observable<User> {
+    return this.http.post<User>('https://reqres.in/api/register', {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    });
+  }
 }

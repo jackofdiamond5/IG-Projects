@@ -1,7 +1,10 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Subscription } from 'rxjs';
 
 import { ILogin } from '../interfaces/login.interface';
 
@@ -10,16 +13,22 @@ import { ILogin } from '../interfaces/login.interface';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, ILogin {
+export class LoginComponent implements OnInit, OnDestroy, ILogin {
   username: string;
   password: string;
 
   public myUser: FormGroup;
   public myRegistration: FormGroup;
 
+  isAuthorized: boolean;
+  isAuthorizedSubscription: Subscription;
+  apiResult: string;
+
   @Output() viewChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
+  constructor(private oidcSecurityService: OidcSecurityService, private http: HttpClient, private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
+    this.isAuthorized = false;
+    
     this.myUser = fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -34,6 +43,30 @@ export class LoginComponent implements OnInit, ILogin {
   }
 
   ngOnInit() {
+    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized()
+      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+  }
+
+  ngOnDestroy() {
+    this.isAuthorizedSubscription.unsubscribe();
+  }
+
+  signUp() {
+    this.oidcSecurityService.authorize();
+  }
+
+  signOut() {
+    this.oidcSecurityService.logoff();
+  }
+
+  callApi() {
+    const token = this.oidcSecurityService.getToken();
+    const apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get(apiURL, { headers: headers }).subscribe(
+        response => this.apiResult = JSON.stringify(response),
+        error => console.log(error));
   }
 
   tryLogIn() {

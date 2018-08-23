@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
 
 import { PageNotFoundComponent } from './error-routing/not-found/not-found.component';
 import { UncaughtErrorComponent } from './error-routing/error/uncaught-error.component';
@@ -12,6 +13,9 @@ import { CategoryChartComponent } from './category-chart/category-chart.componen
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,6 +25,10 @@ export const routes: Routes = [
   { path: 'dialog', component: DialogComponent, data: { text: 'Dialog' } },
   { path: 'drop-down', component: DropDownComponent, data: { text: 'Drop Down' } },
   { path: 'category-chart', component: CategoryChartComponent, data: { text: 'Category Chart' } },
+  { path: 'profile', component: ProfileComponent, data: { text: 'Profile' } },
+  { path: 'forbidden', component: ForbiddenComponent, data: { text: 'Forbidden' } },
+  { path: 'unauthorized', component: UnauthorizedComponent, data: { text: 'Unauthorized' } },
+  { path: 'redirect.html', component: RedirectComponent },
   // { path: 'login', component: LoginComponent },
   // { path: 'register', component: RegisterComponent },
   { path: '**', component: PageNotFoundComponent } // must always be last
