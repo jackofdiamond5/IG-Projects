@@ -1,5 +1,4 @@
-<igx-dialog (onClose)="resetForms()" #dialog (click)="changeTitle()" title="{{title}}" leftButtonLabel="Confirm" (onLeftButtonSelect)="dialog.close()"
-  rightButtonLabel="Cancel" (onRightButtonSelect)="dialog.close()">
+<igx-dialog (onClose)="resetForms()" #dialog (click)="changeTitle()" title="{{title}}" [closeOnOutsideSelect]="true">
   <app-login></app-login>
   <app-register></app-register>
 </igx-dialog>

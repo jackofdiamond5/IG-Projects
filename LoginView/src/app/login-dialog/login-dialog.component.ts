@@ -7,6 +7,7 @@ import { IgxDialogComponent } from 'igniteui-angular';
   styleUrls: ['./login-dialog.component.scss']
 })
 export class LoginDialogComponent implements OnInit {
+  title = 'Login';
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
 
   constructor() { }
@@ -25,5 +26,10 @@ export class LoginDialogComponent implements OnInit {
 
   open() {
     this.loginDialog.open();
+  }
+
+  @HostListener('#register click')
+  changeTitle() {
+    this.title = 'Register';
   }
 }
