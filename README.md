@@ -1,1 +1,1 @@
-# IG Initial Projects
+# Projects and tasks @ Infragistics
