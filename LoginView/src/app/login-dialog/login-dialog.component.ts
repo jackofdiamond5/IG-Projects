@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
 import { IgxDialogComponent } from 'igniteui-angular';
 
 @Component({
@@ -10,6 +10,8 @@ export class LoginDialogComponent implements OnInit {
   title = 'Login';
 
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
+
+  @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -38,5 +40,11 @@ export class LoginDialogComponent implements OnInit {
   @HostListener('registered')
   handleRegistered() {
     this.showLoginForm();
+  }
+
+  @HostListener('loggedIn')
+  handleLoggedIn(user) {
+    this.loginDialog.close();
+    this.loggedIn.emit(user);
   }
 }

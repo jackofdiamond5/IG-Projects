@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, HostListener } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
@@ -25,10 +25,11 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   apiResult: string;
 
   @Output() viewChange: EventEmitter<any> = new EventEmitter();
+  @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
-  constructor(private oidcSecurityService: OidcSecurityService, private http: HttpClient, private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
+  constructor(private oidcSecurityService: OidcSecurityService,
+    private http: HttpClient, private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
     this.isAuthorized = false;
-    
     this.myUser = fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -65,36 +66,21 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.get(apiURL, { headers: headers }).subscribe(
-        response => this.apiResult = JSON.stringify(response),
-        error => console.log(error));
+      response => this.apiResult = JSON.stringify(response),
+      error => console.log(error));
   }
 
-  tryLogIn() {
-    
+  tryLogin() {
+    this.authentication
+      .login(this.myUser.value)
+      .subscribe(
+        r => {
+          if (r.token) {
+            this.user.setToken(r.token);
+            this.loggedIn.emit(this.myUser.value);
+          }
+        });
   }
-
-  // tryLogIn() {
-  //   this.authentication.login(
-  //     this.username,
-  //     this.password
-  //   )
-  //     .subscribe(
-  //       r => {
-  //         if (r.token) {
-  //           const msgSuccess = document.getElementById('successMsg');
-  //           const msgHello = document.getElementById('helloMsg');
-  //           const form = document.getElementById('loginForm');
-
-  //           this.user.setToken(r.token);
-  //           msgHello.textContent = 'Hello, ' + this.username + '! You have successfully logged in! ';
-  //           form.hidden = true;
-  //           msgSuccess.hidden = false;
-  //         }
-  //       },
-  //       r => {
-  //         alert(r.error.error);
-  //       });
-  // }
 
   showRegistrationForm() {
     const loginForm = document.getElementById('loginForm');

@@ -18,9 +18,9 @@
     <button igxButton="raised" type="submit" igxRipple [disabled]="!myUser.valid">LOG IN</button>
   </div>
   <div class="register-container">
-    <button id="register" igxButton="flat" igxRipple="lightskyblue" (click)="showRegistrationForm()">Register</button>
+    <button id="register" type="button" igxButton="flat" igxRipple="lightskyblue" (click)="showRegistrationForm($event)">Register</button>
   </div>
   <div class="register-container">
-    <button id="openIDSignUp" igxButton="raised" (click)="signUp()">Sign Up with Open ID</button>
+    <button type="button" id="openIDSignUp" igxButton="raised" (click)="signUp()">Sign Up with Open ID</button>
   </div>
 </form>

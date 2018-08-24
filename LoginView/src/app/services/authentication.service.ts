@@ -21,43 +21,56 @@ export class AuthenticationService implements OnInit, OnDestroy {
   ngOnInit() {
     this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized()
       .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
-   }
+  }
 
   ngOnDestroy() {
     this.isAuthorizedSubscription.unsubscribe();
   }
 
-  //signUp() {
+  // signUp() {
   //  this.oidcSecurityService.authorize();
-  //}
+  // }
 
-  //logout() {
+  // logout() {
   //  this.oidcSecurityService.logoff();
-  //}
+  // }
 
-  //callApi() {
+  // callApi() {
   //  const token = this.oidcSecurityService.getToken();
-   // const apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
-   // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-//
-   // this.http.get(apiURL, { headers: headers }).subscribe(
-   //     response => this.apiResult = JSON.stringify(response),
-   //     error => console.log(error));
-  //}
+  //  const apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
+  //  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  login(email: string, password: string): Observable<LoginResultModel> {
-    return this.http.post<LoginResultModel>('https://reqres.in/api/login', {
-      email: email,
-      password: password
-    });
+  //  this.http.get(apiURL, { headers: headers }).subscribe(
+  //      response => this.apiResult = JSON.stringify(response),
+  //      error => console.log(error));
+  // }
+
+  login(user): Observable<LoginResultModel> {
+    debugger;
+    if (!localStorage.getItem(user.email)) {
+      alert('User does not exist!');
+      return this.http.post<LoginResultModel>('https://reqres.in/api/login', { });
+    }
+    if (localStorage.getItem(user.email) === user.password) {
+      return this.http.post<LoginResultModel>('https://reqres.in/api/login', {
+        email: user.email,
+        password: user.password
+      });
+    }
+
+    alert('Wrong password!');
+    return this.http.post<LoginResultModel>('https://reqres.in/api/login', { });
   }
 
-  register(firstName: string, lastName: string, email: string, password: string): Observable<User> {
+  register(user: User): Observable<User> {
+    if (localStorage.getItem(user.username)) {
+      alert('User already exists!');
+      return this.http.post<User>('https://reqres.in/api/register', { });
+    }
+
     return this.http.post<User>('https://reqres.in/api/register', {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
+      email: user.username,
+      password: user.password
     });
   }
 }
