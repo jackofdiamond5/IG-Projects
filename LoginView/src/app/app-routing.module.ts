@@ -26,11 +26,9 @@ export const routes: Routes = [
   { path: 'drop-down', component: DropDownComponent, data: { text: 'Drop Down' } },
   { path: 'category-chart', component: CategoryChartComponent, data: { text: 'Category Chart' } },
   { path: 'profile', component: ProfileComponent, data: { text: 'Profile' } },
-  { path: 'forbidden', component: ForbiddenComponent, data: { text: 'Forbidden' } },
-  { path: 'unauthorized', component: UnauthorizedComponent, data: { text: 'Unauthorized' } },
+  // { path: 'forbidden', component: ForbiddenComponent, data: { text: 'Forbidden' } },
+  // { path: 'unauthorized', component: UnauthorizedComponent, data: { text: 'Unauthorized' } },
   { path: 'redirect.html', component: RedirectComponent },
-  // { path: 'login', component: LoginComponent },
-  // { path: 'register', component: RegisterComponent },
   { path: '**', component: PageNotFoundComponent } // must always be last
 ];
 

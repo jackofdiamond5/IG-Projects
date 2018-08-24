@@ -7,7 +7,7 @@ import { IgxDialogComponent } from 'igniteui-angular';
   styleUrls: ['./login-dialog.component.scss']
 })
 export class LoginDialogComponent implements OnInit {
-  title = 'Login';
+  title: string;
 
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
 

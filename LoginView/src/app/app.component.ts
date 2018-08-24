@@ -13,6 +13,8 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  loggedIn: boolean;
+
   public topNavLinks: Array<{
     path: string,
     name: string
@@ -42,10 +44,21 @@ export class AppComponent implements OnInit {
           this.navdrawer.close();
         }
       });
-   }
+  }
 
-   @HostListener('#loginButton click')
-   openDialog() {
-     this.loginDialog.open();
-   }
+  @HostListener('#loginButton click')
+  openDialog() {
+    this.loginDialog.open();
+  }
+
+  @HostListener('#logoutButton click')
+  handleLogout() {
+    this.loggedIn = false;
+  }
+
+  @HostListener('loggedIn')
+  handleLogin() {
+    this.loggedIn = true;
+  }
+
 }

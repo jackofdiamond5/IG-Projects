@@ -5,6 +5,7 @@ import { UserService } from '../services/user.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { ILogin } from '../interfaces/login.interface';
 
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
 
   public myUser: FormGroup;
   public myRegistration: FormGroup;
+  private router: Router;
 
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
@@ -31,15 +33,11 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     private http: HttpClient, private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
     this.isAuthorized = false;
     this.myUser = fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-
-    this.myRegistration = fb.group({
-      newEmail: ['', Validators.required],
-      newPassword: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      id: [''],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      firstName: [''],
+      lastName: ['']
     });
   }
 
@@ -74,10 +72,11 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.authentication
       .login(this.myUser.value)
       .subscribe(
-        r => {
-          if (r.token) {
-            this.user.setToken(r.token);
+        res => {
+          debugger;
+          if (res) {
             this.loggedIn.emit(this.myUser.value);
+            // navigate to profile page
           }
         });
   }

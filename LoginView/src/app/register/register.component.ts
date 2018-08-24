@@ -21,11 +21,6 @@ export class RegisterComponent implements OnInit, IRegister {
   @Output() registered: EventEmitter<any> = new EventEmitter();
 
   constructor(private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
-    this.myUser = fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-
     this.myRegistration = fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -42,7 +37,6 @@ export class RegisterComponent implements OnInit, IRegister {
       .register(this.myRegistration.value)
       .subscribe(
         r => {
-          localStorage.setItem(this.username, this.password);
           this.registered.emit();
         }
       );
