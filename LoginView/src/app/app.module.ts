@@ -37,9 +37,7 @@ import { RedirectComponent } from './redirect/redirect.component';
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
-  return () => oidcConfigService.load_using_custom_stsServer(
-    'https://login.microsoftonline.com/fabrikamb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=b2c_1_susi'
-  );
+  return () => oidcConfigService.load_using_stsServer('https://accounts.google.com');
 }
 
 @NgModule({
@@ -96,15 +94,15 @@ export class AppModule {
 
       const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
       openIDImplicitFlowConfiguration.stsServer =
-       'https://login.microsoftonline.com/tfp/fabrikamb2c.onmicrosoft.com/b2c_1_susi/oauth2/v2.0/';
-      openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:65328/redirect.html';
+       'https://accounts.google.com';
+      openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200/profile';
       // The Client MUST validate that the aud (audience) Claim contains its client_id value registered at the Issuer
       // identified by the iss (issuer) Claim as an audience.
       // The ID Token MUST be rejected if the ID Token does not list the Client as a valid audience,
       // or if it contains additional audiences not trusted by the Client.
-      openIDImplicitFlowConfiguration.client_id = 'e760cab2-b9a1-4c0d-86fb-ff7084abd902';
+      openIDImplicitFlowConfiguration.client_id = '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com';
       openIDImplicitFlowConfiguration.response_type = 'id_token token';
-      openIDImplicitFlowConfiguration.scope = 'openid https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read';
+      openIDImplicitFlowConfiguration.scope = 'openid email profile';
       openIDImplicitFlowConfiguration.post_logout_redirect_uri = '/';
       openIDImplicitFlowConfiguration.post_login_route = '/profile';
       // HTTP 403
