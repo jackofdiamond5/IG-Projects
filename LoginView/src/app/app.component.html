@@ -10,12 +10,13 @@
       <div *ngIf="!loggedIn">
         <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
       </div>
-      <div *ngIf="loggedIn">
-        <button #profile igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openProfile()">Profile</button>
-      </div>
-      <div *ngIf="loggedIn">
-        <button #logoutButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="handleLogout()">Log Out</button>
-      </div>
+
+      <button *ngIf="loggedIn" #showOptions igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="toggleDropDown($event)">Options</button>
+      <igx-drop-down #options>
+        <button #profile igxRipple="purple" igxButton="flat" igxButtonColor="black" (click)="openProfile()">Profile</button>
+        <button #logoutButton igxRipple="purple" igxButton="flat" igxButtonColor="black" (click)="handleLogout()">Log Out</button>
+      </igx-drop-down>
+
     </igx-navbar>
     <app-login-dialog (loggedIn)="handleLogin()"></app-login-dialog>
     <div class="content" igxFlex>

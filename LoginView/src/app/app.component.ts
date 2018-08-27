@@ -4,7 +4,11 @@ import { filter } from 'rxjs/operators';
 
 import { routes } from './app-routing.module';
 
-import { IgxNavigationDrawerComponent } from 'igniteui-angular';
+import {
+  IgxNavigationDrawerComponent, IgxDropDownComponent,
+  ConnectedPositioningStrategy, CloseScrollStrategy,
+  HorizontalAlignment, VerticalAlignment
+} from 'igniteui-angular';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 @Component({
@@ -22,6 +26,20 @@ export class AppComponent implements OnInit {
 
   @ViewChild(IgxNavigationDrawerComponent) public navdrawer: IgxNavigationDrawerComponent;
   @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
+  @ViewChild(IgxDropDownComponent) igxDropDown: IgxDropDownComponent;
+
+
+  private _positionSettings = {
+    horizontalStartPoint: HorizontalAlignment.Left,
+    verticalStartPoint: VerticalAlignment.Bottom
+  };
+
+  private _overlaySettings = {
+    closeOnOutsideClick: true,
+    modal: false,
+    positionStrategy: new ConnectedPositioningStrategy(this._positionSettings),
+    scrollStrategy: new CloseScrollStrategy()
+  };
 
   constructor(private router: Router) {
     for (const route of routes) {
@@ -55,6 +73,7 @@ export class AppComponent implements OnInit {
   handleLogout() {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/home']);
+    this.igxDropDown.toggle();
     this.loggedIn = false;
   }
 
@@ -66,5 +85,11 @@ export class AppComponent implements OnInit {
   @HostListener('#profile click')
   openProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  @HostListener('#showOptions click')
+  toggleDropDown(event) {
+    this._overlaySettings.positionStrategy.settings.target = event.target;
+    this.igxDropDown.toggle(this._overlaySettings);
   }
 }

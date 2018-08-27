@@ -38,6 +38,9 @@ export class RegisterComponent implements OnInit, IRegister {
       .subscribe(
         r => {
           this.registered.emit();
+        },
+        e => {
+          alert(e.error.message);
         }
       );
   }
