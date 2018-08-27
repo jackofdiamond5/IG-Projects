@@ -7,12 +7,15 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
-        <div *ngIf="!loggedIn">
-          <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
-        </div>
-        <div *ngIf="loggedIn">
-          <button #logoutButton (click)="handleLogout()" igxRipple="white" igxButton="flat" igxButtonColor="white">Log Out</button>
-        </div>
+      <div *ngIf="!loggedIn">
+        <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
+      </div>
+      <div *ngIf="loggedIn">
+        <button #profile igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openProfile()">Profile</button>
+      </div>
+      <div *ngIf="loggedIn">
+        <button #logoutButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="handleLogout()">Log Out</button>
+      </div>
     </igx-navbar>
     <app-login-dialog (loggedIn)="handleLogin()"></app-login-dialog>
     <div class="content" igxFlex>

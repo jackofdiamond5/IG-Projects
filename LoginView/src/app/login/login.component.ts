@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, HostListener, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private oidcSecurityService: OidcSecurityService,
-    private http: HttpClient, private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
+    private http: HttpClient, private authentication: AuthenticationService,
+    private user: UserService, fb: FormBuilder, private injector: Injector) {
     this.isAuthorized = false;
     this.myUser = fb.group({
       id: [''],
@@ -73,12 +74,18 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
       .login(this.myUser.value)
       .subscribe(
         res => {
-          debugger;
           if (res) {
+            this.router = this.injector.get(Router);
             this.loggedIn.emit(this.myUser.value);
-            // navigate to profile page
+            this.router.navigate(['/profile']);
           }
-        });
+        },
+        res => {
+          if (res.error) {
+            alert(res.error.message);
+          }
+        }
+      );
   }
 
   showRegistrationForm() {

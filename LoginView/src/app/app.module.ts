@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   IgxNavigationDrawerModule, IgxNavbarModule,
   IgxLayoutModule, IgxRippleModule,
@@ -33,6 +33,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { RedirectComponent } from './redirect/redirect.component';
+import { JwtInterceptor } from './services/jwt.interceptor';
+import { BackendProvider } from './services/backend.service';
+import { AuthGuard } from './services/auth.guard';
 
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {
@@ -75,13 +78,16 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     IgxCategoryChartModule
   ],
   providers: [
+    AuthGuard,
     OidcConfigService,
-      {
-        provide: APP_INITIALIZER,
-        useFactory: loadConfig,
-        deps: [OidcConfigService],
-        multi: true
-      }
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadConfig,
+      deps: [OidcConfigService],
+      multi: true
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    BackendProvider
   ],
   bootstrap: [AppComponent]
 })
@@ -94,7 +100,7 @@ export class AppModule {
 
       const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
       openIDImplicitFlowConfiguration.stsServer =
-       'https://accounts.google.com';
+        'https://accounts.google.com';
       openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200/profile';
       // The Client MUST validate that the aud (audience) Claim contains its client_id value registered at the Issuer
       // identified by the iss (issuer) Claim as an audience.
@@ -115,9 +121,9 @@ export class AppModule {
       openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds = 30;
 
       const authWellKnownEndpoints = new AuthWellKnownEndpoints();
-            authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
+      authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
 
-      this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints)
+      this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
     });
 
     console.log('APP STARTING');

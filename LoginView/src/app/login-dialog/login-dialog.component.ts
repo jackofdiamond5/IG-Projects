@@ -16,6 +16,9 @@ export class LoginDialogComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (localStorage.getItem('currentUser')) {
+      this.loggedIn.emit();
+    }
   }
 
   open() {

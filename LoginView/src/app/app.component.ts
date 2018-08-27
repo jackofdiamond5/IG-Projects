@@ -53,6 +53,8 @@ export class AppComponent implements OnInit {
 
   @HostListener('#logoutButton click')
   handleLogout() {
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/home']);
     this.loggedIn = false;
   }
 
@@ -61,4 +63,8 @@ export class AppComponent implements OnInit {
     this.loggedIn = true;
   }
 
+  @HostListener('#profile click')
+  openProfile() {
+    this.router.navigate(['/profile']);
+  }
 }
