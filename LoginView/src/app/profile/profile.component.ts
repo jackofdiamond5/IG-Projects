@@ -11,7 +11,7 @@ export class ProfileComponent implements OnInit {
 
   currentUser: IUser;
 
-  constructor(private authentication: AuthenticationService, private injector: Injector) {
+  constructor(private authentication: AuthenticationService) {
   }
 
   ngOnInit() {

@@ -32,7 +32,9 @@ export class AuthenticationService implements OnInit, OnDestroy {
 
   get loggedInUser(): IUser {
     const formData = JSON.parse(localStorage.getItem('currentUser'));
-    this.currentUser = JSON.parse(localStorage.getItem('users')).filter(u => u.name === formData.username);
+    if (formData) {
+      this.currentUser = JSON.parse(localStorage.getItem('users')).filter(u => u.username === formData.username);
+    }
     return this.currentUser;
   }
 

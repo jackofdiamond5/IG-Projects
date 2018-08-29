@@ -7,11 +7,11 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
-      <div *ngIf="currentUser === null || currentUser === undefined">
+      <div *ngIf="currentUser === undefined">
         <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
       </div>
       <div>
-        <button *ngIf="currentUser !== null && currentUser !== undefined" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963" igxButtonColor="white"
+        <button *ngIf="currentUser !== undefined" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963" igxButtonColor="white"
           (click)="toggleDropDown($event)" [igxToggleAction]="options">
           <igx-avatar initials="JS" [roundShape]="true" size="small" bgColor="white">
           </igx-avatar>
