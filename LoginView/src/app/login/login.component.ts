@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, HostListener, Injector } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthenticationService } from '../services/authentication.service';
-import { UserService } from '../services/user.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-
 import { ILogin } from '../interfaces/login.interface';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { AuthenticationService } from '../services/authentication.service';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, Injector } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   username: string;
   password: string;
 
-  public myUser: FormGroup;
+  public user: FormGroup;
   public myRegistration: FormGroup;
   private router: Router;
 
@@ -30,15 +28,12 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private oidcSecurityService: OidcSecurityService,
-    private http: HttpClient, private authentication: AuthenticationService,
-    private user: UserService, fb: FormBuilder, private injector: Injector) {
+    private http: HttpClient, private authentication: AuthenticationService, fb: FormBuilder, private injector: Injector) {
     this.isAuthorized = false;
-    this.myUser = fb.group({
+    this.user = fb.group({
       id: [''],
       username: ['', Validators.required],
       password: ['', Validators.required],
-      firstName: [''],
-      lastName: ['']
     });
   }
 
@@ -51,32 +46,43 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.isAuthorizedSubscription.unsubscribe();
   }
 
-  signUp() {
+  signUpG() {
     this.oidcSecurityService.authorize();
+  }
+
+  signUpFb() {
+    debugger;
+    FB.login((result: any) => {
+      this.getUser();
+    });
+  }
+
+  getUser() {
+    FB.api('/me?fields=id,name,first_name,gender,picture,email,friends',
+    function(result) {
+        if (result && !result.error) {
+          debugger;
+          // result.email
+          // result.name
+          // result.picture.data.url
+        } else {
+            console.log(result.error);
+        }
+    });
   }
 
   signOut() {
     this.oidcSecurityService.logoff();
   }
 
-  callApi() {
-    const token = this.oidcSecurityService.getToken();
-    const apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    this.http.get(apiURL, { headers: headers }).subscribe(
-      response => this.apiResult = JSON.stringify(response),
-      error => console.log(error));
-  }
-
   tryLogin() {
     this.authentication
-      .login(this.myUser.value)
+      .login(this.user.value)
       .subscribe(
         res => {
           if (res) {
             this.router = this.injector.get(Router);
-            this.loggedIn.emit(this.myUser.value);
+            this.loggedIn.emit(this.user.value);
             this.router.navigate(['/profile']);
           }
         },
@@ -86,7 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
           }
         }
       );
-  }
+    }
 
   showRegistrationForm() {
     const loginForm = document.getElementById('loginForm');

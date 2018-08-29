@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { IUser } from '../interfaces/user-model.interface.';
 import { IRegister } from '../interfaces/register.interface';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, Injector } from '@angular/core';
+import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,22 +12,19 @@ import { IRegister } from '../interfaces/register.interface';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, IRegister {
-  firstName: string;
-  lastName: string;
+  name: string;
   username: string;
+  email: string;
   password: string;
 
-  public myUser: FormGroup;
-  public myRegistration: FormGroup;
+  public registrationForm: FormGroup;
 
-  @Output() registered: EventEmitter<any> = new EventEmitter();
-
-  constructor(private authentication: AuthenticationService, private user: UserService, fb: FormBuilder) {
-    this.myRegistration = fb.group({
+  constructor(private authentication: AuthenticationService, private router: Router, private injector: Injector, fb: FormBuilder) {
+    this.registrationForm = fb.group({
+      name: ['', Validators.required],
       username: ['', Validators.required],
-      password: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required]
+      email: ['', Validators.nullValidator],
+      password: ['', Validators.required]
     });
   }
 
@@ -34,10 +33,12 @@ export class RegisterComponent implements OnInit, IRegister {
 
   tryRegister() {
     this.authentication
-      .register(this.myRegistration.value)
+      .register(this.registrationForm.value)
       .subscribe(
         r => {
-          this.registered.emit();
+          this.authentication.login(r as IUser);
+          this.router = this.injector.get(Router);
+          this.router.navigate(['/profile'])
         },
         e => {
           alert(e.error.message);

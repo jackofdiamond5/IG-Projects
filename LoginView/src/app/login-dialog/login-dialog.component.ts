@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
 import { IgxDialogComponent } from 'igniteui-angular';
+import { Component, OnInit, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
+import { AuthenticationService } from '../services/authentication.service';
+import { IUser } from '../interfaces/user-model.interface.';
 
 @Component({
   selector: 'app-login-dialog',
@@ -8,17 +10,14 @@ import { IgxDialogComponent } from 'igniteui-angular';
 })
 export class LoginDialogComponent implements OnInit {
   title: string;
+  currentUser: IUser;
 
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
 
-  @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor(private authentication: AuthenticationService) { }
 
   ngOnInit() {
-    if (localStorage.getItem('currentUser')) {
-      this.loggedIn.emit();
-    }
   }
 
   open() {
@@ -46,8 +45,12 @@ export class LoginDialogComponent implements OnInit {
   }
 
   @HostListener('loggedIn')
-  handleLoggedIn(user) {
+  handleLoggedIn() {
     this.loginDialog.close();
-    this.loggedIn.emit(user);
+    this.setUserState();
+  }
+
+  setUserState() {
+    this.currentUser = this.authentication.loggedInUser;
   }
 }

@@ -1,15 +1,11 @@
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
 import { routes } from './app-routing.module';
-
-import {
-  IgxNavigationDrawerComponent, IgxDropDownComponent,
-  ConnectedPositioningStrategy, CloseScrollStrategy,
-  HorizontalAlignment, VerticalAlignment
-} from 'igniteui-angular';
+import { NavigationStart, Router } from '@angular/router';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { IgxNavigationDrawerComponent, IgxDropDownComponent } from 'igniteui-angular';
+import { AuthenticationService } from './services/authentication.service';
+import { IUser } from './interfaces/user-model.interface.';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +14,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 })
 export class AppComponent implements OnInit {
   loggedIn: boolean;
+  currentUser: IUser;
 
   public topNavLinks: Array<{
     path: string,
@@ -28,20 +25,7 @@ export class AppComponent implements OnInit {
   @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
   @ViewChild(IgxDropDownComponent) igxDropDown: IgxDropDownComponent;
 
-
-  private _positionSettings = {
-    horizontalStartPoint: HorizontalAlignment.Left,
-    verticalStartPoint: VerticalAlignment.Bottom
-  };
-
-  private _overlaySettings = {
-    closeOnOutsideClick: true,
-    modal: false,
-    positionStrategy: new ConnectedPositioningStrategy(this._positionSettings),
-    scrollStrategy: new CloseScrollStrategy()
-  };
-
-  constructor(private router: Router) {
+  constructor(private router: Router, private authentication: AuthenticationService) {
     for (const route of routes) {
       if (route.path && route.data && route.path.indexOf('*') === -1) {
         this.topNavLinks.push({
@@ -62,6 +46,7 @@ export class AppComponent implements OnInit {
           this.navdrawer.close();
         }
       });
+      this.setUserState();
   }
 
   @HostListener('#loginButton click')
@@ -69,17 +54,17 @@ export class AppComponent implements OnInit {
     this.loginDialog.open();
   }
 
-  @HostListener('#logoutButton click')
+  @HostListener('#logout click')
   handleLogout() {
-    localStorage.removeItem('currentUser');
     this.router.navigate(['/home']);
-    this.igxDropDown.toggle();
-    this.loggedIn = false;
+    this.authentication.logout();
+    this.setUserState();
   }
 
   @HostListener('loggedIn')
   handleLogin() {
     this.loggedIn = true;
+    this.setUserState();
   }
 
   @HostListener('#profile click')
@@ -87,9 +72,12 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/profile']);
   }
 
-  @HostListener('#showOptions click')
-  toggleDropDown(event) {
-    this._overlaySettings.positionStrategy.settings.target = event.target;
-    this.igxDropDown.toggle(this._overlaySettings);
+  @HostListener('#home click')
+  navigateHome() {
+    this.router.navigate(['/home']);
+  }
+
+  private setUserState() {
+    this.currentUser = this.authentication.loggedInUser;
   }
 }

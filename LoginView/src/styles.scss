@@ -13,3 +13,7 @@ $app-palette: igx-palette($primary, $secondary);
 .content p {
   margin: 15px;
 }
+
+.igx-overlay__wrapper{
+  z-index: 5;
+}

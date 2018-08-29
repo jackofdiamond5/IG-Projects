@@ -1,11 +1,11 @@
-<form class="input-group-form" id="loginForm" [formGroup]="myUser" (ngSubmit)="tryLogin()">
+<form class="input-group-form" id="loginForm" [formGroup]="user" (ngSubmit)="tryLogin()">
   <h3 class="login-title">Welcome Back</h3>
   <igx-input-group>
     <igx-prefix>
       <igx-icon name="account_circle"></igx-icon>
     </igx-prefix>
     <label igxLabel for="username">Username</label>
-    <input igxInput id="username" name="username" formControlName="username" type="text" [(ngModel)]="username" />
+    <input igxInput id="loginUsername" name="username" formControlName="username" type="text" [(ngModel)]="username" />
   </igx-input-group>
   <igx-input-group>
     <igx-prefix>
@@ -15,12 +15,15 @@
     <label igxLabel for="password">Password</label>
   </igx-input-group>
   <div class="button-wrapper">
-    <button igxButton="raised" type="submit" igxRipple [disabled]="!myUser.valid">LOG IN</button>
+    <button igxButton="raised" type="submit" igxRipple [disabled]="!user.valid">LOG IN</button>
   </div>
   <div class="register-container">
     <button id="register" type="button" igxButton="flat" igxRipple="lightskyblue" (click)="showRegistrationForm($event)">Register</button>
   </div>
   <div class="register-container">
-    <button type="button" id="openIDSignUp" igxButton="raised" (click)="signUp()">Sign Up with Open ID</button>
+    <button type="button" id="openIDSignUpG" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
+  </div>
+  <div class="register-container">
+    <button type="button" id="openIDSignUpFb" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
   </div>
 </form>

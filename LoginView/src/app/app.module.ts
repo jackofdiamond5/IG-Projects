@@ -1,41 +1,37 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
-  IgxNavigationDrawerModule, IgxNavbarModule,
+  AuthModule,
+  OidcConfigService,
+  OidcSecurityService,
+  AuthWellKnownEndpoints,
+  OpenIDImplicitFlowConfiguration,
+} from 'angular-auth-oidc-client';
+import {
   IgxLayoutModule, IgxRippleModule,
   IgxInputGroupModule, IgxIconModule,
   IgxDialogModule, IgxDropDownModule,
-  IgxButtonModule, IgxToggleModule
+  IgxNavigationDrawerModule, IgxNavbarModule,
+  IgxButtonModule, IgxToggleModule, IgxAvatarModule
 } from 'igniteui-angular';
-
-import {
-  AuthModule,
-  OidcSecurityService,
-  OpenIDImplicitFlowConfiguration,
-  OidcConfigService,
-  AuthWellKnownEndpoints
-} from 'angular-auth-oidc-client';
-
 import { AppComponent } from './app.component';
+import { AuthGuard } from './services/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { AppRoutingModule } from './app-routing.module';
+import { LoginComponent } from './login/login.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { DialogComponent } from './dialog/dialog.component';
+import { JwtInterceptor } from './services/jwt.interceptor';
+import { BackendProvider } from './services/fake-backend.service';
+import { ProfileComponent } from './profile/profile.component';
+import { RegisterComponent } from './register/register.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropDownComponent } from './drop-down/drop-down.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CategoryChartComponent } from './category-chart/category-chart.component';
 import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
-import { ProfileComponent } from './profile/profile.component';
-import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { RedirectComponent } from './redirect/redirect.component';
-import { JwtInterceptor } from './services/jwt.interceptor';
-import { BackendProvider } from './services/backend.service';
-import { AuthGuard } from './services/auth.guard';
 
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {
@@ -54,9 +50,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     RedirectComponent,
     RegisterComponent,
     LoginDialogComponent,
-    ProfileComponent,
-    ForbiddenComponent,
-    UnauthorizedComponent
+    ProfileComponent
   ],
   imports: [
     FormsModule,
@@ -75,7 +69,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     IgxDropDownModule,
     IgxButtonModule,
     IgxToggleModule,
-    IgxCategoryChartModule
+    IgxCategoryChartModule,
+    IgxAvatarModule
   ],
   providers: [
     AuthGuard,
@@ -86,8 +81,9 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
       deps: [OidcConfigService],
       multi: true
     },
+    // DELETE THIS BEFORE PRODUCTION!
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    BackendProvider
+    BackendProvider,
   ],
   bootstrap: [AppComponent]
 })
@@ -101,7 +97,7 @@ export class AppModule {
       const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
       openIDImplicitFlowConfiguration.stsServer =
         'https://accounts.google.com';
-      openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200/profile';
+      openIDImplicitFlowConfiguration.redirect_url = 'http://localhost:4200/redirect.html';
       // The Client MUST validate that the aud (audience) Claim contains its client_id value registered at the Issuer
       // identified by the iss (issuer) Claim as an audience.
       // The ID Token MUST be rejected if the ID Token does not list the Client as a valid audience,
@@ -110,7 +106,7 @@ export class AppModule {
       openIDImplicitFlowConfiguration.response_type = 'id_token token';
       openIDImplicitFlowConfiguration.scope = 'openid email profile';
       openIDImplicitFlowConfiguration.post_logout_redirect_uri = '/';
-      openIDImplicitFlowConfiguration.post_login_route = '/profile';
+      openIDImplicitFlowConfiguration.post_login_route = '/redirect.html';
       // HTTP 403
       openIDImplicitFlowConfiguration.forbidden_route = '/forbidden';
       // HTTP 401

@@ -7,16 +7,25 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
-      <div *ngIf="!loggedIn">
+      <div *ngIf="currentUser === null || currentUser === undefined">
         <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
       </div>
-
-      <button *ngIf="loggedIn" #showOptions igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="toggleDropDown($event)">Options</button>
+      <div>
+        <button *ngIf="currentUser !== null && currentUser !== undefined" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963" igxButtonColor="white"
+          (click)="toggleDropDown($event)" [igxToggleAction]="options">
+          <igx-avatar initials="JS" [roundShape]="true" size="small" bgColor="white">
+          </igx-avatar>
+          <igx-icon name="keyboard_arrow_down"></igx-icon>
+        </button>
+      </div>
       <igx-drop-down #options>
-        <button #profile igxRipple="purple" igxButton="flat" igxButtonColor="black" (click)="openProfile()">Profile</button>
-        <button #logoutButton igxRipple="purple" igxButton="flat" igxButtonColor="black" (click)="handleLogout()">Log Out</button>
+        <igx-drop-down-item igxRipple="purple" (click)="openProfile()">
+          Profile
+        </igx-drop-down-item>
+        <igx-drop-down-item igxRipple="purple" (click)="handleLogout()">
+          Log Out
+        </igx-drop-down-item>
       </igx-drop-down>
-
     </igx-navbar>
     <app-login-dialog (loggedIn)="handleLogin()"></app-login-dialog>
     <div class="content" igxFlex>

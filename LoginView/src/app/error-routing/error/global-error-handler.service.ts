@@ -18,8 +18,8 @@ export class GlobalErrorHandlerService implements ErrorHandler {
       if (isDevMode()) {
         throw error;
       } else {
-      this.zone.run(() => {
-         this.router.navigate(['error']);
+        this.zone.run(() => {
+          this.router.navigate(['error']);
         });
       }
     }

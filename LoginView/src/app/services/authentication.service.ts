@@ -1,9 +1,9 @@
-import { OnInit, OnDestroy, Injectable } from '@angular/core';
+import { Subscription, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { User } from '../models/UserModel';
+import { IUser } from '../interfaces/user-model.interface.';
+import { BackendInterceptor } from './fake-backend.service';
+import { OnInit, OnDestroy, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { BackendInterceptor } from '../services/backend.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class AuthenticationService implements OnInit, OnDestroy {
   isAuthorizedSubscription: Subscription;
   apiResult: string;
   interceptor: BackendInterceptor;
+  currentUser: IUser;
 
   constructor(private http: HttpClient, private oidcSecurityService: OidcSecurityService) {
     this.isAuthorized = false;
@@ -29,13 +30,29 @@ export class AuthenticationService implements OnInit, OnDestroy {
     this.isAuthorizedSubscription.unsubscribe();
   }
 
-  login(userData: User) {
-    return this.http.post('/login', userData);
-    // return this.interceptor.intercept(new HttpRequest<User>('POST', '/login', userData), this.handler);
+  get loggedInUser(): IUser {
+    const formData = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(localStorage.getItem('users')).filter(u => u.name === formData.username);
+    return this.currentUser;
   }
 
-  register(userData: User) {
+  login(userData: IUser) {
+    this.setCurrentUser(userData);
+    return this.http.post('/login', userData);
+  }
+
+  logout() {
+    this.currentUser = null;
+    localStorage.removeItem('currentUser');
+  }
+
+  register(userData: IUser) {
     return this.http.post('/register', userData);
-    // return this.interceptor.intercept(new HttpRequest<User>('POST', '/register', userData), this.handler);
+  }
+
+  // set current user in LS
+  private setCurrentUser(user: IUser) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUser = user;
   }
 }
