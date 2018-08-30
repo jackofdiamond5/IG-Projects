@@ -19,7 +19,9 @@ export const routes: Routes = [
   { path: 'drop-down', component: DropDownComponent, data: { text: 'Drop Down' } },
   { path: 'category-chart', component: CategoryChartComponent, data: { text: 'Category Chart' } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'redirect.html', component: RedirectComponent },
+  { path: 'redirect.html', component: RedirectComponent, data: { provider: 'Google' } },
+  { path: 'redirect-google', component: RedirectComponent, data: { provider: 'Google' } },
+  { path: 'redirect-facebook', component: RedirectComponent, data: { provider: 'Facebook' } },
   { path: '**', component: PageNotFoundComponent } // must always be last
 ];
 

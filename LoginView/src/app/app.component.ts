@@ -6,6 +6,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { IgxNavigationDrawerComponent, IgxDropDownComponent } from 'igniteui-angular';
 import { AuthenticationService } from './services/authentication.service';
 import { IUser } from './interfaces/user-model.interface.';
+import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-root',

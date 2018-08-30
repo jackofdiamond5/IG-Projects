@@ -12,6 +12,9 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "types":[
+      "node", "jasmine", "facebook-js-sdk"
+    ],
     "lib": [
       "es2017",
       "dom"
