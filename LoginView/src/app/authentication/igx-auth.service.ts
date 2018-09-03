@@ -35,11 +35,11 @@ export class ExternalAuthService {
 
     public googleConfig: ExternalAuthConfig;
 
-    public AddGoogle(googleConfig: ExternalAuthConfig) {
+    public addGoogle(googleConfig: ExternalAuthConfig) {
         this.googleConfig = googleConfig;
     }
 
-    public Login(externalStsConfig: ExternalAuthConfig) {
+    public login(externalStsConfig: ExternalAuthConfig) {
         this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
             this.configService(externalStsConfig);
             this.oidcSecurityService.authorize();
@@ -47,23 +47,16 @@ export class ExternalAuthService {
         this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
     }
 
-    public GetUserInfo(externalStsConfig: ExternalAuthConfig) {
-        const user = new Promise<IUser>();
+    public getUserInfo(externalStsConfig: ExternalAuthConfig): Promise<IUser> {
+        const user = new Promise<IUser>((res, rej) => {
+
+        });
         this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
             this.configService(externalStsConfig);
             this.oidcSecurityService.authorizedCallback();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
                 this.oidcSecurityService.getUserData().subscribe(userData => {
-                    // tslint:disable-next-line:no-debugger
-                    debugger;
-                    user.
-                    this.authentication.login(userData as IUser);
 
-                    // userData.name;
-                    // userData.email;
-                    // userData.picture;
-                    // sessionStorage.setItem('userName', userData.name);
-                    // this.user.setUser()
                 });
             });
         });
@@ -71,7 +64,7 @@ export class ExternalAuthService {
         return user;
     }
 
-    private configService(externalStsConfig: ExternalAuthConfig) {
+    public configService(externalStsConfig: ExternalAuthConfig) {
         const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
         openIDImplicitFlowConfiguration.stsServer = externalStsConfig.stsServer;
         openIDImplicitFlowConfiguration.redirect_url = externalStsConfig.redirect_url;

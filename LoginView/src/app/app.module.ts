@@ -82,13 +82,13 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     // DELETE THIS BEFORE PRODUCTION!
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     BackendProvider,
+    //
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private externalAuthService: ExternalAuthService) {
-    debugger;
-    this.externalAuthService.AddGoogle(<ExternalAuthConfig>{
+    this.externalAuthService.addGoogle(<ExternalAuthConfig>{
       provider: ExternalAuthProvider.Google,
       stsServer: 'https://accounts.google.com',
       client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',

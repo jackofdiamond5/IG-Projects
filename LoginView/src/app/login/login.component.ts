@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   }
 
   signUpG() {
-    this.authService.Login(this.authService.googleConfig);
+    this.authService.login(this.authService.googleConfig);
   }
 
   // signUpFb() {

@@ -22,23 +22,23 @@ export class RedirectComponent implements OnInit {
 
   ngOnInit() {
     debugger;
-    this.authService.Login(this.authService.googleConfig);
+    const userInfo: Promise<IUser> = this.authService.getUserInfo(this.authService.googleConfig);
 
-    this.oidcSecurityService.authorizedCallback();
-    this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-      this.oidcSecurityService.getUserData().subscribe(userData => {
-        // tslint:disable-next-line:no-debugger
-        debugger;
+    // this.oidcSecurityService.authorizedCallback();
+    // this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
+    //   this.oidcSecurityService.getUserData().subscribe(userData => {
+    //     // tslint:disable-next-line:no-debugger
+    //     debugger;
 
-        this.authentication.login(userData as IUser);
+    //     // this.authentication.login(userData as IUser);
 
-        // userData.name;
-        // userData.email;
-        // userData.picture;
-        // sessionStorage.setItem('userName', userData.name);
-        // this.user.setUser()
-      });
-      this.user.setToken(this.oidcSecurityService.getToken());
-    });
+    //     // userData.name;
+    //     // userData.email;
+    //     // userData.picture;
+    //     // sessionStorage.setItem('userName', userData.name);
+    //     // this.user.setUser()
+    //   });
+    //   this.user.setToken(this.oidcSecurityService.getToken());
+    // });
   }
 }
