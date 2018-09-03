@@ -80,6 +80,8 @@ export class AppComponent implements OnInit {
   }
 
   private setUserState() {
+    // tslint:disable-next-line:no-debugger
+    debugger;
     this.currentUser = this.authentication.loggedInUser;
   }
 }

@@ -5,6 +5,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { IUser } from '../interfaces/user-model.interface.';
 import { ActivatedRoute } from '@angular/router';
 import { ExternalAuthProvider, ExternalAuthService } from '../authentication/igx-auth.service';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   template: '<p>Signing in...</p>'
@@ -14,7 +15,8 @@ export class RedirectComponent implements OnInit {
 
 
   constructor(private oidcSecurityService: OidcSecurityService, private user: UserService,
-              route: ActivatedRoute, private authService: ExternalAuthService, private authentication: AuthenticationService;) {
+    route: ActivatedRoute, private authService: ExternalAuthService,
+    private authentication: AuthenticationService, private login: LoginComponent) {
     // tslint:disable-next-line:no-debugger
     // debugger;
     // const provider = route.data['provider'] as ExternalAuthProvider;
@@ -30,7 +32,9 @@ export class RedirectComponent implements OnInit {
     //     // tslint:disable-next-line:no-debugger
     //     debugger;
 
-         this.authentication.login(userInfo);
+
+    this.login.tryLogin();
+    // this.authentication.login(userInfo);
 
     //     // userData.name;
     //     // userData.email;
@@ -38,7 +42,7 @@ export class RedirectComponent implements OnInit {
     //     // sessionStorage.setItem('userName', userData.name);
     //     // this.user.setUser()
     //   });
-       this.user.setToken(this.oidcSecurityService.getToken());
+    this.user.setToken(this.oidcSecurityService.getToken());
     // });
   }
 }
