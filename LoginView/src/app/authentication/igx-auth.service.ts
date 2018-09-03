@@ -48,15 +48,18 @@ export class ExternalAuthService {
     }
 
     public getUserInfo(externalStsConfig: ExternalAuthConfig): Promise<IUser> {
+        let resolve: (val: IUser) => void;
+        let reject: () => void;
         const user = new Promise<IUser>((res, rej) => {
-
+            resolve = res;
+            reject = rej;
         });
         this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
             this.configService(externalStsConfig);
             this.oidcSecurityService.authorizedCallback();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
                 this.oidcSecurityService.getUserData().subscribe(userData => {
-
+                    resolve(userData as IUser);
                 });
             });
         });

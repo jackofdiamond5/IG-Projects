@@ -11,18 +11,18 @@ import { ExternalAuthProvider, ExternalAuthService } from '../authentication/igx
 })
 export class RedirectComponent implements OnInit {
 
-  private authentication: AuthenticationService;
+
 
   constructor(private oidcSecurityService: OidcSecurityService, private user: UserService,
-              route: ActivatedRoute, private authService: ExternalAuthService) {
+              route: ActivatedRoute, private authService: ExternalAuthService, private authentication: AuthenticationService;) {
     // tslint:disable-next-line:no-debugger
     // debugger;
     // const provider = route.data['provider'] as ExternalAuthProvider;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     debugger;
-    const userInfo: Promise<IUser> = this.authService.getUserInfo(this.authService.googleConfig);
+    const userInfo: IUser = await this.authService.getUserInfo(this.authService.googleConfig);
 
     // this.oidcSecurityService.authorizedCallback();
     // this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
@@ -30,7 +30,7 @@ export class RedirectComponent implements OnInit {
     //     // tslint:disable-next-line:no-debugger
     //     debugger;
 
-    //     // this.authentication.login(userData as IUser);
+         this.authentication.login(userInfo);
 
     //     // userData.name;
     //     // userData.email;
@@ -38,7 +38,7 @@ export class RedirectComponent implements OnInit {
     //     // sessionStorage.setItem('userName', userData.name);
     //     // this.user.setUser()
     //   });
-    //   this.user.setToken(this.oidcSecurityService.getToken());
+       this.user.setToken(this.oidcSecurityService.getToken());
     // });
   }
 }
