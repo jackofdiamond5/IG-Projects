@@ -24,13 +24,12 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
   apiResult: string;
-  private authService: ExternalAuthService = new ExternalAuthService(this.oidcSecurityService, this.oidcConfigService);
 
   @Output() viewChange: EventEmitter<any> = new EventEmitter();
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
-  constructor(private oidcSecurityService: OidcSecurityService, private oidcConfigService: OidcConfigService,
-    private http: HttpClient, private authentication: AuthenticationService, fb: FormBuilder, private injector: Injector
+  constructor(private oidcSecurityService: OidcSecurityService, private authService: ExternalAuthService,
+    private authentication: AuthenticationService, fb: FormBuilder, private injector: Injector
   ) {
     this.isAuthorized = false;
     this.user = fb.group({
@@ -50,18 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   }
 
   signUpG() {
-    this.authService.Login(<ExternalAuthConfig>{
-      provider: ExternalAuthProvider.Google,
-      stsServer: 'https://accounts.google.com',
-      client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',
-      scope: 'openid email profile',
-      redirect_url: 'http://localhost:4200/redirect.html',
-      response_type: 'id_token token',
-      post_logout_redirect_uri: '/',
-      post_login_route: '/redirect.html',
-      auto_userinfo: false,
-      max_id_token_iat_offset_allowed_in_seconds: 30
-    });
+    this.authService.Login(this.authService.googleConfig);
   }
 
   // signUpFb() {

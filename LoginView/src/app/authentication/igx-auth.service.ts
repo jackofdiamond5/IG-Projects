@@ -1,4 +1,7 @@
 import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
+import { Injectable } from '@angular/core';
+import { of, Observable } from 'rxjs';
+import { IUser } from '../interfaces/user-model.interface.';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -20,6 +23,10 @@ export interface ExternalAuthConfig {
     max_id_token_iat_offset_allowed_in_seconds: number;
 }
 
+
+@Injectable({
+    providedIn: 'root'
+})
 export class ExternalAuthService {
     constructor(
         private oidcSecurityService: OidcSecurityService,
@@ -28,27 +35,56 @@ export class ExternalAuthService {
 
     public googleConfig: ExternalAuthConfig;
 
+    public AddGoogle(googleConfig: ExternalAuthConfig) {
+        this.googleConfig = googleConfig;
+    }
+
     public Login(externalStsConfig: ExternalAuthConfig) {
         this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
-            const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
-            openIDImplicitFlowConfiguration.stsServer = externalStsConfig.stsServer;
-            openIDImplicitFlowConfiguration.redirect_url = externalStsConfig.redirect_url;
-            openIDImplicitFlowConfiguration.client_id = externalStsConfig.client_id;
-            openIDImplicitFlowConfiguration.response_type = externalStsConfig.response_type;
-            openIDImplicitFlowConfiguration.scope = externalStsConfig.scope;
-            openIDImplicitFlowConfiguration.post_logout_redirect_uri = externalStsConfig.redirect_url;
-            openIDImplicitFlowConfiguration.post_login_route = externalStsConfig.post_login_route;
-            openIDImplicitFlowConfiguration.auto_userinfo = externalStsConfig.auto_userinfo;
-            openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
-                externalStsConfig.max_id_token_iat_offset_allowed_in_seconds;
-
-            const authWellKnownEndpoints = new AuthWellKnownEndpoints();
-            authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
-
-            this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
-
+            this.configService(externalStsConfig);
             this.oidcSecurityService.authorize();
         });
-        this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer); // https://accounts.google.com
+        this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
+    }
+
+    public GetUserInfo(externalStsConfig: ExternalAuthConfig) {
+        const user = new Promise<IUser>();
+        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
+            this.configService(externalStsConfig);
+            this.oidcSecurityService.authorizedCallback();
+            this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
+                this.oidcSecurityService.getUserData().subscribe(userData => {
+                    // tslint:disable-next-line:no-debugger
+                    debugger;
+                    user.
+                    this.authentication.login(userData as IUser);
+
+                    // userData.name;
+                    // userData.email;
+                    // userData.picture;
+                    // sessionStorage.setItem('userName', userData.name);
+                    // this.user.setUser()
+                });
+            });
+        });
+        this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
+        return user;
+    }
+
+    private configService(externalStsConfig: ExternalAuthConfig) {
+        const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
+        openIDImplicitFlowConfiguration.stsServer = externalStsConfig.stsServer;
+        openIDImplicitFlowConfiguration.redirect_url = externalStsConfig.redirect_url;
+        openIDImplicitFlowConfiguration.client_id = externalStsConfig.client_id;
+        openIDImplicitFlowConfiguration.response_type = externalStsConfig.response_type;
+        openIDImplicitFlowConfiguration.scope = externalStsConfig.scope;
+        openIDImplicitFlowConfiguration.post_logout_redirect_uri = externalStsConfig.redirect_url;
+        openIDImplicitFlowConfiguration.post_login_route = externalStsConfig.post_login_route;
+        openIDImplicitFlowConfiguration.auto_userinfo = externalStsConfig.auto_userinfo;
+        openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
+            externalStsConfig.max_id_token_iat_offset_allowed_in_seconds;
+        const authWellKnownEndpoints = new AuthWellKnownEndpoints();
+        authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
+        this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
     }
 }

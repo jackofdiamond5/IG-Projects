@@ -1,4 +1,3 @@
-import { UserService } from '../services/user.service';
 import { IUser } from '../interfaces/user-model.interface.';
 import { IRegister } from '../interfaces/register.interface';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -38,7 +37,7 @@ export class RegisterComponent implements OnInit, IRegister {
         r => {
           this.authentication.login(r as IUser);
           this.router = this.injector.get(Router);
-          this.router.navigate(['/profile'])
+          this.router.navigate(['/profile']);
         },
         e => {
           alert(e.error.message);

@@ -10,7 +10,6 @@ import { ErrorRoutingModule } from './error-routing/error-routing.module';
 import { CategoryChartComponent } from './category-chart/category-chart.component';
 import { PageNotFoundComponent } from './error-routing/not-found/not-found.component';
 import { UncaughtErrorComponent } from './error-routing/error/uncaught-error.component';
-
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'error', component: UncaughtErrorComponent },
@@ -19,9 +18,8 @@ export const routes: Routes = [
   { path: 'drop-down', component: DropDownComponent, data: { text: 'Drop Down' } },
   { path: 'category-chart', component: CategoryChartComponent, data: { text: 'Category Chart' } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'redirect.html', component: RedirectComponent, data: { provider: 'Google' } },
-  { path: 'redirect-google', component: RedirectComponent, data: { provider: 'Google' } },
-  { path: 'redirect-facebook', component: RedirectComponent, data: { provider: 'Facebook' } },
+  { path: 'redirect', component: RedirectComponent, data: { provider: 'Google' } },
+  // { path: 'redirect-facebook', component: RedirectComponent, data: { provider: 'Facebook' } },
   { path: '**', component: PageNotFoundComponent } // must always be last
 ];
 

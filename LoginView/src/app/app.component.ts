@@ -47,8 +47,8 @@ export class AppComponent implements OnInit {
           this.navdrawer.close();
         }
       });
-      debugger;
-      this.setUserState();
+
+    this.setUserState();
   }
 
   @HostListener('#loginButton click')

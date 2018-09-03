@@ -17,5 +17,4 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authentication.loggedInUser[0];
   }
-
 }

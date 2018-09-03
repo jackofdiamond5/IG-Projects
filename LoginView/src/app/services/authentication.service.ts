@@ -9,7 +9,6 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
   providedIn: 'root'
 })
 export class AuthenticationService implements OnInit, OnDestroy {
-
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
   apiResult: string;

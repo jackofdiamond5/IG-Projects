@@ -4,7 +4,7 @@ import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { IUser } from '../interfaces/user-model.interface.';
 import { ActivatedRoute } from '@angular/router';
-import { ExternalAuthProvider } from '../authentication/igx-auth.service';
+import { ExternalAuthProvider, ExternalAuthService } from '../authentication/igx-auth.service';
 
 @Component({
   template: '<p>Signing in...</p>'
@@ -13,13 +13,19 @@ export class RedirectComponent implements OnInit {
 
   private authentication: AuthenticationService;
 
-  constructor(private oidcSecurityService: OidcSecurityService, private user: UserService, route: ActivatedRoute) {
-    const provider = route.data['provider'] as ExternalAuthProvider;
+  constructor(private oidcSecurityService: OidcSecurityService, private user: UserService,
+              route: ActivatedRoute, private authService: ExternalAuthService) {
+    // tslint:disable-next-line:no-debugger
+    // debugger;
+    // const provider = route.data['provider'] as ExternalAuthProvider;
   }
 
   ngOnInit() {
+    debugger;
+    this.authService.Login(this.authService.googleConfig);
+
     this.oidcSecurityService.authorizedCallback();
-    this.oidcSecurityService.onAuthorizationResult.subscribe((x) => {
+    this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
       this.oidcSecurityService.getUserData().subscribe(userData => {
         // tslint:disable-next-line:no-debugger
         debugger;
@@ -29,7 +35,7 @@ export class RedirectComponent implements OnInit {
         // userData.name;
         // userData.email;
         // userData.picture;
-        sessionStorage.setItem('userName', userData.name);
+        // sessionStorage.setItem('userName', userData.name);
         // this.user.setUser()
       });
       this.user.setToken(this.oidcSecurityService.getToken());

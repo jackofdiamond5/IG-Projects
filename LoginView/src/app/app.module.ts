@@ -29,6 +29,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CategoryChartComponent } from './category-chart/category-chart.component';
 import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
+import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './authentication/igx-auth.service';
 
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {
@@ -85,11 +86,19 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {
-
-    // ExternalAuthService.addGoogle({
-    //   client_id: "",
-    //   secret: ""
-    // });
+  constructor(private externalAuthService: ExternalAuthService) {
+    debugger;
+    this.externalAuthService.AddGoogle(<ExternalAuthConfig>{
+      provider: ExternalAuthProvider.Google,
+      stsServer: 'https://accounts.google.com',
+      client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',
+      scope: 'openid email profile',
+      redirect_url: 'http://localhost:4200/redirect',
+      response_type: 'id_token token',
+      post_logout_redirect_uri: '/',
+      post_login_route: 'redirect',
+      auto_userinfo: false,
+      max_id_token_iat_offset_allowed_in_seconds: 30
+    });
   }
 }
