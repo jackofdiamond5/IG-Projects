@@ -1,7 +1,6 @@
 import { Subscription, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../interfaces/user-model.interface.';
-import { BackendInterceptor } from './fake-backend.service';
 import { OnInit, OnDestroy, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
@@ -12,12 +11,10 @@ export class AuthenticationService implements OnInit, OnDestroy {
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
   apiResult: string;
-  interceptor: BackendInterceptor;
   currentUser: IUser;
 
   constructor(private http: HttpClient, private oidcSecurityService: OidcSecurityService) {
     this.isAuthorized = false;
-    this.interceptor = new BackendInterceptor();
   }
 
   ngOnInit() {
@@ -38,22 +35,11 @@ export class AuthenticationService implements OnInit, OnDestroy {
   }
 
   login(userData: IUser) {
-    this.setCurrentUser(userData);
+    debugger;
     return this.http.post('/login', userData);
-  }
-
-  logout() {
-    this.currentUser = null;
-    localStorage.removeItem('currentUser');
   }
 
   register(userData: IUser) {
     return this.http.post('/register', userData);
-  }
-
-  // set current user in LS
-  private setCurrentUser(user: IUser) {
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentUser = user;
   }
 }

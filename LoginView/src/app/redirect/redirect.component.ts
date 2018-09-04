@@ -11,38 +11,21 @@ import { LoginComponent } from '../login/login.component';
   template: '<p>Signing in...</p>'
 })
 export class RedirectComponent implements OnInit {
-
-
-
-  constructor(private oidcSecurityService: OidcSecurityService, private user: UserService,
-    route: ActivatedRoute, private authService: ExternalAuthService,
-    private authentication: AuthenticationService, private login: LoginComponent) {
-    // tslint:disable-next-line:no-debugger
-    // debugger;
+  constructor(
+    private user: UserService,
+    private loginComponent: LoginComponent,
+    private authService: AuthenticationService,
+    private externalAuthService: ExternalAuthService,
+    private oidcSecurityService: OidcSecurityService) {
     // const provider = route.data['provider'] as ExternalAuthProvider;
   }
 
   async ngOnInit() {
+    const userInfo: IUser = await this.externalAuthService.getUserInfo(this.externalAuthService.googleConfig);
+    // this.authService.loginWith(userInfo, route.data['provider'] as ExternalAuthProvider).subscribe();
     debugger;
-    const userInfo: IUser = await this.authService.getUserInfo(this.authService.googleConfig);
-
-    // this.oidcSecurityService.authorizedCallback();
-    // this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-    //   this.oidcSecurityService.getUserData().subscribe(userData => {
-    //     // tslint:disable-next-line:no-debugger
-    //     debugger;
-
-
-    this.login.tryLogin();
-    // this.authentication.login(userInfo);
-
-    //     // userData.name;
-    //     // userData.email;
-    //     // userData.picture;
-    //     // sessionStorage.setItem('userName', userData.name);
-    //     // this.user.setUser()
-    //   });
-    this.user.setToken(this.oidcSecurityService.getToken());
-    // });
+    //TODO: in subscribe:
+    userInfo.externalToken = this.oidcSecurityService.getToken();
+    this.user.setCurrentUser(userInfo);
   }
 }

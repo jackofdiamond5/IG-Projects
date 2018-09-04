@@ -7,6 +7,7 @@ import { IgxNavigationDrawerComponent, IgxDropDownComponent } from 'igniteui-ang
 import { AuthenticationService } from './services/authentication.service';
 import { IUser } from './interfaces/user-model.interface.';
 import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,6 @@ import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client
 })
 export class AppComponent implements OnInit {
   loggedIn: boolean;
-  currentUser: IUser;
 
   public topNavLinks: Array<{
     path: string,
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
   @ViewChild(IgxDropDownComponent) igxDropDown: IgxDropDownComponent;
 
-  constructor(private router: Router, private authentication: AuthenticationService) {
+  constructor(private router: Router, private authentication: AuthenticationService, private userService: UserService) {
     for (const route of routes) {
       if (route.path && route.data && route.path.indexOf('*') === -1) {
         this.topNavLinks.push({
@@ -47,8 +47,6 @@ export class AppComponent implements OnInit {
           this.navdrawer.close();
         }
       });
-
-    this.setUserState();
   }
 
   @HostListener('#loginButton click')
@@ -59,14 +57,12 @@ export class AppComponent implements OnInit {
   @HostListener('#logout click')
   handleLogout() {
     this.router.navigate(['/home']);
-    this.authentication.logout();
-    this.setUserState();
+    this.userService.logout();
   }
 
   @HostListener('loggedIn')
   handleLogin() {
     this.loggedIn = true;
-    this.setUserState();
   }
 
   @HostListener('#profile click')
@@ -77,11 +73,5 @@ export class AppComponent implements OnInit {
   @HostListener('#home click')
   navigateHome() {
     this.router.navigate(['/home']);
-  }
-
-  private setUserState() {
-    // tslint:disable-next-line:no-debugger
-    debugger;
-    this.currentUser = this.authentication.loggedInUser;
   }
 }

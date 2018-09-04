@@ -7,6 +7,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { Component, OnInit, OnDestroy, EventEmitter, Output, Injector } from '@angular/core';
 import { ExternalAuthService, ExternalAuthConfig, ExternalAuthProvider } from '../authentication/igx-auth.service';
+import { IUser } from '../interfaces/user-model.interface.';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private oidcSecurityService: OidcSecurityService, private authService: ExternalAuthService,
-    private authentication: AuthenticationService, fb: FormBuilder, private injector: Injector
+    private authentication: AuthenticationService, fb: FormBuilder
   ) {
     this.isAuthorized = false;
     this.user = fb.group({
@@ -77,13 +78,14 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.oidcSecurityService.logoff();
   }
 
-  tryLogin() {
+  tryLogin(userInfo?: IUser) {
+    debugger;
     this.authentication
-      .login(this.user.value)
+      .login(userInfo || this.user.value)
       .subscribe(
         res => {
           if (res) {
-            this.router = this.injector.get(Router);
+            debugger;
             this.loggedIn.emit(this.user.value);
             this.router.navigate(['/profile']);
           }

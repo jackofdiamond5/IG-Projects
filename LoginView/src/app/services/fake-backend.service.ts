@@ -45,10 +45,10 @@ export class BackendInterceptor implements HttpInterceptor {
     }
 
     loginHandle(request: HttpRequest<any>, users: IUser[]) {
+        debugger;
         const filteredUsers = users.filter(user => {
-            return user.username === request.body.username && user.password === user.password;
+            return user.username === request.body.username;
         });
-
         // authenticate
         if (filteredUsers.length) {
             const user: IUser = filteredUsers[0];
@@ -58,7 +58,6 @@ export class BackendInterceptor implements HttpInterceptor {
                 email: user.email,
                 token: user.token,
                 picture: user.picture,
-                password: user.password,
                 username: user.username,
             };
 
@@ -70,22 +69,6 @@ export class BackendInterceptor implements HttpInterceptor {
 
     private generateToken(): string {
         return Math.random().toString(36).substring(6);
-    }
-
-    private hash(word: string) {
-        let hash = 0;
-        if (word.length === 0) {
-            return hash;
-        }
-        for (let i = 0; i < word.length; i++) {
-            // tslint:disable-next-line:no-bitwise
-            const char = word.charCodeAt(i); hash = ((hash << 5) - hash) + char; hash = hash & hash;
-        }
-        return hash;
-    }
-
-    private salt(): string {
-        return crypto.getRandomValues(new Uint32Array(1)).toString();
     }
 }
 

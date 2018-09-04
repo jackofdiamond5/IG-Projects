@@ -33,23 +33,7 @@ export class LoginDialogComponent implements OnInit {
     loginForm.hidden = false;
     registrationForm.hidden = true;
   }
-
-  @HostListener('viewChange')
-  changeTitle(title) {
-    this.title = title;
-  }
-
-  @HostListener('registered')
-  handleRegistered() {
-    this.showLoginForm();
-  }
-
-  @HostListener('loggedIn')
-  handleLoggedIn() {
-    this.loginDialog.close();
-    this.setUserState();
-  }
-
+  
   setUserState() {
     this.currentUser = this.authentication.loggedInUser;
   }
