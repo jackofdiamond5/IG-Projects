@@ -16,18 +16,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { DialogComponent } from './dialog/dialog.component';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { BackendProvider } from './services/fake-backend.service';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DropDownComponent } from './drop-down/drop-down.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CategoryChartComponent } from './category-chart/category-chart.component';
 import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
 import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './authentication/igx-auth.service';
 
@@ -41,9 +38,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   declarations: [
     AppComponent,
     HomeComponent,
-    DialogComponent,
-    DropDownComponent,
-    CategoryChartComponent,
     LoginComponent,
     RedirectComponent,
     RegisterComponent,
@@ -72,6 +66,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   ],
   providers: [
     AuthGuard,
+    LoginComponent,
     OidcConfigService,
     {
       provide: APP_INITIALIZER,
@@ -81,8 +76,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     },
     // DELETE THIS BEFORE PRODUCTION!
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    BackendProvider,
-    //
+    BackendProvider
   ],
   bootstrap: [AppComponent]
 })
