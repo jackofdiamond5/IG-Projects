@@ -13,7 +13,6 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, data: { text: 'Home' } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'redirect', component: RedirectComponent, data: { provider: 'Google' } },
-  // { path: 'redirect-facebook', component: RedirectComponent, data: { provider: 'Facebook' } },
   { path: '**', component: PageNotFoundComponent } // must always be last
 ];
 

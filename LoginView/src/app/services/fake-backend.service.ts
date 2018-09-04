@@ -43,7 +43,7 @@ export class BackendInterceptor implements HttpInterceptor {
         this.registerHandle(request, users);
         const userData = this.loginHandle(request, users);
 
-        return of(new HttpResponse({status: 200, body: userData}));
+        return of(new HttpResponse({ status: 200, body: userData }));
     }
 
     registerHandle(request: HttpRequest<any>, users: IUser[]) {

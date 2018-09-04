@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router, private userService: UserService) {
     for (const route of routes) {
-      if (route.path && route.data && route.path.indexOf('*') === -1) {
+      if (route.path && route.data && route.path.indexOf('*') === -1 && route.path !== 'redirect') {
         this.topNavLinks.push({
           name: route.data.text,
           path: '/' + route.path

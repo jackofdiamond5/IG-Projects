@@ -18,8 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   username: string;
   password: string;
 
-  public user: FormGroup;
-  public myRegistration: FormGroup;
+  public loginForm: FormGroup;
 
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
@@ -32,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     private authentication: AuthenticationService, fb: FormBuilder, private userService: UserService, private router: Router
   ) {
     this.isAuthorized = false;
-    this.user = fb.group({
+    this.loginForm = fb.group({
       id: [''],
       username: ['', Validators.required],
       password: ['', Validators.required],
@@ -52,12 +51,8 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.authService.login(this.authService.googleConfig);
   }
 
-  signOut() {
-    this.oidcSecurityService.logoff();
-  }
-
   tryLogin() {
-    const response = this.authentication.login(this.user.value);
+    const response = this.authentication.login(this.loginForm.value);
     if (response) {
       this.userService.setCurrentUser(response);
       this.router.navigate(['/profile']);
