@@ -28,4 +28,14 @@ export class LoginDialogComponent implements OnInit {
     loginForm.hidden = false;
     registrationForm.hidden = true;
   }
+
+  @HostListener('loggedIn')
+  closeDialog() {
+    this.loginDialog.close();
+  }
+
+  @HostListener('viewChange')
+  changeTitle() {
+    this.title = 'Register';
+  }
 }

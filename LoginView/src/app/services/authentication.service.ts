@@ -1,8 +1,9 @@
-import { Subscription, throwError } from 'rxjs';
+import { Subscription, throwError, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../interfaces/user-model.interface.';
 import { OnInit, OnDestroy, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -35,19 +36,35 @@ export class AuthenticationService implements OnInit, OnDestroy {
   }
 
   login(userData: IUser) {
-    return this.http
+    let data;
+    this.http
       .post('/login', userData)
       .subscribe(
-        success => {
-          return success;
+        suc => {
+          debugger;
+          data = suc;
         },
-        error => {
-          return error;
+        err => {
+          alert(err.error.message);
         }
       );
+
+    return data;
   }
 
   register(userData: IUser) {
-    return this.http.post('/register', userData);
+    let data;
+    this.http
+    .post('/register', userData)
+    .subscribe(
+      suc => {
+        data = this.login(suc as IUser);
+      },
+      err => {
+        alert(err.error.message);
+      }
+    );
+
+    return data;
   }
 }

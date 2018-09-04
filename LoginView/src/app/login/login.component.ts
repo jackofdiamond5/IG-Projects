@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
 
   public user: FormGroup;
   public myRegistration: FormGroup;
-  private router: Router;
 
   isAuthorized: boolean;
   isAuthorizedSubscription: Subscription;
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private oidcSecurityService: OidcSecurityService, private authService: ExternalAuthService,
-    private authentication: AuthenticationService, fb: FormBuilder, private userService: UserService
+    private authentication: AuthenticationService, fb: FormBuilder, private userService: UserService, private router: Router
   ) {
     this.isAuthorized = false;
     this.user = fb.group({
@@ -58,13 +57,12 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.oidcSecurityService.logoff();
   }
 
-  tryLogin(userInfo?: IUser) {
-    const response = this.authentication.login(userInfo || this.user.value);
-    console.log(response);
-    debugger;
+  tryLogin() {
+    const response = this.authentication.login(this.user.value);
     if (response) {
-      this.userService.setCurrentUser(userInfo);
+      this.userService.setCurrentUser(response);
       this.router.navigate(['/profile']);
+      this.loggedIn.emit();
     }
   }
 
