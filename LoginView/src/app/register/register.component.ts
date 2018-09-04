@@ -1,10 +1,10 @@
-import { IUser } from '../interfaces/user-model.interface.';
-import { IRegister } from '../interfaces/register.interface';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Component, OnInit, Injector, EventEmitter, Output } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+
 import { UserService } from '../services/user.service';
+import { IRegister } from '../interfaces/register.interface';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit, IRegister {
 
   tryRegister() {
     const response = this.authentication.register(this.registrationForm.value);
-    console.log(response);
     if (response) {
       this.userService.setCurrentUser(response);
       this.router.navigate(['/profile']);

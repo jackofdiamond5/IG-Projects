@@ -1,13 +1,11 @@
 import { filter } from 'rxjs/operators';
-import { routes } from './app-routing.module';
 import { NavigationStart, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { IgxNavigationDrawerComponent, IgxDropDownComponent } from 'igniteui-angular';
-import { AuthenticationService } from './services/authentication.service';
-import { IUser } from './interfaces/user-model.interface.';
-import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
+
+import { routes } from './app-routing.module';
 import { UserService } from './services/user.service';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +24,7 @@ export class AppComponent implements OnInit {
   @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
   @ViewChild(IgxDropDownComponent) igxDropDown: IgxDropDownComponent;
 
-  constructor(private router: Router, private authentication: AuthenticationService, private userService: UserService) {
+  constructor(private router: Router, private userService: UserService) {
     for (const route of routes) {
       if (route.path && route.data && route.path.indexOf('*') === -1) {
         this.topNavLinks.push({
@@ -58,11 +56,6 @@ export class AppComponent implements OnInit {
   handleLogout() {
     this.router.navigate(['/home']);
     this.userService.logout();
-  }
-
-  @HostListener('loggedIn')
-  handleLogin() {
-    this.loggedIn = true;
   }
 
   @HostListener('#profile click')

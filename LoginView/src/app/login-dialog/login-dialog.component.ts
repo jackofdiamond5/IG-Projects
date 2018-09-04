@@ -1,7 +1,5 @@
 import { IgxDialogComponent } from 'igniteui-angular';
-import { Component, OnInit, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
-import { AuthenticationService } from '../services/authentication.service';
-import { IUser } from '../interfaces/user-model.interface.';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-login-dialog',
@@ -19,7 +17,6 @@ export class LoginDialogComponent implements OnInit {
     this.loginDialog.open();
   }
 
-  @HostListener('onOpen')
   showLoginForm() {
     this.title = 'Login';
     const loginForm = document.getElementById('loginForm');
@@ -29,12 +26,10 @@ export class LoginDialogComponent implements OnInit {
     registrationForm.hidden = true;
   }
 
-  @HostListener('loggedIn')
   closeDialog() {
     this.loginDialog.close();
   }
 
-  @HostListener('viewChange')
   changeTitle() {
     this.title = 'Register';
   }

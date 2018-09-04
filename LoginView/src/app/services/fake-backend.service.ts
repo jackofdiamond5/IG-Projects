@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../interfaces/user-model.interface.';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { IUser } from '../interfaces/user-model.interface.';
 
 @Injectable()
 export class BackendInterceptor implements HttpInterceptor {
@@ -23,10 +24,26 @@ export class BackendInterceptor implements HttpInterceptor {
                 return this.registerHandle(request, users);
             }
 
+            // login user with external provider
+            if (request.url.endsWith('/extlogin') && request.method === 'POST') {
+                return this.loginExt(request, users);
+            }
+
             return next.handle(request);
         }))
             .pipe(materialize())
             .pipe(dematerialize());
+    }
+
+    loginExt(request: HttpRequest<any>, users: IUser[]) {
+        // TODO: Add logic for multiple providers
+        // const user = request.body.userInfo as IUser;
+        // const provider = request.body.provider;
+
+        this.registerHandle(request, users);
+        const userData = this.loginHandle(request, users);
+
+        return of(new HttpResponse({status: 200, body: userData}));
     }
 
     registerHandle(request: HttpRequest<any>, users: IUser[]) {
@@ -45,7 +62,6 @@ export class BackendInterceptor implements HttpInterceptor {
     }
 
     loginHandle(request: HttpRequest<any>, users: IUser[]) {
-        debugger;
         const filteredUsers = users.filter(user => {
             return user.username === request.body.username;
         });

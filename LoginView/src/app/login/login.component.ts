@@ -1,14 +1,13 @@
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { ILogin } from '../interfaces/login.interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { AuthenticationService } from '../services/authentication.service';
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Injector } from '@angular/core';
-import { ExternalAuthService, ExternalAuthConfig, ExternalAuthProvider } from '../authentication/igx-auth.service';
-import { IUser } from '../interfaces/user-model.interface.';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+
+import { ILogin } from '../interfaces/login.interface';
 import { UserService } from '../services/user.service';
+import { ExternalAuthService } from '../services/igx-auth.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -71,6 +70,6 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     const registrationForm = document.getElementById('registrationForm');
     loginForm.hidden = true;
     registrationForm.hidden = false;
-    this.viewChange.emit('Register');
+    this.viewChange.emit();
   }
 }

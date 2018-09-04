@@ -12,8 +12,8 @@
       </div>
       <div>
         <button *ngIf="userService.currentUser !== null" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963"
-          igxButtonColor="white" (click)="toggleDropDown($event)" [igxToggleAction]="options">
-          <igx-avatar initials="JS" [roundShape]="true" size="small" bgColor="white">
+          igxButtonColor="white" [igxToggleAction]="options">
+          <igx-avatar initials="IG" [src]="userService.currentUser.picture" [roundShape]="true" size="small" bgColor="white">
           </igx-avatar>
           <igx-icon name="keyboard_arrow_down"></igx-icon>
         </button>
@@ -27,7 +27,7 @@
         </igx-drop-down-item>
       </igx-drop-down>
     </igx-navbar>
-    <app-login-dialog (loggedIn)="handleLogin()"></app-login-dialog>
+    <app-login-dialog></app-login-dialog>
     <div class="content" igxFlex>
       <router-outlet></router-outlet>
     </div>

@@ -1,7 +1,6 @@
-import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
 import { IUser } from '../interfaces/user-model.interface.';
+import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -22,7 +21,6 @@ export interface ExternalAuthConfig {
     auto_userinfo: boolean;
     max_id_token_iat_offset_allowed_in_seconds: number;
 }
-
 
 @Injectable({
     providedIn: 'root'

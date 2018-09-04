@@ -1,6 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { IUser } from '../interfaces/user-model.interface.';
 import { AuthenticationService } from '../services/authentication.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,13 +9,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  constructor(private userService: UserService) { }
 
-  currentUser: IUser;
-
-  constructor(private authentication: AuthenticationService) {
-  }
-
-  ngOnInit() {
-    this.currentUser = this.authentication.loggedInUser[0];
-  }
+  ngOnInit() { }
 }

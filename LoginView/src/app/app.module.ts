@@ -9,24 +9,25 @@ import {
   IgxNavigationDrawerModule, IgxNavbarModule,
   IgxButtonModule, IgxToggleModule, IgxAvatarModule
 } from 'igniteui-angular';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
 import { AuthGuard } from './services/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { BackendProvider } from './services/fake-backend.service';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { RedirectComponent } from './redirect/redirect.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
-import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './authentication/igx-auth.service';
+import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './services/igx-auth.service';
 
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {

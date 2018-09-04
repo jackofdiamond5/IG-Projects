@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { IUser } from '../interfaces/user-model.interface.';
 
 const TOKEN = 'TOKEN';
