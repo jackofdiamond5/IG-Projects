@@ -1,9 +1,10 @@
 import { IUser } from '../interfaces/user-model.interface.';
 import { IRegister } from '../interfaces/register.interface';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -18,8 +19,11 @@ export class RegisterComponent implements OnInit, IRegister {
 
   public registrationForm: FormGroup;
 
-  constructor(private authentication: AuthenticationService, private router: Router, private injector: Injector, fb: FormBuilder) {
-    this.registrationForm = fb.group({
+  @Output() registered: EventEmitter<any> = new EventEmitter();
+
+  constructor(private authentication: AuthenticationService,
+    private fb: FormBuilder, private userService: UserService, private router: Router) {
+    this.registrationForm = this.fb.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
       email: ['', Validators.nullValidator],
@@ -31,17 +35,12 @@ export class RegisterComponent implements OnInit, IRegister {
   }
 
   tryRegister() {
-    this.authentication
-      .register(this.registrationForm.value)
-      .subscribe(
-        r => {
-          this.authentication.login(r as IUser);
-          this.router = this.injector.get(Router);
-          this.router.navigate(['/profile']);
-        },
-        e => {
-          alert(e.error.message);
-        }
-      );
+    const response = this.authentication.register(this.registrationForm.value);
+    console.log(response);
+    if (response) {
+      this.userService.setCurrentUser(response);
+      this.router.navigate(['/profile']);
+      this.registered.emit();
+    }
   }
 }
