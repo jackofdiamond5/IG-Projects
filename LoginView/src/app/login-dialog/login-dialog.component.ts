@@ -10,12 +10,7 @@ import { IUser } from '../interfaces/user-model.interface.';
 })
 export class LoginDialogComponent implements OnInit {
   title: string;
-  currentUser: IUser;
-
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
-
-
-  constructor(private authentication: AuthenticationService) { }
 
   ngOnInit() {
   }
@@ -32,9 +27,5 @@ export class LoginDialogComponent implements OnInit {
 
     loginForm.hidden = false;
     registrationForm.hidden = true;
-  }
-  
-  setUserState() {
-    this.currentUser = this.authentication.loggedInUser;
   }
 }

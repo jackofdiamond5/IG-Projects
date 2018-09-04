@@ -28,11 +28,11 @@ export class UserService {
 
   setCurrentUser(user: IUser) {
     localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentUser = user;
+    this._currentUser = user;
   }
 
   logout() {
-    this.currentUser = null;
+    this._currentUser = null;
     localStorage.removeItem('currentUser');
   }
 }

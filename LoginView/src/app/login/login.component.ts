@@ -8,6 +8,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Component, OnInit, OnDestroy, EventEmitter, Output, Injector } from '@angular/core';
 import { ExternalAuthService, ExternalAuthConfig, ExternalAuthProvider } from '../authentication/igx-auth.service';
 import { IUser } from '../interfaces/user-model.interface.';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
   constructor(private oidcSecurityService: OidcSecurityService, private authService: ExternalAuthService,
-    private authentication: AuthenticationService, fb: FormBuilder
+    private authentication: AuthenticationService, fb: FormBuilder, private userService: UserService
   ) {
     this.isAuthorized = false;
     this.user = fb.group({
@@ -53,49 +54,18 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.authService.login(this.authService.googleConfig);
   }
 
-  // signUpFb() {
-  //   debugger;
-  //   FB.login((result: any) => {
-  //     this.getUser();
-  //   });
-  // }
-
-  getUser() {
-    // FB.api('/me?fields=id,name,first_name,gender,picture,email,friends',
-    // function(result) {
-    //     if (result && !result.error) {
-    //       debugger;
-    //       // result.email
-    //       // result.name
-    //       // result.picture.data.url
-    //     } else {
-    //         console.log(result.error);
-    //     }
-    // });
-  }
-
   signOut() {
     this.oidcSecurityService.logoff();
   }
 
   tryLogin(userInfo?: IUser) {
+    const response = this.authentication.login(userInfo || this.user.value);
+    console.log(response);
     debugger;
-    this.authentication
-      .login(userInfo || this.user.value)
-      .subscribe(
-        res => {
-          if (res) {
-            debugger;
-            this.loggedIn.emit(this.user.value);
-            this.router.navigate(['/profile']);
-          }
-        },
-        res => {
-          if (res.error) {
-            alert(res.error.message);
-          }
-        }
-      );
+    if (response) {
+      this.userService.setCurrentUser(userInfo);
+      this.router.navigate(['/profile']);
+    }
   }
 
   showRegistrationForm() {

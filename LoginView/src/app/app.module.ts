@@ -72,7 +72,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   ],
   providers: [
     AuthGuard,
-    LoginComponent,
     OidcConfigService,
     {
       provide: APP_INITIALIZER,

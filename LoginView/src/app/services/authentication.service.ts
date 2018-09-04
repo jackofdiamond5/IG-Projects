@@ -35,8 +35,16 @@ export class AuthenticationService implements OnInit, OnDestroy {
   }
 
   login(userData: IUser) {
-    debugger;
-    return this.http.post('/login', userData);
+    return this.http
+      .post('/login', userData)
+      .subscribe(
+        success => {
+          return success;
+        },
+        error => {
+          return error;
+        }
+      );
   }
 
   register(userData: IUser) {
