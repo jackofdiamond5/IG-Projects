@@ -32,6 +32,7 @@ export class ExternalAuthService {
     }
 
     public googleConfig: ExternalAuthConfig;
+    public facebookConfig: ExternalAuthConfig;
 
     public addGoogle(googleConfig: ExternalAuthConfig) {
         this.googleConfig = googleConfig;
@@ -43,6 +44,21 @@ export class ExternalAuthService {
             this.oidcSecurityService.authorize();
         });
         this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
+    }
+
+    public loginFB() {
+        FB.login((response) => {
+            // tslint:disable-next-line:no-debugger
+            debugger;
+            if (response.authResponse) {
+              FB.api('/me', function(newResponse) {
+                console.log('User name: ' + newResponse.name);
+              });
+             } else {
+              console.log('User cancelled login or did not fully authorize.');
+             }
+              // this.router.navigate(['./redirect-facebook']);
+        }, {scope: 'email'});
     }
 
     public getUserInfo(externalStsConfig: ExternalAuthConfig): Promise<IUser> {
