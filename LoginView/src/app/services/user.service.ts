@@ -22,7 +22,7 @@ export class UserService {
     this._currentUser = v;
   }
 
-  setToken(token: string): void {
+  setToken(token: string) {
     localStorage.setItem(TOKEN, token);
   }
 
