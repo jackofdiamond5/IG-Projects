@@ -14,8 +14,7 @@
     ],
     "types": [
       "node",
-      "jasmine",
-      "facebook-js-sdk"
+      "jasmine"
     ],
     "lib": [
       "es2017",
