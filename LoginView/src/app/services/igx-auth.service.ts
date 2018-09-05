@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/user-model.interface.';
 import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
+import { AuthenticationService } from './authentication.service';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -27,6 +28,7 @@ export interface ExternalAuthConfig {
 })
 export class ExternalAuthService {
     constructor(
+        private authentication: AuthenticationService,
         private oidcSecurityService: OidcSecurityService,
         private oidcConfigService: OidcConfigService) {
     }
@@ -48,17 +50,19 @@ export class ExternalAuthService {
 
     public loginFB() {
         FB.login((response) => {
-            // tslint:disable-next-line:no-debugger
-            debugger;
             if (response.authResponse) {
-              FB.api('/me', function(newResponse) {
-                console.log('User name: ' + newResponse.name);
-              });
-             } else {
-              console.log('User cancelled login or did not fully authorize.');
-             }
-              // this.router.navigate(['./redirect-facebook']);
-        }, {scope: 'email'});
+                FB.api(
+                    '/me?fields=id,email,name,first_name,last_name,picture',
+                    function (newResponse) {
+                        // TODO: Handle internal login
+                        // console.log('User name: ' + newResponse.name);
+                        // console.log(newResponse);
+                    });
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+            // this.router.navigate(['./redirect-facebook']);
+        }, { scope: 'public_profile' });
     }
 
     public getUserInfo(externalStsConfig: ExternalAuthConfig): Promise<IUser> {

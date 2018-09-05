@@ -62,8 +62,9 @@ export class BackendInterceptor implements HttpInterceptor {
     }
 
     loginHandle(request: HttpRequest<any>, users: IUser[]) {
+        debugger;
         const filteredUsers = users.filter(user => {
-            return user.username === request.body.username;
+            return user.id === request.body.id;
         });
         // authenticate
         if (filteredUsers.length) {
