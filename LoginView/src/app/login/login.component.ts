@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   }
 
   signUpG() {
-    this.authService.login(this.authService.googleConfig);
+    this.authService.login();
   }
 
   signUpFb() {

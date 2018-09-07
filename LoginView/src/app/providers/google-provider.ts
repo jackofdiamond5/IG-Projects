@@ -1,0 +1,63 @@
+import { ExternalAuthConfig } from '../services/igx-auth.service';
+import {
+    OpenIDImplicitFlowConfiguration,
+    AuthWellKnownEndpoints,
+    OidcSecurityService,
+    OidcConfigService
+} from 'angular-auth-oidc-client';
+import { IUser } from '../interfaces/user-model.interface.';
+
+export class GoogleProvider {
+    constructor(private oidcConfigService: OidcConfigService, private oidcSecurityService: OidcSecurityService,
+        private externalStsConfig: ExternalAuthConfig) {
+    }
+
+    public config() {
+        const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
+        openIDImplicitFlowConfiguration.stsServer = this.externalStsConfig.stsServer;
+        openIDImplicitFlowConfiguration.redirect_url = this.externalStsConfig.redirect_url;
+        openIDImplicitFlowConfiguration.client_id = this.externalStsConfig.client_id;
+        openIDImplicitFlowConfiguration.response_type = this.externalStsConfig.response_type;
+        openIDImplicitFlowConfiguration.scope = this.externalStsConfig.scope;
+        openIDImplicitFlowConfiguration.post_logout_redirect_uri = this.externalStsConfig.redirect_url;
+        openIDImplicitFlowConfiguration.post_login_route = this.externalStsConfig.post_login_route;
+        openIDImplicitFlowConfiguration.auto_userinfo = this.externalStsConfig.auto_userinfo;
+        openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
+            this.externalStsConfig.max_id_token_iat_offset_allowed_in_seconds;
+        const authWellKnownEndpoints = new AuthWellKnownEndpoints();
+        authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
+        this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
+    }
+
+    public login() {
+        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
+            this.config();
+            this.oidcSecurityService.authorize();
+        });
+        this.oidcConfigService.load_using_stsServer(this.externalStsConfig.stsServer);
+    }
+
+    public getUserInfo() {
+        let resolve: (val: IUser) => void;
+        let reject: () => void;
+        const user = new Promise<IUser>((res, rej) => {
+            resolve = res;
+            reject = rej;
+        });
+        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
+            this.config();
+            this.oidcSecurityService.authorizedCallback();
+            this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
+                this.oidcSecurityService.getUserData().subscribe(userData => {
+                    resolve(userData as IUser);
+                });
+            });
+        });
+        this.oidcConfigService.load_using_stsServer(this.externalStsConfig.stsServer);
+        return user;
+    }
+
+    public logout() {
+        this.oidcSecurityService.logoff();
+    }
+}

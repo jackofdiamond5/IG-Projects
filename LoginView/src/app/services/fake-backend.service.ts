@@ -12,7 +12,7 @@ export class BackendInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const users: IUser[] = JSON.parse(localStorage.getItem('users')) || [];
-
+        debugger;
         return of(null).pipe(mergeMap(() => {
             // login user
             if (request.url.endsWith('/login') && request.method === 'POST') {
@@ -39,7 +39,7 @@ export class BackendInterceptor implements HttpInterceptor {
         // TODO: Add logic for multiple providers
         // const user = request.body.userInfo as IUser;
         // const provider = request.body.provider;
-
+        debugger;
         this.registerHandle(request, users);
         const userData = this.loginHandle(request, users);
 
@@ -47,9 +47,10 @@ export class BackendInterceptor implements HttpInterceptor {
     }
 
     registerHandle(request: HttpRequest<any>, users: IUser[]) {
+        debugger;
         const newUser = request.body as IUser;
         newUser.token = this.generateToken();
-        const duplicateUser = users.filter(user => user.username === newUser.username).length;
+        const duplicateUser = users.filter(user => user.id === newUser.id).length;
         if (duplicateUser) {
             return throwError({ error: { message: 'Username "' + newUser.username + '" is already taken' } });
         }

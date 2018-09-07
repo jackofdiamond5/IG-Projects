@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/user-model.interface.';
 import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
 import { AuthenticationService } from './authentication.service';
+import { GoogleProvider } from '../providers/google-provider';
+import { FacebookProvider } from '../providers/facebook-provider';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -28,77 +30,40 @@ export interface ExternalAuthConfig {
 })
 export class ExternalAuthService {
     constructor(
-        private authentication: AuthenticationService,
         private oidcSecurityService: OidcSecurityService,
         private oidcConfigService: OidcConfigService) {
     }
 
-    public googleConfig: ExternalAuthConfig;
+    private googleProvider: GoogleProvider;
+    private facebookProvider: FacebookProvider;
+
     public facebookConfig: ExternalAuthConfig;
 
     public addGoogle(googleConfig: ExternalAuthConfig) {
-        this.googleConfig = googleConfig;
+        this.googleProvider = new GoogleProvider(this.oidcConfigService, this.oidcSecurityService, googleConfig);
     }
 
-    public login(externalStsConfig: ExternalAuthConfig) {
-        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
-            this.configService(externalStsConfig);
-            this.oidcSecurityService.authorize();
-        });
-        this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
+    public login() {
+        this.googleProvider.login();
     }
 
     public loginFB() {
-        FB.login((response) => {
-            if (response.authResponse) {
-                FB.api(
-                    '/me?fields=id,email,name,first_name,last_name,picture',
-                    function (newResponse) {
-                        // TODO: Handle internal login
-                        // console.log('User name: ' + newResponse.name);
-                        // console.log(newResponse);
-                    });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
-            // this.router.navigate(['./redirect-facebook']);
-        }, { scope: 'public_profile' });
+        // const self = this;
+        // FB.login((response) => {
+        //     if (response.authResponse) {
+        //         FB.api(
+        //             '/me?fields=id,email,name,first_name,last_name,picture',
+        //             function (newResponse) {
+
+        //             });
+        //     } else {
+        //         console.log('User cancelled login or did not fully authorize.');
+        //     }
+        //     // this.router.navigate(['./redirect-facebook']);
+        // }, { scope: 'public_profile' });
     }
 
-    public getUserInfo(externalStsConfig: ExternalAuthConfig): Promise<IUser> {
-        let resolve: (val: IUser) => void;
-        let reject: () => void;
-        const user = new Promise<IUser>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        });
-        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
-            this.configService(externalStsConfig);
-            this.oidcSecurityService.authorizedCallback();
-            this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-                this.oidcSecurityService.getUserData().subscribe(userData => {
-                    resolve(userData as IUser);
-                });
-            });
-        });
-        this.oidcConfigService.load_using_stsServer(externalStsConfig.stsServer);
-        return user;
-    }
-
-    public configService(externalStsConfig: ExternalAuthConfig) {
-        const openIDImplicitFlowConfiguration = new OpenIDImplicitFlowConfiguration();
-        openIDImplicitFlowConfiguration.stsServer = externalStsConfig.stsServer;
-        openIDImplicitFlowConfiguration.redirect_url = externalStsConfig.redirect_url;
-        openIDImplicitFlowConfiguration.client_id = externalStsConfig.client_id;
-        openIDImplicitFlowConfiguration.response_type = externalStsConfig.response_type;
-        openIDImplicitFlowConfiguration.scope = externalStsConfig.scope;
-        openIDImplicitFlowConfiguration.post_logout_redirect_uri = externalStsConfig.redirect_url;
-        openIDImplicitFlowConfiguration.post_login_route = externalStsConfig.post_login_route;
-        openIDImplicitFlowConfiguration.auto_userinfo = externalStsConfig.auto_userinfo;
-        openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
-            externalStsConfig.max_id_token_iat_offset_allowed_in_seconds;
-        const authWellKnownEndpoints = new AuthWellKnownEndpoints();
-        authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
-        this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
+    public getUserInfo(externalAuthProvider: ExternalAuthProvider): Promise<IUser> {
+        return this.googleProvider.getUserInfo();
     }
 }
