@@ -7,8 +7,8 @@
  *
  * Depends on:
  *  Built and tested with jquery-3.3.1.min.js;
- *	jquery.ui.core.js;
- *	jquery.ui.widget.js
+ *   jquery.ui.core.js;
+ *   jquery.ui.widget.js
  */
 
 /*global jQuery */
@@ -18,9 +18,9 @@ if (typeof jQuery !== "function") {
 
 (function ($) {
     /*
-		igCountdown is a widget based on jQuery UI that counts down to zero, from a specified start.
-		It supports stopping, pausing, as well as auto-start and self-destroy.
-	*/
+      igCountdown is a widget based on jQuery UI that counts down to zero, from a specified start.
+      It supports stopping, pausing, as well as auto-start and self-destroy.
+   */
 	$.widget('ui.igCountdown', {
 		css: {
 			/* igWidget element classes go here */
@@ -35,7 +35,7 @@ if (typeof jQuery !== "function") {
 			reset: 'reset',
 			destroy: 'destroy'
 		},
-        options: {
+		options: {
 			/* igWidget options go here */
 			startValue: 10,
 			resetMessage: "Resetted",
@@ -43,7 +43,7 @@ if (typeof jQuery !== "function") {
 			elapsedMessage: "Timer has elapsed!",
 			autoStart: false,
 			delta: 1
-        },
+		},
 		events: {
 			started: 'started',
 			resumed: 'resumed',
@@ -58,7 +58,7 @@ if (typeof jQuery !== "function") {
 		},
 		_running: false,
 		_paused: false,
-		_currentValue : null,
+		_currentValue: null,
 		setCurrentValue: function (newValue) {
 			if (!this._constrain(newValue)) {
 				return;
@@ -75,7 +75,7 @@ if (typeof jQuery !== "function") {
 		_reset: function () {
 			this._triggerReset();
 		},
-		_triggerStarted: function () {		
+		_triggerStarted: function () {
 			if (!this._constrain(this._currentValue)) {
 				return;
 			}
@@ -145,7 +145,7 @@ if (typeof jQuery !== "function") {
 				owner: this,
 				_currentValue: this._currentValue
 			};
-			
+
 			this._trigger(this.events.tick, null, args);
 		},
 		_triggerElapsed: function () {
@@ -186,16 +186,16 @@ if (typeof jQuery !== "function") {
 					switch (event.target.id) {
 						case 'str':
 							widgetInstance._start();
-						break;
+							break;
 						case 'psr':
 							widgetInstance._pause();
-						break;
+							break;
 						case 'rst':
 							widgetInstance._reset();
-						break;
+							break;
 						case 'dstr':
 							widgetInstance.destroy();
-						break;
+							break;
 					}
 				}
 			});
@@ -203,7 +203,7 @@ if (typeof jQuery !== "function") {
 			let renderingEnabled = this._triggerRendering();
 			if (renderingEnabled) {
 				this._render();
-				this._triggerRendered();	
+				this._triggerRendered();
 			}
 		},
 		_detachEvents: function () {
@@ -218,20 +218,20 @@ if (typeof jQuery !== "function") {
 			let div = $('<div />');
 			div.append('<span />');
 			div.addClass(this.css.container);
-			
+
 			this.element.prepend(div);
 
 			this._renderButtons();
-			this._renderWidgetStartValue();		
+			this._renderWidgetStartValue();
 		},
 		_renderWidgetStartValue: function () {
 			let counter = this.element.children().find('span');
 			counter.addClass(this.css.counter);
 			counter.append("<span />");
-			
+
 			let output = this.element.children().find(`.${this.css.counter} > span`);
 			output.addClass(this.css.output);
-			
+
 			if (!this._constrain(this.options.startValue)) {
 				return;
 			}
@@ -242,15 +242,15 @@ if (typeof jQuery !== "function") {
 		},
 		_renderButtons: function () {
 			let widget = this.element;
-			
+
 			let buttonsHolder = $('<div />');
 			buttonsHolder.addClass(`${this.css.buttons}`);
 			buttonsHolder
-			.append(`<button id="str">`)
-			.append(`<button id="psr">`)
-			.append(`<button id="rst">`)
-			.append(`<button id="dstr">`);
-			
+				.append(`<button id="str">`)
+				.append(`<button id="psr">`)
+				.append(`<button id="rst">`)
+				.append(`<button id="dstr">`);
+
 			widget.append(buttonsHolder);
 
 			this._addButtonClasses();
@@ -291,7 +291,7 @@ if (typeof jQuery !== "function") {
 				output.text(this._currentValue);
 				return;
 			}
-			
+
 			output.text(this._currentValue);
 			output.addClass(this.css.end);
 			output.removeClass(this.css.blink);
@@ -307,11 +307,11 @@ if (typeof jQuery !== "function") {
 
 			return true;
 		},
-        _setOption: function (option, value) {
+		_setOption: function (option, value) {
 			// custom setOption method goes here
 
 			let css = this.css, elements, prevValue = this.options[option];
-			
+
 			if (!this._constrain(value)) {
 				return;
 			}
@@ -322,21 +322,21 @@ if (typeof jQuery !== "function") {
 			// The following line applies the option value to the igCounter meaning you don't
 			// have to perform this.options[option] = value;
 			$.Widget.prototype._setOption.apply(this, arguments);
-			
+
 			return true;
 		},
-        destroy: function () {
+		destroy: function () {
 			/* 
-				igCountdown destructor - unbind all event handlers, remove dynamically added classes and 
-				dynamically added elements in the widget element's DOM
+			   igCountdown destructor - unbind all event handlers, remove dynamically added classes and 
+			   dynamically added elements in the widget element's DOM
 			*/
-			
+
 			this._detachEvents();
 			this._restoreInitialState();
 			clearInterval(this._intervalID);
-				
+
 			$.Widget.prototype.destroy.apply(this, arguments);
-        }
-    });
-    $.extend($.ui.igCountdown, {version: '<build_number>'});
+		}
+	});
+	$.extend($.ui.igCountdown, { version: '<build_number>' });
 }(jQuery));
