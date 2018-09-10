@@ -5,6 +5,7 @@ import { AuthenticationService } from './authentication.service';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { IAuthProvider } from '../providers/IAuthProvider';
+import { MicrosoftProvider } from '../providers/microsoft-provider';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -57,6 +58,13 @@ export class ExternalAuthService {
         new FacebookProvider(fbConfig)
       );
     }
+
+    public addMicrosoft(msConfig: ExternalAuthConfig) {
+      this.providers.set(
+        ExternalAuthProvider.Microsoft,
+        new MicrosoftProvider(this.oidcConfigService, this.oidcSecurityService, msConfig)
+      );
+  }
 
     public login(provider: ExternalAuthProvider) {
         const extProvider = this.providers.get(provider);

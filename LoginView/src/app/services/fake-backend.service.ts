@@ -4,6 +4,7 @@ import { mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { IUser } from '../interfaces/user-model.interface.';
+import msKeys from './microsoft-keys';
 
 @Injectable()
 export class BackendInterceptor implements HttpInterceptor {
@@ -27,6 +28,11 @@ export class BackendInterceptor implements HttpInterceptor {
             // login user with external provider
             if (request.url.endsWith('/extlogin') && request.method === 'POST') {
                 return this.loginExt(request, users);
+            }
+
+            // Microsoft-specific OIDC discovery URI
+            if (request.url.endsWith('ms-discovery/keys') && request.method === 'GET') {
+              return of(new HttpResponse({ status: 200, body: msKeys }));
             }
 
             return next.handle(request);

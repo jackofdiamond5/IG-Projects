@@ -88,12 +88,25 @@ export class AppModule {
       stsServer: 'https://accounts.google.com',
       client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',
       scope: 'openid email profile',
-      redirect_url: 'http://localhost:4200/redirect',
+      redirect_url: 'http://localhost:4200/redirect-google', // TODO: Use <app root URL>/redirect, from router?
       response_type: 'id_token token',
       post_logout_redirect_uri: '/',
       post_login_route: 'redirect',
       auto_userinfo: false,
       max_id_token_iat_offset_allowed_in_seconds: 30
+    });
+
+    this.externalAuthService.addMicrosoft(<ExternalAuthConfig>{
+      provider: ExternalAuthProvider.Microsoft,
+      stsServer: 'https://login.microsoftonline.com/consumers/v2.0/',
+      client_id: '<CLIENT ID>',
+      scope: 'openid email profile',
+      redirect_url: 'http://localhost:4200/redirect-microsoft',
+      response_type: 'id_token token',
+      post_logout_redirect_uri: '/',
+      post_login_route: '',
+      auto_userinfo: false,
+      max_id_token_iat_offset_allowed_in_seconds: 1000
     });
   }
 }

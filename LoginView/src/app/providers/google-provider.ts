@@ -7,10 +7,11 @@ import {
 } from 'angular-auth-oidc-client';
 import { IUser } from '../interfaces/user-model.interface.';
 import { IAuthProvider } from './IAuthProvider';
+import { take } from 'rxjs/operators';
 
 export class GoogleProvider implements IAuthProvider {
-    constructor(private oidcConfigService: OidcConfigService, private oidcSecurityService: OidcSecurityService,
-        private externalStsConfig: ExternalAuthConfig) {
+    constructor(protected oidcConfigService: OidcConfigService, protected oidcSecurityService: OidcSecurityService,
+        protected externalStsConfig: ExternalAuthConfig) {
     }
 
     public config() {
@@ -25,13 +26,16 @@ export class GoogleProvider implements IAuthProvider {
         openIDImplicitFlowConfiguration.auto_userinfo = this.externalStsConfig.auto_userinfo;
         openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
             this.externalStsConfig.max_id_token_iat_offset_allowed_in_seconds;
+        // TODO: always?
+        openIDImplicitFlowConfiguration.silent_renew = false;
+
         const authWellKnownEndpoints = new AuthWellKnownEndpoints();
         authWellKnownEndpoints.setWellKnownEndpoints(this.oidcConfigService.wellKnownEndpoints);
         this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
     }
 
     public login() {
-        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
+        this.oidcConfigService.onConfigurationLoaded.pipe(take(1)).subscribe(() => {
             this.config();
             this.oidcSecurityService.authorize();
         });
@@ -45,14 +49,14 @@ export class GoogleProvider implements IAuthProvider {
             resolve = res;
             reject = rej;
         });
-        this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
+        this.oidcConfigService.onConfigurationLoaded.pipe(take(1)).subscribe(() => {
             this.config();
-            this.oidcSecurityService.authorizedCallback();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-                this.oidcSecurityService.getUserData().subscribe(userData => {
-                    resolve(userData as IUser);
-                });
+              this.oidcSecurityService.getUserData().subscribe(userData => {
+                resolve(userData as IUser);
+              });
             });
+            this.oidcSecurityService.authorizedCallback();
         });
         this.oidcConfigService.load_using_stsServer(this.externalStsConfig.stsServer);
         return user;
