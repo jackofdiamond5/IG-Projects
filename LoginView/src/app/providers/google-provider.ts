@@ -6,8 +6,9 @@ import {
     OidcConfigService
 } from 'angular-auth-oidc-client';
 import { IUser } from '../interfaces/user-model.interface.';
+import { IAuthProvider } from './IAuthProvider';
 
-export class GoogleProvider {
+export class GoogleProvider implements IAuthProvider {
     constructor(private oidcConfigService: OidcConfigService, private oidcSecurityService: OidcSecurityService,
         private externalStsConfig: ExternalAuthConfig) {
     }

@@ -1,6 +1,10 @@
+import { IAuthProvider } from './IAuthProvider';
+import { IUser } from '../interfaces/user-model.interface.';
+import { ExternalAuthConfig } from '../services/igx-auth.service';
 
-export class FacebookProvider {
-    constructor() { }
+export class FacebookProvider implements IAuthProvider {
+
+    constructor(private externalStsConfig: ExternalAuthConfig) { }
 
     public config() {
 
@@ -22,8 +26,8 @@ export class FacebookProvider {
         }, { scope: 'public_profile' });
     }
 
-    public getUserInfo() {
-
+    getUserInfo(): Promise<IUser> {
+      throw new Error('Method not implemented.');
     }
 
     public logout() {

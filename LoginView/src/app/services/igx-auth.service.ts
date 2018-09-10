@@ -4,6 +4,7 @@ import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration
 import { AuthenticationService } from './authentication.service';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
+import { IAuthProvider } from '../providers/IAuthProvider';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -29,41 +30,62 @@ export interface ExternalAuthConfig {
     providedIn: 'root'
 })
 export class ExternalAuthService {
+
+    activeProvider: ExternalAuthProvider;
+    protected providers: Map<ExternalAuthProvider, IAuthProvider> = new Map();
+
     constructor(
         private oidcSecurityService: OidcSecurityService,
         private oidcConfigService: OidcConfigService) {
     }
 
-    private googleProvider: GoogleProvider;
-    private facebookProvider: FacebookProvider;
 
-    public facebookConfig: ExternalAuthConfig;
+    public has(provider: ExternalAuthProvider) {
+      return this.providers.has(provider);
+    }
 
     public addGoogle(googleConfig: ExternalAuthConfig) {
-        this.googleProvider = new GoogleProvider(this.oidcConfigService, this.oidcSecurityService, googleConfig);
+        this.providers.set(
+          ExternalAuthProvider.Google,
+          new GoogleProvider(this.oidcConfigService, this.oidcSecurityService, googleConfig)
+        );
     }
 
-    public login() {
-        this.googleProvider.login();
+    public addFacebook(fbConfig: ExternalAuthConfig) {
+      this.providers.set(
+        ExternalAuthProvider.Facebook,
+        new FacebookProvider(fbConfig)
+      );
     }
 
-    public loginFB() {
-        // const self = this;
-        // FB.login((response) => {
-        //     if (response.authResponse) {
-        //         FB.api(
-        //             '/me?fields=id,email,name,first_name,last_name,picture',
-        //             function (newResponse) {
-
-        //             });
-        //     } else {
-        //         console.log('User cancelled login or did not fully authorize.');
-        //     }
-        //     // this.router.navigate(['./redirect-facebook']);
-        // }, { scope: 'public_profile' });
+    public login(provider: ExternalAuthProvider) {
+        const extProvider = this.providers.get(provider);
+        if (extProvider) {
+          extProvider.login();
+        }
     }
 
-    public getUserInfo(externalAuthProvider: ExternalAuthProvider): Promise<IUser> {
-        return this.googleProvider.getUserInfo();
+    /**
+     * TODO setActiveProvider
+     */
+    public setActiveProvider(provider: ExternalAuthProvider) {
+      this.activeProvider = provider;
+    }
+
+
+    /** TODO, use setActiveProvider only? */
+    public getUserInfo(provider: ExternalAuthProvider): Promise<IUser> {
+        const extProvider = this.providers.get(provider);
+        if (extProvider) {
+          return extProvider.getUserInfo();
+        }
+        return Promise.reject(null); // TODO ?
+    }
+
+    /**
+     * logout
+     */
+    public logout() {
+      this.providers.get(this.activeProvider).logout();
     }
 }

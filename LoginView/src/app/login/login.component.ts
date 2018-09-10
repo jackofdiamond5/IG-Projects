@@ -6,7 +6,7 @@ import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/cor
 
 import { ILogin } from '../interfaces/login.interface';
 import { UserService } from '../services/user.service';
-import { ExternalAuthService } from '../services/igx-auth.service';
+import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   }
 
   signUpG() {
-    this.authService.login();
+    this.authService.login(ExternalAuthProvider.Google);
   }
 
   signUpFb() {
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
       xfbml: false,
       version: 'v3.1'
     });
-    this.authService.loginFB();
+    this.authService.login(ExternalAuthProvider.Facebook);
   }
 
   tryLogin() {
