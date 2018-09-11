@@ -2,14 +2,9 @@ import { IAuthProvider } from './IAuthProvider';
 import { Router } from '@angular/router';
 import { IUser } from '../interfaces/user-model.interface';
 import { ExternalAuthConfig } from '../services/igx-auth.service';
-import { ViewChild } from '@angular/core';
-
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 export class FacebookProvider implements IAuthProvider {
     private user: IUser;
-
-    @ViewChild(LoginDialogComponent) loginDialog: LoginDialogComponent;
 
     constructor(private externalStsConfig: ExternalAuthConfig, private router: Router) { }
 
@@ -33,12 +28,10 @@ export class FacebookProvider implements IAuthProvider {
                      (newResponse) => {
                         this.user = newResponse;
                         self.router.navigate(['redirect-facebook']);
-                        self.loginDialog.closeDialog();
                     });
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
-            // this.router.navigate(['./redirect-facebook']);
         }, { scope: 'public_profile' });
     }
 

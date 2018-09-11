@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
 
   signUpFb() {
     this.authService.login(ExternalAuthProvider.Facebook);
+    this.loggedIn.emit();
   }
 
   tryLogin() {
