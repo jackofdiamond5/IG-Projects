@@ -1,4 +1,4 @@
-import { IUser } from '../interfaces/user-model.interface.';
+import { IUser } from '../interfaces/user-model.interface';
 
 export interface IAuthProvider {
   config();

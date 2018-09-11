@@ -20,10 +20,13 @@
   <div class="register-container">
     <button id="register" type="button" igxButton="flat" igxRipple="lightskyblue" (click)="showRegistrationForm($event)">Register</button>
   </div>
-  <div class="register-container">
+  <div class="register-container" *ngIf="this.authService.has('Google')">
     <button type="button" id="openIDSignUpG" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
   </div>
-  <div class="register-container">
+  <div class="register-container" *ngIf="this.authService.has('Facebook')">
     <button type="button" id="openIDSignUpFb" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
+  </div>
+  <div class="register-container" *ngIf="this.authService.has('Microsoft')">
+    <button type="button" id="openIDSignUpMS" igxButton="raised" (click)="signUpMS()">Sign Up Microsoft</button>
   </div>
 </form>

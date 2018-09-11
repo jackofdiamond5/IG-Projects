@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../interfaces/user-model.interface.';
+import { IUser } from '../interfaces/user-model.interface';
 import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
 import { AuthenticationService } from './authentication.service';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { IAuthProvider } from '../providers/IAuthProvider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
+import { Router } from '@angular/router';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -36,6 +37,7 @@ export class ExternalAuthService {
     protected providers: Map<ExternalAuthProvider, IAuthProvider> = new Map();
 
     constructor(
+        private router: Router,
         private oidcSecurityService: OidcSecurityService,
         private oidcConfigService: OidcConfigService) {
     }
@@ -55,7 +57,7 @@ export class ExternalAuthService {
     public addFacebook(fbConfig: ExternalAuthConfig) {
       this.providers.set(
         ExternalAuthProvider.Facebook,
-        new FacebookProvider(fbConfig)
+        new FacebookProvider(fbConfig, this.router)
       );
     }
 

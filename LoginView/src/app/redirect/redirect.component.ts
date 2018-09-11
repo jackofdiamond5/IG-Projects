@@ -3,7 +3,7 @@ import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
-import { IUser } from '../interfaces/user-model.interface.';
+import { IUser } from '../interfaces/user-model.interface';
 import { AuthenticationService } from '../services/authentication.service';
 import { ExternalAuthProvider, ExternalAuthService } from '../services/igx-auth.service';
 
@@ -25,7 +25,7 @@ export class RedirectComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const userInfo: IUser = await this.externalAuthService.getUserInfo(ExternalAuthProvider.Google);
+    const userInfo: IUser = await this.externalAuthService.getUserInfo(this.provider);
     this.authService.loginWith(userInfo, this.provider).subscribe(
       suc => {
         userInfo.externalToken = this.oidcSecurityService.getToken();

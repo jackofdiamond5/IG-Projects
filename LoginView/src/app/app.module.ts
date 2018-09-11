@@ -83,10 +83,10 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
 })
 export class AppModule {
   constructor(private externalAuthService: ExternalAuthService) {
-    this.externalAuthService.addGoogle(<ExternalAuthConfig>{
+    this.externalAuthService.addGoogle({
       provider: ExternalAuthProvider.Google,
       stsServer: 'https://accounts.google.com',
-      client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',
+      client_id: '<CLIENT ID>',
       scope: 'openid email profile',
       redirect_url: 'http://localhost:4200/redirect-google', // TODO: Use <app root URL>/redirect, from router?
       response_type: 'id_token token',
@@ -96,7 +96,7 @@ export class AppModule {
       max_id_token_iat_offset_allowed_in_seconds: 30
     });
 
-    this.externalAuthService.addMicrosoft(<ExternalAuthConfig>{
+    this.externalAuthService.addMicrosoft({
       provider: ExternalAuthProvider.Microsoft,
       stsServer: 'https://login.microsoftonline.com/consumers/v2.0/',
       client_id: '<CLIENT ID>',
@@ -108,5 +108,9 @@ export class AppModule {
       auto_userinfo: false,
       max_id_token_iat_offset_allowed_in_seconds: 1000
     });
+
+    this.externalAuthService.addFacebook({
+      client_id: '<CLIENT ID>'
+    } as ExternalAuthConfig);
   }
 }

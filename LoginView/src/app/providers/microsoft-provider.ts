@@ -5,7 +5,6 @@ import {
     OidcSecurityService,
     OidcConfigService
 } from 'angular-auth-oidc-client';
-import { IUser } from '../interfaces/user-model.interface.';
 import { IAuthProvider } from './IAuthProvider';
 import { take } from 'rxjs/operators';
 import { GoogleProvider } from './google-provider';

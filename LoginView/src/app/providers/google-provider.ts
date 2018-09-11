@@ -5,7 +5,7 @@ import {
     OidcSecurityService,
     OidcConfigService
 } from 'angular-auth-oidc-client';
-import { IUser } from '../interfaces/user-model.interface.';
+import { IUser } from '../interfaces/user-model.interface';
 import { IAuthProvider } from './IAuthProvider';
 import { take } from 'rxjs/operators';
 
@@ -64,5 +64,7 @@ export class GoogleProvider implements IAuthProvider {
 
     public logout() {
         this.oidcSecurityService.logoff();
+        // Should we expressly clear the Session storage?
+        // window.sessionStorage.clear();
     }
 }

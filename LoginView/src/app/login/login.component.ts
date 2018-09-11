@@ -51,14 +51,11 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.authService.login(ExternalAuthProvider.Google);
   }
 
+  signUpMS() {
+    this.authService.login(ExternalAuthProvider.Microsoft);
+  }
+
   signUpFb() {
-    // Requiring HTTPS for Facebook Login
-    // https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/
-    FB.init({
-      appId: '329678091107847',
-      xfbml: false,
-      version: 'v3.1'
-    });
     this.authService.login(ExternalAuthProvider.Facebook);
   }
 

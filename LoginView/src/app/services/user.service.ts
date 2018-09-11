@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { IUser } from '../interfaces/user-model.interface.';
+import { IUser } from '../interfaces/user-model.interface';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 const TOKEN = 'TOKEN';
