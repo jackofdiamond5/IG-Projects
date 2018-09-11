@@ -9,6 +9,7 @@ export class FacebookProvider implements IAuthProvider {
     constructor(private externalStsConfig: ExternalAuthConfig, private router: Router) { }
 
     public config() {
+
         // Requiring HTTPS for Facebook Login
         // https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/
         FB.init({
@@ -36,8 +37,6 @@ export class FacebookProvider implements IAuthProvider {
     }
 
     public getUserInfo(): Promise<IUser> {
-        // tslint:disable-next-line:no-debugger
-        debugger;
         return Promise.resolve(this.user);
     }
 

@@ -26,12 +26,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
-import { IgxCategoryChartModule } from 'igniteui-angular-charts/ES5/igx-category-chart-module';
 import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './services/igx-auth.service';
 
 // Set the port to the one used by the server
 export function loadConfig(oidcConfigService: OidcConfigService) {
-  console.log('APP_INITIALIZER STARTING');
   return () => Promise.resolve();
 }
 
@@ -62,7 +60,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     IgxDropDownModule,
     IgxButtonModule,
     IgxToggleModule,
-    IgxCategoryChartModule,
     IgxAvatarModule
   ],
   providers: [
@@ -86,7 +83,7 @@ export class AppModule {
     this.externalAuthService.addGoogle({
       provider: ExternalAuthProvider.Google,
       stsServer: 'https://accounts.google.com',
-      client_id: '<CLIENT ID>',
+      client_id: '332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com',
       scope: 'openid email profile',
       redirect_url: 'http://localhost:4200/redirect-google', // TODO: Use <app root URL>/redirect, from router?
       response_type: 'id_token token',
@@ -99,7 +96,7 @@ export class AppModule {
     this.externalAuthService.addMicrosoft({
       provider: ExternalAuthProvider.Microsoft,
       stsServer: 'https://login.microsoftonline.com/consumers/v2.0/',
-      client_id: '<CLIENT ID>',
+      client_id: 'a46659f7-d6ca-4353-86f0-0a3e14acb47b',
       scope: 'openid email profile',
       redirect_url: 'http://localhost:4200/redirect-microsoft',
       response_type: 'id_token token',
@@ -110,7 +107,7 @@ export class AppModule {
     });
 
     this.externalAuthService.addFacebook({
-      client_id: '<CLIENT ID>'
+      client_id: '329678091107847'
     } as ExternalAuthConfig);
   }
 }

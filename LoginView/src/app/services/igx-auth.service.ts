@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/user-model.interface';
-import { OidcSecurityService, OidcConfigService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints } from 'angular-auth-oidc-client';
-import { AuthenticationService } from './authentication.service';
+import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { IAuthProvider } from '../providers/IAuthProvider';
