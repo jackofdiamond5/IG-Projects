@@ -22,6 +22,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    AuthenticationModule,
     AppRoutingModule,
     IgxNavigationDrawerModule,
     IgxNavbarModule,
@@ -31,8 +32,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     IgxToggleModule,
     IgxAvatarModule,
     IgxIconModule,
-    IgxDropDownModule,
-    AuthenticationModule
+    IgxDropDownModule
   ],
   providers: [ ],
   bootstrap: [AppComponent]
