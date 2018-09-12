@@ -1,10 +1,10 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule, ModuleWithProviders} from '@angular/core';
 
-import { AuthGuard } from '../services/auth.guard';
-import { ProfileComponent } from '../profile/profile.component';
-import { RedirectComponent } from '../redirect/redirect.component';
-import { ExternalAuthProvider } from '../services/igx-auth.service';
+import { AuthGuard } from './services/auth.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { ExternalAuthProvider } from './services/igx-auth.service';
 
 const authRoutes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

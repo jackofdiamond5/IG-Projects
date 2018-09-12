@@ -4,8 +4,8 @@ import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { IgxNavigationDrawerComponent, IgxDropDownComponent } from 'igniteui-angular';
 
 import { routes } from './app-routing.module';
-import { UserService } from './services/user.service';
-import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { UserService } from './authentication/services/user.service';
+import { LoginDialogComponent } from './authentication/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-root',

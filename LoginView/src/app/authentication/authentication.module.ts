@@ -11,15 +11,15 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthGuard } from '../services/auth.guard';
-import { LoginComponent } from '../login/login.component';
-import { JwtInterceptor } from '../services/jwt.interceptor';
-import { BackendProvider } from '../services/fake-backend.service';
-import { ProfileComponent } from '../profile/profile.component';
-import { RegisterComponent } from '../register/register.component';
-import { RedirectComponent } from '../redirect/redirect.component';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from '../services/igx-auth.service';
+import { AuthGuard } from './services/auth.guard';
+import { LoginComponent } from './login/login.component';
+import { JwtInterceptor } from './services/jwt.interceptor';
+import { BackendProvider } from './services/fake-backend.service';
+import { ProfileComponent } from './profile/profile.component';
+import { RegisterComponent } from './register/register.component';
+import { RedirectComponent } from './redirect/redirect.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { ExternalAuthProvider, ExternalAuthConfig, ExternalAuthService } from './services/igx-auth.service';
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 
 // Set the port to the one used by the server
