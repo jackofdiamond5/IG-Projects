@@ -11,7 +11,7 @@
         <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
       </div>
       <div>
-        <button *ngIf="userService.currentUser !== null" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963"
+        <button class="login-button" *ngIf="userService.currentUser !== null" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963"
           igxButtonColor="white" [igxToggleAction]="options">
           <igx-avatar initials="IG" [src]="userService.currentUser.picture" [roundShape]="true" size="small" bgColor="white">
           </igx-avatar>
