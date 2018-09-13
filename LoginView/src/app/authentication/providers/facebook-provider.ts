@@ -2,6 +2,7 @@ import { IAuthProvider } from './IAuthProvider';
 import { Router } from '@angular/router';
 import { IUser } from '../interfaces/user-model.interface';
 import { ExternalAuthConfig } from '../services/igx-auth.service';
+import { UserService } from '../services/user.service';
 
 export class FacebookProvider implements IAuthProvider {
     private user: IUser;
@@ -9,7 +10,6 @@ export class FacebookProvider implements IAuthProvider {
     constructor(private externalStsConfig: ExternalAuthConfig, private router: Router) { }
 
     public config() {
-
         // Requiring HTTPS for Facebook Login
         // https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/
         FB.init({

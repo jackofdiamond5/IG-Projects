@@ -53,7 +53,7 @@ export class BackendInterceptor implements HttpInterceptor {
     registerHandle(request: HttpRequest<any>, users: IUser[]) {
         const newUser = request.body as IUser;
         newUser.token = this.generateToken();
-        const duplicateUser = users.filter(user => user.id === newUser.id).length;
+        const duplicateUser = users.filter(user => user.username === newUser.username).length;
         if (duplicateUser) {
             return throwError({ error: { message: 'Username "' + newUser.username + '" is already taken' } });
         }
@@ -67,7 +67,7 @@ export class BackendInterceptor implements HttpInterceptor {
 
     loginHandle(request: HttpRequest<any>, users: IUser[]) {
         const filteredUsers = users.filter(user => {
-            return user.id === request.body.id;
+            return user.username === request.body.username;
         });
         // authenticate
         if (filteredUsers.length) {

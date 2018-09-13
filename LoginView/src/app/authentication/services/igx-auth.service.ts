@@ -6,6 +6,7 @@ import { FacebookProvider } from '../providers/facebook-provider';
 import { IAuthProvider } from '../providers/IAuthProvider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -41,7 +42,6 @@ export class ExternalAuthService {
         private oidcConfigService: OidcConfigService) {
     }
 
-
     public has(provider: ExternalAuthProvider) {
       return this.providers.has(provider);
     }
@@ -65,7 +65,7 @@ export class ExternalAuthService {
         ExternalAuthProvider.Microsoft,
         new MicrosoftProvider(this.oidcConfigService, this.oidcSecurityService, msConfig)
       );
-  }
+    }
 
     public login(provider: ExternalAuthProvider) {
         const extProvider = this.providers.get(provider);
@@ -80,7 +80,6 @@ export class ExternalAuthService {
     public setActiveProvider(provider: ExternalAuthProvider) {
       this.activeProvider = provider;
     }
-
 
     /** TODO, use setActiveProvider only? */
     public getUserInfo(provider: ExternalAuthProvider): Promise<IUser> {

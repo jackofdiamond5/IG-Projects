@@ -7,6 +7,7 @@
   </igx-nav-drawer>
   <div class="main" igxFlex igxLayout igxLayoutDir="columns">
     <igx-navbar title="LoginView" actionButtonIcon="menu" (onAction)="nav.toggle()">
+      
       <div *ngIf="userService.currentUser === null">
         <button #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
       </div>
@@ -26,8 +27,9 @@
           Log Out
         </igx-drop-down-item>
       </igx-drop-down>
+      <app-login-dialog></app-login-dialog>
+      
     </igx-navbar>
-    <app-login-dialog></app-login-dialog>
     <div class="content" igxFlex>
       <router-outlet></router-outlet>
     </div>
