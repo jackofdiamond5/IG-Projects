@@ -31,6 +31,6 @@ export class LoginDialogComponent implements OnInit {
   }
 
   changeTitle() {
-    this.title = 'Register';
+    this.title = this.title === 'Register' ? 'Login' : 'Register';
   }
 }

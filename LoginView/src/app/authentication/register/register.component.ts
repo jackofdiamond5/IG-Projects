@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit, IRegister {
 
   public registrationForm: FormGroup;
 
+  @Output() viewChange: EventEmitter<any> = new EventEmitter();
   @Output() registered: EventEmitter<any> = new EventEmitter();
 
   constructor(private authentication: AuthenticationService,
@@ -41,5 +42,13 @@ export class RegisterComponent implements OnInit, IRegister {
       this.router.navigate(['/profile']);
       this.registered.emit();
     }
+  }
+
+  showLoginForm() {
+    const loginForm = document.getElementById('loginForm');
+    const registrationForm = document.getElementById('registrationForm');
+    loginForm.hidden = false;
+    registrationForm.hidden = true;
+    this.viewChange.emit();
   }
 }
