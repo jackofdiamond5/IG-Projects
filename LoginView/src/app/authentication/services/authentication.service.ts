@@ -1,9 +1,9 @@
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ExternalAuthProvider } from './igx-auth.service';
-import { IUser } from '../interfaces/user-model.interface';
 import { OnInit, OnDestroy, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+
+import { IUser } from '../interfaces/user-model.interface';
 
 @Injectable({
   providedIn: 'root'

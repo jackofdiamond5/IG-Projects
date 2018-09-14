@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import { IUser } from '../interfaces/user-model.interface';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-
-const TOKEN = 'TOKEN';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  // constructor(private oidcSecurityService: OidcSecurityService) { }
+  constructor() { }
 
   private _currentUser: IUser;
   public get currentUser(): IUser {
@@ -22,14 +19,6 @@ export class UserService {
     this._currentUser = v;
   }
 
-  setToken(token: string) {
-    localStorage.setItem(TOKEN, token);
-  }
-
-  isLogged() {
-    return localStorage.getItem(TOKEN) != null;
-  }
-
   setCurrentUser(user: IUser) {
     localStorage.setItem('currentUser', JSON.stringify(user));
     this._currentUser = user;
@@ -38,6 +27,5 @@ export class UserService {
   logout() {
     this._currentUser = null;
     localStorage.removeItem('currentUser');
-    // this.oidcSecurityService.logoff();
   }
 }

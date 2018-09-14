@@ -6,8 +6,8 @@ import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/cor
 
 import { ILogin } from '../interfaces/login.interface';
 import { UserService } from '../services/user.service';
-import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 
 @Component({
   selector: 'app-login',

@@ -1,16 +1,13 @@
-import { ExternalAuthConfig } from '../services/igx-auth.service';
 import {
-    OpenIDImplicitFlowConfiguration,
-    AuthWellKnownEndpoints,
+    OidcConfigService,
     OidcSecurityService,
-    OidcConfigService
+    AuthWellKnownEndpoints,
+    OpenIDImplicitFlowConfiguration
 } from 'angular-auth-oidc-client';
-import { IAuthProvider } from './IAuthProvider';
-import { take } from 'rxjs/operators';
+
 import { GoogleProvider } from './google-provider';
 
 export class MicrosoftProvider extends GoogleProvider {
-
     public static redurectURL = 'ms-discovery/keys';
 
     /** ADD endpoint specific tenant + ID, used when connecting users from work or school accounts.

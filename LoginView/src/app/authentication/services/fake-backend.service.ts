@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, materialize, dematerialize } from 'rxjs/operators';
-import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+    HttpEvent,
+    HttpHandler,
+    HttpRequest,
+    HttpResponse,
+    HttpInterceptor,
+    HTTP_INTERCEPTORS
+} from '@angular/common/http';
 
-import { IUser } from '../interfaces/user-model.interface';
 import msKeys from './microsoft-keys';
+import { IUser } from '../interfaces/user-model.interface';
 
 @Injectable()
 export class BackendInterceptor implements HttpInterceptor {
@@ -31,7 +38,7 @@ export class BackendInterceptor implements HttpInterceptor {
 
             // Microsoft-specific OIDC discovery URI
             if (request.url.endsWith('ms-discovery/keys') && request.method === 'GET') {
-              return of(new HttpResponse({ status: 200, body: msKeys }));
+                return of(new HttpResponse({ status: 200, body: msKeys }));
             }
 
             return next.handle(request);
@@ -51,7 +58,7 @@ export class BackendInterceptor implements HttpInterceptor {
         const newUser = request.body as IUser;
         newUser.token = this.generateToken();
         const duplicateUser = users.filter(user => user.email === newUser.email).length;
-        if (duplicateUser && !newUser.id) {
+        if (duplicateUser) {
             return throwError({ error: { message: 'Account with email "' + newUser.email + '" already exists' } });
         }
 
