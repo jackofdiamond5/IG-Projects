@@ -41,9 +41,6 @@ export class BackendInterceptor implements HttpInterceptor {
     }
 
     loginExt(request: HttpRequest<any>, users: IUser[]) {
-        // TODO: Add logic for multiple providers
-        // const user = request.body.userInfo as IUser;
-        // const provider = request.body.provider;
         this.registerHandle(request, users);
         const userData = this.loginHandle(request, users);
 
@@ -53,12 +50,13 @@ export class BackendInterceptor implements HttpInterceptor {
     registerHandle(request: HttpRequest<any>, users: IUser[]) {
         const newUser = request.body as IUser;
         newUser.token = this.generateToken();
-        const duplicateUser = users.filter(user => user.username === newUser.username).length;
-        if (duplicateUser) {
-            return throwError({ error: { message: 'Username "' + newUser.username + '" is already taken' } });
+        const duplicateUser = users.filter(user => user.email === newUser.email).length;
+        if (duplicateUser && !newUser.id) {
+            return throwError({ error: { message: 'Account with email "' + newUser.email + '" already exists' } });
         }
 
-        newUser.id = users.length + 1;
+        // if the user is from an external provider use their id, otherwise generate new one
+        newUser.id = newUser.id ? newUser.id : users.length + 1;
         users.push(newUser);
         localStorage.setItem('users', JSON.stringify(users));
 
@@ -67,7 +65,7 @@ export class BackendInterceptor implements HttpInterceptor {
 
     loginHandle(request: HttpRequest<any>, users: IUser[]) {
         const filteredUsers = users.filter(user => {
-            return user.username === request.body.username;
+            return user.email === request.body.email;
         });
         // authenticate
         if (filteredUsers.length) {
@@ -77,8 +75,7 @@ export class BackendInterceptor implements HttpInterceptor {
                 name: user.name,
                 email: user.email,
                 token: user.token,
-                picture: user.picture,
-                username: user.username,
+                picture: user.picture
             };
 
             return of(new HttpResponse({ status: 200, body: body }));

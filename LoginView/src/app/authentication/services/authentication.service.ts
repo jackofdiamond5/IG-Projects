@@ -41,8 +41,8 @@ export class AuthenticationService implements OnInit, OnDestroy {
     return data;
   }
 
-  public loginWith(userInfo: IUser, provider: ExternalAuthProvider) {
-    return this.http.post('/extlogin', userInfo/*{ userInfo, provider }*/); // TODO: Add logic for multiple providers
+  public loginWith(userInfo: IUser) {
+    return this.http.post('/extlogin', userInfo);
   }
 
   register(userData: IUser) {

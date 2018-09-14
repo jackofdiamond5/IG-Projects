@@ -6,7 +6,6 @@ import { FacebookProvider } from '../providers/facebook-provider';
 import { IAuthProvider } from '../providers/IAuthProvider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
 import { Router } from '@angular/router';
-import { UserService } from './user.service';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -32,7 +31,6 @@ export interface ExternalAuthConfig {
     providedIn: 'root'
 })
 export class ExternalAuthService {
-
     activeProvider: ExternalAuthProvider;
     protected providers: Map<ExternalAuthProvider, IAuthProvider> = new Map();
 

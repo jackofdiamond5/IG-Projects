@@ -26,7 +26,7 @@ export class RedirectComponent implements OnInit {
 
   async ngOnInit() {
     const userInfo: IUser = await this.externalAuthService.getUserInfo(this.provider);
-    this.authService.loginWith(userInfo, this.provider).subscribe(
+    this.authService.loginWith(userInfo).subscribe(
       suc => {
         userInfo.externalToken = this.oidcSecurityService.getToken();
         this.user.setCurrentUser(userInfo);
