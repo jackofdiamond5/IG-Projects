@@ -13,7 +13,6 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class RegisterComponent implements OnInit, IRegister {
   name: string;
-  username: string;
   email: string;
   password: string;
 
@@ -25,15 +24,13 @@ export class RegisterComponent implements OnInit, IRegister {
   constructor(private authentication: AuthenticationService,
     private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.registrationForm = this.fb.group({
-      name: ['', Validators.required],
-      username: ['', Validators.required],
-      email: ['', Validators.nullValidator],
+      name: ['', Validators.nullValidator],
+      email: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   tryRegister() {
     const response = this.authentication.register(this.registrationForm.value);

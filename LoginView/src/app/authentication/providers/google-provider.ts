@@ -1,13 +1,13 @@
-import { ExternalAuthConfig } from '../services/igx-auth.service';
-import {
-    OpenIDImplicitFlowConfiguration,
-    AuthWellKnownEndpoints,
-    OidcSecurityService,
-    OidcConfigService
-} from 'angular-auth-oidc-client';
-import { IUser } from '../interfaces/user-model.interface';
-import { IAuthProvider } from './IAuthProvider';
 import { take } from 'rxjs/operators';
+import {
+    OidcConfigService,
+    OidcSecurityService,
+    AuthWellKnownEndpoints,
+    OpenIDImplicitFlowConfiguration
+} from 'angular-auth-oidc-client';
+import { IAuthProvider } from './IAuthProvider';
+import { IUser } from '../interfaces/user-model.interface';
+import { ExternalAuthConfig } from '../services/igx-auth.service';
 
 export class GoogleProvider implements IAuthProvider {
     constructor(protected oidcConfigService: OidcConfigService, protected oidcSecurityService: OidcSecurityService,
@@ -52,9 +52,9 @@ export class GoogleProvider implements IAuthProvider {
         this.oidcConfigService.onConfigurationLoaded.pipe(take(1)).subscribe(() => {
             this.config();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-              this.oidcSecurityService.getUserData().subscribe(userData => {
-                resolve(userData as IUser);
-              });
+                this.oidcSecurityService.getUserData().subscribe(userData => {
+                    resolve(userData as IUser);
+                });
             });
             this.oidcSecurityService.authorizedCallback();
         });

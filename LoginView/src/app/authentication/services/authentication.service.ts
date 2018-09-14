@@ -1,9 +1,9 @@
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ExternalAuthProvider } from './igx-auth.service';
-import { IUser } from '../interfaces/user-model.interface';
 import { OnInit, OnDestroy, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+
+import { IUser } from '../interfaces/user-model.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +41,8 @@ export class AuthenticationService implements OnInit, OnDestroy {
     return data;
   }
 
-  public loginWith(userInfo: IUser, provider: ExternalAuthProvider) {
-    return this.http.post('/extlogin', userInfo/*{ userInfo, provider }*/); // TODO: Add logic for multiple providers
+  public loginWith(userInfo: IUser) {
+    return this.http.post('/extlogin', userInfo);
   }
 
   register(userData: IUser) {

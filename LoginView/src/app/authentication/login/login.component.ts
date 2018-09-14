@@ -6,8 +6,8 @@ import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/cor
 
 import { ILogin } from '../interfaces/login.interface';
 import { UserService } from '../services/user.service';
-import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy, ILogin {
-  username: string;
+  email: string;
   password: string;
 
   public loginForm: FormGroup;
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
     this.isAuthorized = false;
     this.loginForm = fb.group({
       id: [''],
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }

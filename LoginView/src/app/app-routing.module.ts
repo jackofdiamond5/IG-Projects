@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './home/home.component';
 import { Routes, RouterModule } from '@angular/router';
+
+import { HomeComponent } from './home/home.component';
 import { ErrorRoutingModule } from './error-routing/error-routing.module';
 import { PageNotFoundComponent } from './error-routing/not-found/not-found.component';
 import { UncaughtErrorComponent } from './error-routing/error/uncaught-error.component';
@@ -15,5 +16,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes), ErrorRoutingModule],
   exports: [RouterModule, ErrorRoutingModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

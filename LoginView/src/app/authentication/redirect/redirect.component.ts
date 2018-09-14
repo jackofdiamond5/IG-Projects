@@ -11,7 +11,6 @@ import { ExternalAuthProvider, ExternalAuthService } from '../services/igx-auth.
   template: '<p>Signing in...</p>'
 })
 export class RedirectComponent implements OnInit {
-
   private provider: ExternalAuthProvider;
 
   constructor(
@@ -26,7 +25,7 @@ export class RedirectComponent implements OnInit {
 
   async ngOnInit() {
     const userInfo: IUser = await this.externalAuthService.getUserInfo(this.provider);
-    this.authService.loginWith(userInfo, this.provider).subscribe(
+    this.authService.loginWith(userInfo).subscribe(
       suc => {
         userInfo.externalToken = this.oidcSecurityService.getToken();
         this.user.setCurrentUser(userInfo);
