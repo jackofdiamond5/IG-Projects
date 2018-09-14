@@ -13,9 +13,10 @@ import {
 import msKeys from './microsoft-keys';
 import { IUser } from '../interfaces/user-model.interface';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BackendInterceptor implements HttpInterceptor {
-
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

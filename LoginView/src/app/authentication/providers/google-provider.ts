@@ -52,9 +52,9 @@ export class GoogleProvider implements IAuthProvider {
         this.oidcConfigService.onConfigurationLoaded.pipe(take(1)).subscribe(() => {
             this.config();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
-              this.oidcSecurityService.getUserData().subscribe(userData => {
-                resolve(userData as IUser);
-              });
+                this.oidcSecurityService.getUserData().subscribe(userData => {
+                    resolve(userData as IUser);
+                });
             });
             this.oidcSecurityService.authorizedCallback();
         });

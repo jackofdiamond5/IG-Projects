@@ -9,7 +9,5 @@ export class HomeComponent implements OnInit {
   title = 'Welcome to Ignite UI for Angular!';
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() { }
 }

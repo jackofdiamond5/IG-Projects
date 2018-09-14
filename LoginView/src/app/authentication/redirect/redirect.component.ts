@@ -11,7 +11,6 @@ import { ExternalAuthProvider, ExternalAuthService } from '../services/igx-auth.
   template: '<p>Signing in...</p>'
 })
 export class RedirectComponent implements OnInit {
-
   private provider: ExternalAuthProvider;
 
   constructor(

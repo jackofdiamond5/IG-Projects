@@ -4,7 +4,9 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 
 import { UserService } from '../services/user.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JwtInterceptor implements HttpInterceptor {
     constructor(private userService: UserService) { }
 

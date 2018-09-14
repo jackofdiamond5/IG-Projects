@@ -30,8 +30,7 @@ export class RegisterComponent implements OnInit, IRegister {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   tryRegister() {
     const response = this.authentication.register(this.registrationForm.value);

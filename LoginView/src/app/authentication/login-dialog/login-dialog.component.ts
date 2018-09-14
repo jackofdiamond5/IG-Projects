@@ -10,8 +10,7 @@ export class LoginDialogComponent implements OnInit {
   title: string;
   @ViewChild(IgxDialogComponent) public loginDialog: IgxDialogComponent;
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   open() {
     this.loginDialog.open();

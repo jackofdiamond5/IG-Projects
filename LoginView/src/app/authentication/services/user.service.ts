@@ -13,6 +13,7 @@ export class UserService {
     if (!this._currentUser) {
       this._currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
+
     return this._currentUser;
   }
   public set currentUser(v: IUser) {

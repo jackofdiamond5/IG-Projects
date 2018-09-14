@@ -13,10 +13,10 @@ export class FacebookProvider implements IAuthProvider {
         // Requiring HTTPS for Facebook Login
         // https://developers.facebook.com/blog/post/2018/06/08/enforce-https-facebook-login/
         FB.init({
-        appId: this.externalStsConfig.client_id,
-        xfbml: false,
-        version: 'v3.1'
-      });
+            appId: this.externalStsConfig.client_id,
+            xfbml: false,
+            version: 'v3.1'
+        });
     }
 
     public login() {
@@ -26,7 +26,7 @@ export class FacebookProvider implements IAuthProvider {
             if (response.authResponse) {
                 FB.api(
                     '/me?fields=id,email,name,first_name,last_name,picture',
-                     (newResponse) => {
+                    (newResponse) => {
                         this.user = newResponse;
                         self.router.navigate(['redirect-facebook']);
                     });
@@ -40,7 +40,5 @@ export class FacebookProvider implements IAuthProvider {
         return Promise.resolve(this.user);
     }
 
-    public logout() {
-
-    }
+    public logout() { }
 }
