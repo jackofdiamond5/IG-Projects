@@ -1,5 +1,4 @@
-<form class="input-group-form" id="loginForm" [formGroup]="loginForm" (ngSubmit)="tryLogin()">
-  <h3 class="login-title">Welcome Back</h3>
+<form id="loginForm" [formGroup]="loginForm" (ngSubmit)="tryLogin()">
   <igx-input-group>
     <igx-prefix>
       <igx-icon name="account_circle"></igx-icon>
@@ -14,19 +13,14 @@
     <input igxInput id="loginPassword" name="password" type="password" formControlName="password" />
     <label igxLabel for="password">Password</label>
   </igx-input-group>
+  
   <div class="button-wrapper">
     <button igxButton="raised" type="submit" igxRipple [disabled]="!loginForm.valid">LOG IN</button>
+    <a id="register" (click)="showRegistrationForm($event)">Create new account?</a>
   </div>
-  <div class="register-container">
-    <button id="register" type="button" igxButton="flat" igxRipple="lightskyblue" (click)="showRegistrationForm($event)">Register</button>
-  </div>
-  <div class="register-container" *ngIf="this.authService.has('Google')">
-    <button type="button" id="openIDSignUpG" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
-  </div>
-  <div class="register-container" *ngIf="this.authService.has('Facebook')">
-    <button type="button" id="openIDSignUpFb" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
-  </div>
-  <div class="register-container" *ngIf="this.authService.has('Microsoft')">
-    <button type="button" id="openIDSignUpMS" igxButton="raised" (click)="signUpMS()">Sign Up Microsoft</button>
+  <div class="social-login">
+    <button type="button" *ngIf="this.authService.has('Google')" class="google" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
+    <button type="button" *ngIf="this.authService.has('Facebook')" class="facebook" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
+    <button type="button" *ngIf="this.authService.has('Microsoft')" class="microsoft" igxButton="raised" (click)="signUpMS()">Sign Up Microsoft</button>
   </div>
 </form>

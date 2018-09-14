@@ -1,23 +1,32 @@
-.login-title {
-    color: #66ccff;
+form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    padding: 10px;
+    > * {
+        width: 100%;
+    }
 }
 
-.input-group-form {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
-    padding: 34px 16px;
-	margin-bottom: 48px;
-	margin-top: 20px;
+a {
+    padding-top: 10px;
+    cursor: pointer;
 }
-
-.igx-input-group, .button-wrapper {
-    margin-top: 32px;
-}
-
 button {
+    margin-top: 15px;
     width: 100%;
 }
 
-.register-container {
-    float: right;
-    margin: 2px 8px;
+.social-login {
+    border-top: 1px solid gray;
+
+    button.google {
+        background-color: rgb(255, 19, 75);
+    }
+    button.facebook {
+        background-color: rgb(19, 119, 213)
+    }
+    button.facebook {
+        background-color: rgb(27, 158, 246)
+    }
 }

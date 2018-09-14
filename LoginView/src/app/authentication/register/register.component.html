@@ -1,5 +1,4 @@
 <form class="input-group-form" id="registrationForm" [formGroup]="registrationForm" (ngSubmit)="tryRegister()" hidden>
-  <h3 class="registration-title">Create your account</h3>
   <igx-input-group>
     <label igxLabel for="name">Name</label>
     <input igxInput id="name" name="name" formControlName="name" type="text" />
@@ -12,8 +11,8 @@
     <input igxInput id="registerPassword" name="password" type="password" formControlName="password" />
     <label igxLabel for="password">Password</label>
   </igx-input-group>
-  <div class="button-wrapper">
+  <div>
     <button igxButton="raised" type="submit" igxRipple [disabled]="!registrationForm.valid">SIGN UP</button>
-    <button igxButton="raised" type="button" igxRipple (click)="showLoginForm()">Have an account?</button>
+    <a (click)="showLoginForm()">Have an account?</a>
   </div>
 </form>
