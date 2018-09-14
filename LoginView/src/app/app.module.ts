@@ -1,7 +1,7 @@
 import {
   IgxLayoutModule, IgxRippleModule,
   IgxNavigationDrawerModule, IgxNavbarModule,
-  IgxButtonModule, IgxToggleModule, IgxAvatarModule, IgxIconModule, IgxDropDownModule
+  IgxButtonModule, IgxIconModule
 } from 'igniteui-angular';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,10 +29,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
     IgxLayoutModule,
     IgxRippleModule,
     IgxButtonModule,
-    IgxToggleModule,
-    IgxAvatarModule,
-    IgxIconModule,
-    IgxDropDownModule
+    IgxIconModule
   ],
   providers: [ ],
   bootstrap: [AppComponent]

@@ -7,7 +7,7 @@ import { RedirectComponent } from './redirect/redirect.component';
 import { ExternalAuthProvider } from './services/igx-auth.service';
 
 const authRoutes: Routes = [
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'redirect-google', component: RedirectComponent, data: { provider: ExternalAuthProvider.Google } },
     { path: 'redirect-facebook', component: RedirectComponent, data: { provider: ExternalAuthProvider.Facebook } },
     { path: 'redirect-microsoft', component: RedirectComponent, data: { provider: ExternalAuthProvider.Microsoft } }

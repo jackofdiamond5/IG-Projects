@@ -4,7 +4,8 @@ import {
 } from 'angular-auth-oidc-client';
 import {
   IgxDialogModule, IgxIconModule,
-  IgxInputGroupModule, IgxButtonModule
+  IgxInputGroupModule, IgxButtonModule,
+  IgxAvatarModule, IgxToggleModule, IgxDropDownModule
 } from 'igniteui-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -15,6 +16,7 @@ import { AuthGuard } from './services/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { BackendProvider } from './services/fake-backend.service';
+import { LoginBarComponent } from './login-bar/login-bar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { RedirectComponent } from './redirect/redirect.component';
@@ -33,13 +35,17 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     AuthModule.forRoot(),
     IgxDialogModule,
     IgxInputGroupModule,
+    IgxToggleModule,
     IgxIconModule,
+    IgxAvatarModule,
     IgxButtonModule,
+    IgxDropDownModule,
     HttpClientModule,
     ReactiveFormsModule,
     AuthenticationRoutingModule
   ],
   declarations: [
+    LoginBarComponent,
     LoginComponent,
     RedirectComponent,
     RegisterComponent,
@@ -61,6 +67,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     BackendProvider
   ],
   exports: [
+    LoginBarComponent,
     LoginComponent,
     RedirectComponent,
     RegisterComponent,
