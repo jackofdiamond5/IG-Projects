@@ -28,7 +28,7 @@ export class FacebookProvider implements IAuthProvider {
                     '/me?fields=id,email,name,first_name,last_name,picture',
                     (newResponse) => {
                         this.user = newResponse;
-                        self.router.navigate(['redirect-facebook']);
+                        self.router.navigate([this.externalStsConfig.redirect_url]);
                     });
             } else {
                 console.log('User cancelled login or did not fully authorize.');

@@ -1,9 +1,11 @@
-import { filter } from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { IgxNavigationDrawerComponent } from 'igniteui-angular';
+import { filter } from 'rxjs/operators';
 
 import { routes } from './app-routing.module';
+
+import { IgxNavigationDrawerComponent } from 'igniteui-angular';
+
 
 @Component({
   selector: 'app-root',
@@ -11,13 +13,10 @@ import { routes } from './app-routing.module';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  loggedIn: boolean;
-
   public topNavLinks: Array<{
     path: string,
     name: string
   }> = [];
-
   @ViewChild(IgxNavigationDrawerComponent) public navdrawer: IgxNavigationDrawerComponent;
 
   constructor(private router: Router) {
@@ -36,15 +35,10 @@ export class AppComponent implements OnInit {
       filter((x) => x instanceof NavigationStart)
     )
       .subscribe((event: NavigationStart) => {
-        if (event.url !== '/' && !this.navdrawer.pin) {
-          // Close drawer when selecting a view on mobile (unpinned)
-          this.navdrawer.close();
-        }
+          if (event.url !== '/' && !this.navdrawer.pin) {
+              // Close drawer when selecting a view on mobile (unpinned)
+              this.navdrawer.close();
+          }
       });
-  }
-
-  @HostListener('#home click')
-  navigateHome() {
-    this.router.navigate(['/home']);
   }
 }
