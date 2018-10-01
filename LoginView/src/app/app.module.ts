@@ -23,7 +23,8 @@ import { ExternalAuthService } from './authentication/services/igx-auth.service'
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AuthenticationModule, // WARNING: `AuthenticationModule` defines child routes, must be imported before root `AppRoutingModule`
+    // NOTE: `AuthenticationModule` defines child routes, must be imported before root `AppRoutingModule`
+    AuthenticationModule,
     AppRoutingModule,
     IgxNavigationDrawerModule,
     IgxNavbarModule,
@@ -37,7 +38,7 @@ export class AppModule {
 
   constructor(private externalAuthService: ExternalAuthService) {
     /**
-     * Un-comment one or more of the following providers and and you service provider client ID.
+     * Un-comment one or more of the following providers and and you service provider Client ID.
      * See <WIKI LINK> for more.
      */
     this.externalAuthService.addGoogle('332873309781-hdl40a54jlslod30f7g7j05s7m6tnc68.apps.googleusercontent.com');
