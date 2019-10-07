@@ -17,10 +17,10 @@ if (typeof jQuery !== "function") {
 }
 
 (function ($) {
-    /*
-      igCountdown is a widget based on jQuery UI that counts down to zero, from a specified start.
-      It supports stopping, pausing, as well as auto-start and self-destroy.
-   */
+   /*
+     igCountdown is a widget based on jQuery UI that counts down to zero, from a specified start.
+     It supports stopping, pausing, as well as auto-start and self-destroy.
+  */
    $.widget('ui.igCountdown', {
       css: {
          /* widget element classes go here */
@@ -178,6 +178,12 @@ if (typeof jQuery !== "function") {
          if (this.options.autoStart) {
             this._triggerStarted();
          }
+
+         const renderingEnabled = this._triggerRendering();
+         if (renderingEnabled) {
+            this._render();
+            this._triggerRendered();
+         }
       },
       _attachEvents: function () {
          const widgetInstance = this;
@@ -199,12 +205,6 @@ if (typeof jQuery !== "function") {
                }
             }
          });
-
-         const renderingEnabled = this._triggerRendering();
-         if (renderingEnabled) {
-            this._render();
-            this._triggerRendered();
-         }
       },
       _detachEvents: function () {
          this.element.off('igcountdownstarted igcountdownstopped igcountdownreset igcountdownpaused');
