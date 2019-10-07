@@ -1,7 +1,7 @@
 ﻿/*!@license
  * Infragistics.Web.ClientUI Widget 1.0.0
  *
- * Copyright (c) 2011-<year> Infragistics Inc.
+ * Copyright (c) 2018 Infragistics Inc.
  *
  * http://www.infragistics.com/
  *
@@ -23,7 +23,7 @@ if (typeof jQuery !== "function") {
    */
    $.widget('ui.igCountdown', {
       css: {
-         /* igWidget element classes go here */
+         /* widget element classes go here */
          container: 'widget',
          counter: 'counter',
          output: 'output',
@@ -36,7 +36,7 @@ if (typeof jQuery !== "function") {
          destroy: 'destroy'
       },
       options: {
-         /* igWidget options go here */
+         /* widget options go here */
          startValue: 10,
          resetMessage: "Resetted",
          pauseMessage: "Paused",
@@ -84,7 +84,7 @@ if (typeof jQuery !== "function") {
             this._triggerResumed();
          }
          else if (!this._running) {
-            let args = {
+            const args = {
                owner: this
             }
 
@@ -109,7 +109,7 @@ if (typeof jQuery !== "function") {
          }
       },
       _triggerReset: function () {
-         let args = {
+         const args = {
             owner: this
          }
 
@@ -120,7 +120,7 @@ if (typeof jQuery !== "function") {
          clearInterval(this._intervalID);
          this._trigger(this.events.reset, null, args);
 
-         let output = this.element.children().find(`.${this.css.output}`);
+         const output = this.element.children().find(`.${this.css.output}`);
          if (this._currentValue <= 3) {
             output.removeClass(this.css.blink);
          }
@@ -141,7 +141,7 @@ if (typeof jQuery !== "function") {
          this._beginCountdown();
       },
       _triggerTick: function () {
-         let args = {
+         const args = {
             owner: this,
             _currentValue: this._currentValue
          };
@@ -149,7 +149,7 @@ if (typeof jQuery !== "function") {
          this._trigger(this.events.tick, null, args);
       },
       _triggerElapsed: function () {
-         let args = {
+         const args = {
             owner: this
          }
 
@@ -157,14 +157,14 @@ if (typeof jQuery !== "function") {
          this._trigger(this.events.elapsed, null, args);
       },
       _triggerRendering: function () {
-         let args = {
+         const args = {
             owner: this
          }
 
          return this._trigger(this.events.rendering, null, args);
       },
       _triggerRendered: function () {
-         let args = {
+         const args = {
             owner: this
          }
 
@@ -180,7 +180,7 @@ if (typeof jQuery !== "function") {
          }
       },
       _attachEvents: function () {
-         let widgetInstance = this;
+         const widgetInstance = this;
          widgetInstance._on(widgetInstance.element, {
             'click.buttons': function (event) {
                switch (event.target.id) {
@@ -200,7 +200,7 @@ if (typeof jQuery !== "function") {
             }
          });
 
-         let renderingEnabled = this._triggerRendering();
+         const renderingEnabled = this._triggerRendering();
          if (renderingEnabled) {
             this._render();
             this._triggerRendered();
@@ -215,7 +215,7 @@ if (typeof jQuery !== "function") {
          this.element.children(`.${this.css.buttons}`).remove();
       },
       _render: function () {
-         let div = $('<div />');
+         const div = $('<div />');
          div.append('<span />');
          div.addClass(this.css.container);
 
@@ -225,11 +225,11 @@ if (typeof jQuery !== "function") {
          this._renderWidgetStartValue();
       },
       _renderWidgetStartValue: function () {
-         let counter = this.element.children().find('span');
+         const counter = this.element.children().find('span');
          counter.addClass(this.css.counter);
          counter.append("<span />");
 
-         let output = this.element.children().find(`.${this.css.counter} > span`);
+         const output = this.element.children().find(`.${this.css.counter} > span`);
          output.addClass(this.css.output);
 
          if (!this._constrain(this.options.startValue)) {
@@ -237,13 +237,12 @@ if (typeof jQuery !== "function") {
          }
 
          this._currentValue = this.options.startValue;
-
          output.text(this._currentValue);
       },
       _renderButtons: function () {
-         let widget = this.element;
+         const widget = this.element;
 
-         let buttonsHolder = $('<div />');
+         const buttonsHolder = $('<div />');
          buttonsHolder.addClass(`${this.css.buttons}`);
          buttonsHolder
             .append(`<button id="str">`)
@@ -256,19 +255,19 @@ if (typeof jQuery !== "function") {
          this._addButtonClasses();
       },
       _addButtonClasses: function () {
-         let start = $(`.${this.css.buttons} > #str`);
+         const start = $(`.${this.css.buttons} > #str`);
          start.addClass(this.css.start);
          start.text("Start");
 
-         let pause = $(`.${this.css.buttons} > #psr`);
+         const pause = $(`.${this.css.buttons} > #psr`);
          pause.addClass(this.css.pause);
          pause.text("Pause");
 
-         let reset = $(`.${this.css.buttons} > #rst`);
+         const reset = $(`.${this.css.buttons} > #rst`);
          reset.addClass(this.css.reset);
          reset.text("Reset");
 
-         let destroy = $(`.${this.css.buttons} > #dstr`);
+         const destroy = $(`.${this.css.buttons} > #dstr`);
          destroy.addClass(this.css.destroy);
          destroy.text('Destroy');
       },
@@ -278,8 +277,7 @@ if (typeof jQuery !== "function") {
       },
       _decrementCurrentValue: function (raiseEvent) {
          this._currentValue -= this.options.delta;
-
-         let output = this.element.children().find(`.${this.css.output}`);
+         const output = this.element.children().find(`.${this.css.output}`);
 
          if (raiseEvent) {
             this._triggerTick();
@@ -309,9 +307,7 @@ if (typeof jQuery !== "function") {
       },
       _setOption: function (option, value) {
          // custom setOption method goes here
-
-         let css = this.css, elements, prevValue = this.options[option];
-
+         prevValue = this.options[option];
          if (!this._constrain(value)) {
             return;
          }
@@ -322,7 +318,6 @@ if (typeof jQuery !== "function") {
          // The following line applies the option value to the igCounter meaning you don't
          // have to perform this.options[option] = value;
          $.Widget.prototype._setOption.apply(this, arguments);
-
          return true;
       },
       destroy: function () {
@@ -338,5 +333,5 @@ if (typeof jQuery !== "function") {
          $.Widget.prototype.destroy.apply(this, arguments);
       }
    });
-   $.extend($.ui.igCountdown, { version: '<build_number>' });
+   $.extend($.ui.igCountdown, { version: '1.0.0' });
 }(jQuery));
