@@ -99,7 +99,7 @@ if (typeof jQuery !== "function") {
          }
 
          if (!this._paused && this._currentValue != this.options.startValue) {
-            let args = {
+            const args = {
                owner: this
             }
 
@@ -133,7 +133,7 @@ if (typeof jQuery !== "function") {
          this._paused = false;
       },
       _triggerResumed: function () {
-         let args = {
+         const args = {
             owner: this
          }
 
