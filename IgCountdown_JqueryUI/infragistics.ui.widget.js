@@ -327,9 +327,11 @@ if (typeof jQuery !== "function") {
             return;
          }
 
+         // Update the counter's state if a custom startValue is set
+         this._updateStartValueOnInput(value);
+
          // The following line applies the option value to the igCounter meaning you don't
          // have to perform this.options[option] = value;
-         this._updateStartValueOnInput(value);
          $.Widget.prototype._setOption.apply(this, arguments);
          return true;
       },
