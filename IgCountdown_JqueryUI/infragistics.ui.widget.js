@@ -239,6 +239,15 @@ if (typeof jQuery !== "function") {
          this._currentValue = this.options.startValue;
          output.text(this._currentValue);
       },
+      _updateStartValueOnInput: function (value) {
+         const output = this.element.children().find(`.${this.css.counter} > span`);
+         if (!this._constrain(value)) {
+            return;
+         }
+         this.setCurrentValue(value);
+
+         output.text(value);
+      },
       _renderButtons: function () {
          const widget = this.element;
 
@@ -317,6 +326,7 @@ if (typeof jQuery !== "function") {
 
          // The following line applies the option value to the igCounter meaning you don't
          // have to perform this.options[option] = value;
+         this._updateStartValueOnInput(value);
          $.Widget.prototype._setOption.apply(this, arguments);
          return true;
       },

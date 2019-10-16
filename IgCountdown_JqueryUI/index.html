@@ -1,9 +1,9 @@
 <head>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	
-	<link rel="stylesheet" type="text/css" href="style.css"/>
-	
+	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
 	<script src="infragistics.ui.widget.js"></script>
 </head>
 
@@ -18,28 +18,14 @@
 		// attach custom event listeners
 		$('#counter1').on('somethingHappens1', function () { });
 		$('#counter2').bind('somethingHappens2', function () { });
-		
-		// attach event listeners alongside initialization
-		$('#const').igCountdown({
-			autoStart: false,
-			startValue: 'invalid',
-			rendered: function (evt, ui) {console.log(`rendered - ${this.id}`);},
-			rendering: function (evt, ui) {console.log(`rendering - ${this.id}`);},
-			tick: function (evt, ui) {console.log('tick');},
-			paused: function (evt, ui) {console.log('paused');},
-			reset: function (evt, ui) {console.log('reset');},
-			started: function (evt, ui) {console.log('started');},
-			resumed: function (evt, ui) {console.log('resumed');},
-			elapsed: function (evt, ui) {console.log('elapsed');},
-			autoStarted: function (evt, ui) {console.log('auto-started');}
-		});
 
 		// attach event listeners after initialization
 		$('#counter1').igCountdown({
 			rendering: function (evt, ui) { console.log(`rendering - ${this.id}`); },
 			rendered: function (evt, ui) { console.log(`rendered - ${this.id}`); },
-		});		
+		});
 		$('#counter1').on('igcountdownstarted', function (evt, ui) { console.log('started'); });
+		$('#counter1').igCountdown('option', 'startValue', 20);
 
 		$('#counter2').igCountdown();
 		$('#counter2').on('igcountdownpaused', function (evt, ui) { console.log('paused'); });
@@ -51,6 +37,6 @@
 		$('#iamdisabled').igCountdown({
 			rendering: function (evt, ui) { return false; }
 		});
-	
+
 	</script>
 </body>
