@@ -25,10 +25,10 @@
 			rendered: function (evt, ui) { console.log(`rendered - ${this.id}`); },
 		});
 		$('#counter1').on('igcountdownstarted', function (evt, ui) { console.log('started'); });
-		$('#counter1').igCountdown('option', 'startValue', 20);
-
+		
 		$('#counter2').igCountdown();
 		$('#counter2').on('igcountdownpaused', function (evt, ui) { console.log('paused'); });
+		$('#counter2').igCountdown('option', 'startValue', 20);
 
 		$('#counter3').igCountdown();
 		$('#counter3').on('igcountdownreset', function (evt, ui) { console.log('reset'); });

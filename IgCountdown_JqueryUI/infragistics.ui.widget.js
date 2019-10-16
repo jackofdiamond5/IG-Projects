@@ -153,7 +153,7 @@ if (typeof jQuery !== "function") {
             owner: this
          }
 
-         clearInterval(this._intervalID)
+         clearInterval(this._intervalID);
          this._trigger(this.events.elapsed, null, args);
       },
       _triggerRendering: function () {
@@ -309,6 +309,9 @@ if (typeof jQuery !== "function") {
             return false;
          }
          if (value <= 0) {
+            return false;
+         }
+         if (value % 2 !== 0) {
             return false;
          }
 
