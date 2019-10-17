@@ -225,6 +225,10 @@ if (typeof jQuery !== "function") {
          this._renderWidgetStartValue();
       },
       _renderWidgetStartValue: function () {
+         if (!this._constrain(this.options.startValue)) {
+            return;
+         }
+
          const counter = this.element.children().find('span');
          counter.addClass(this.css.counter);
          counter.append("<span />");
@@ -232,9 +236,6 @@ if (typeof jQuery !== "function") {
          const output = this.element.children().find(`.${this.css.counter} > span`);
          output.addClass(this.css.output);
 
-         if (!this._constrain(this.options.startValue)) {
-            return;
-         }
 
          this._currentValue = this.options.startValue;
          output.text(this._currentValue);
