@@ -286,7 +286,8 @@ if (typeof jQuery !== "function") {
          this._intervalID = setInterval($.proxy(this._decrementCurrentValue, this, true), 1000);
       },
       _decrementCurrentValue: function (raiseEvent) {
-         this._currentValue -= this.options.delta;
+         this._currentValue = this._currentValue - this.options.delta < 0 ?
+            0 : this._currentValue - this.options.delta;
          const output = this.element.children().find(`.${this.css.output}`);
 
          if (raiseEvent) {
@@ -310,9 +311,6 @@ if (typeof jQuery !== "function") {
             return false;
          }
          if (value <= 0) {
-            return false;
-         }
-         if (value % 2 !== 0) {
             return false;
          }
 
